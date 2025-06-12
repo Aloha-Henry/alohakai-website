@@ -207,14 +207,40 @@
             animation-delay: 0.4s;
         }
         
-        @keyframes typingDot {
-            0%, 80%, 100% {
-                transform: scale(1);
-                opacity: 0.5;
+        /* Mode toggle styles */
+        .mode-toggle {
+            background: transparent;
+            border: 1px solid #4A90E2;
+            color: #4A90E2;
+            padding: 8px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .mode-toggle:hover {
+            background: rgba(74, 144, 226, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .mode-toggle.active {
+            background: #4A90E2;
+            color: #000;
+            border-color: #4A90E2;
+        }
+        
+        @keyframes fadeInMessage {
+            from { 
+                opacity: 0; 
+                transform: translateY(10px); 
             }
-            40% {
-                transform: scale(1.3);
-                opacity: 1;
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
             }
         }
         
@@ -406,14 +432,14 @@
             </div>
             
             <!-- Chat container - fixed height, no bouncing -->
-            <div class="relative max-w-2xl mx-auto mb-16" style="animation: slideUp 0.8s 0.6s ease-out backwards;">
+            <div class="relative max-w-2xl mx-auto mb-8" style="animation: slideUp 0.8s 0.6s ease-out backwards;">
                 <div id="chatContainer" class="glass-container rounded-3xl p-8 h-[400px] flex flex-col">
                     <!-- Messages area - scrollable -->
                     <div id="messagesArea" class="flex-1 overflow-y-auto space-y-4 mb-6">
                         <!-- Kai's initial greeting -->
                         <div class="flex justify-start">
                             <div class="kai-greeting">
-                                Aloha! I'm Kai, how can I help you? 🌺
+                                Aloha! How can I help you? 🌺
                             </div>
                         </div>
                     </div>
@@ -422,6 +448,22 @@
                     <div id="promptsArea" class="flex flex-wrap justify-center gap-3">
                         <!-- Buttons will appear here -->
                     </div>
+                </div>
+                
+                <!-- Mode toggle - below container -->
+                <div class="flex justify-center gap-3 mt-6" style="animation: fadeInMessage 0.8s 0.8s ease-out backwards;">
+                    <button class="mode-toggle active" data-mode="general" onclick="switchMode('general')">
+                        General
+                    </button>
+                    <button class="mode-toggle" data-mode="food" onclick="switchMode('food')">
+                        Food
+                    </button>
+                    <button class="mode-toggle" data-mode="kids" onclick="switchMode('kids')">
+                        For Kids
+                    </button>
+                    <button class="mode-toggle" data-mode="adventure" onclick="switchMode('adventure')">
+                        Adventure
+                    </button>
                 </div>
             </div>
             
@@ -436,22 +478,65 @@
 
     <script>
         const conversations = {
-            initial: {
+            general: {
                 prompts: [
                     { text: 'How does this work?', response: 'Super easy! Just text me anything about Kauai - beaches, food, adventures - and I\'ll hook you up with real-time tips and exclusive deals 🤙' },
+                    { text: 'Do you have discounts?', response: 'Yes! I have deals at 50+ local spots. Restaurants, tours, rentals - save 10-20% just by showing my text. It pays for itself fast! 💰' },
+                    { text: 'What makes you different?', response: 'I live here! Real-time conditions, secret spots, and I speak your language (literally - I know 8!). Plus I\'m up 24/7 to help 🌺' }
+                ]
+            },
+            food: {
+                prompts: [
                     { text: 'Best poke in Kapaa?', response: 'Pono Market has the best spicy ahi! Get there before noon for the fresh stuff. Show them this chat for 10% off your order 🍱' },
-                    { text: 'Any deals on adventures?', response: 'Yes! Na Pali Catamaran has 15% off sunset sails this week. Plus I know which helicopter tours have last-minute deals. Want me to check availability? 🚁' }
+                    { text: 'Late night food spots?', response: 'Midnight Bear Tavern in Koloa is open till 2am! Amazing burgers and live music. Kitchen closes at 1:30 though 🍔' },
+                    { text: 'Hidden local grinds?', response: 'Hamura\'s Saimin in Lihue! Cash only, no signs, but locals line up for the best saimin on island. Get the BBQ sticks too! 🍜' }
+                ]
+            },
+            kids: {
+                prompts: [
+                    { text: 'Safe beaches for kids?', response: 'Lydgate Beach Park is perfect! Protected lagoon, lifeguards, and the Kamalani Playground is right there. Zero waves, maximum fun! 🏖️' },
+                    { text: 'Rainy day activities?', response: 'Kauai Museum has a keiki corner and it\'s only $5 for kids! Or hit up Kauai Mini Golf - they have a covered section 🎯' },
+                    { text: 'Easy family hikes?', response: 'Sleeping Giant East Trail! Only 1.5 miles, shaded, and kids love the "giant\'s face" rock formation at the top 🥾' }
+                ]
+            },
+            adventure: {
+                prompts: [
+                    { text: 'Best sunrise hike?', response: 'Sleeping Giant for sunrise is UNREAL! Start at 5:30am from the east trail. Bring a headlamp and layers - it\'s chilly up top! 🌅' },
+                    { text: 'Secret waterfalls?', response: 'Ho\'opi\'i Falls on the east side! Two waterfalls, rope swings, and way less crowded than Wailua. Careful on wet rocks! 💦' },
+                    { text: 'Epic snorkel spots?', response: 'Tunnels Beach in summer or Koloa Landing year-round. Koloa has turtles guaranteed! Go early morning for calm water 🐢' }
                 ]
             }
         };
 
         const messagesArea = document.getElementById('messagesArea');
         const promptsArea = document.getElementById('promptsArea');
-        let allPrompts = [];
+        let currentMode = 'general';
+        let currentPrompts = [];
+
+        function switchMode(mode) {
+            // Update active toggle
+            document.querySelectorAll('.mode-toggle').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+            
+            // Reset chat to initial state
+            messagesArea.innerHTML = `
+                <div class="flex justify-start">
+                    <div class="kai-greeting">
+                        Aloha! How can I help you? 🌺
+                    </div>
+                </div>
+            `;
+            
+            // Load new prompts
+            currentMode = mode;
+            createPromptButtons(conversations[mode].prompts);
+        }
 
         function createPromptButtons(prompts) {
             promptsArea.innerHTML = '';
-            allPrompts = prompts;
+            currentPrompts = prompts;
             prompts.forEach((prompt, index) => {
                 const button = document.createElement('button');
                 button.className = 'prompt-btn';
@@ -544,10 +629,10 @@
             }, 1500);
         }
 
-        // Initialize with first prompts
+        // Initialize with general prompts
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
-                createPromptButtons(conversations.initial.prompts);
+                createPromptButtons(conversations.general.prompts);
             }, 1000);
         });
     </script>
