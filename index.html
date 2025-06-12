@@ -3,22 +3,553 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlohaKai.AI - Your Local Friend on Kauai</title>
+    <title>AlohaKai - Your Island Insider</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            overflow-x: hidden;
+            background: #000;
+        }
+        
+        /* Animated gradient background */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at top right, rgba(74, 144, 226, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom left, rgba(251, 146, 60, 0.15) 0%, transparent 50%);
+            animation: gradientShift 10s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Premium glass container */
+        .chat-glass {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 70px rgba(74, 144, 226, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.8s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(40px) scale(0.95); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+        
+        /* Value icons with hover */
+        .icon-wrapper {
+            position: relative;
+            animation: iconPop 0.6s ease-out backwards;
+        }
+        
+        .value-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .icon-wrapper:hover .value-icon {
+            transform: translateY(-5px) scale(1.1);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(74, 144, 226, 0.5);
+            box-shadow: 0 10px 30px rgba(74, 144, 226, 0.3);
+        }
+        
+        .icon-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #4A90E2;
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .icon-wrapper:hover .icon-label {
+            opacity: 1;
+            bottom: -30px;
+        }
+        
+        @keyframes iconPop {
+            from { 
+                opacity: 0;
+                transform: scale(0);
+            }
+            to { 
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* Fixed container styles */
+        .glass-container {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 70px rgba(74, 144, 226, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Message styles */
+        .kai-greeting {
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.15) 0%, rgba(74, 144, 226, 0.08) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(74, 144, 226, 0.3);
+            color: rgba(255, 255, 255, 0.95);
+            padding: 16px 32px;
+            border-radius: 25px;
+            font-size: 18px;
+            display: inline-block;
+            animation: fadeInMessage 0.8s ease-out;
+            text-align: left;
+        }
+        
+        .user-message, .kai-response {
+            padding: 14px 28px;
+            border-radius: 25px;
+            font-size: 17px;
+            display: inline-block;
+            animation: fadeInMessage 0.6s ease-out;
+            text-align: left;
+        }
+        
+        .user-message {
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.95);
+        }
+        
+        .kai-response {
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.15) 0%, rgba(74, 144, 226, 0.08) 100%);
+            border: 1px solid rgba(74, 144, 226, 0.3);
+            color: rgba(255, 255, 255, 0.95);
+            max-width: 500px;
+            line-height: 1.5;
+        }
+        
+        /* Prompt button styles */
+        .prompt-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: fadeInMessage 0.5s ease-out backwards;
+        }
+        
+        .prompt-btn:hover {
+            background: rgba(74, 144, 226, 0.2);
+            border-color: rgba(74, 144, 226, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .prompt-btn.cta {
+            background: rgba(251, 146, 60, 0.2);
+            border-color: rgba(251, 146, 60, 0.5);
+        }
+        
+        .prompt-btn.cta:hover {
+            background: rgba(251, 146, 60, 0.3);
+            border-color: rgba(251, 146, 60, 0.7);
+        }
+        
+        /* Typing dots animation */
+        .typing-dots {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.15) 0%, rgba(74, 144, 226, 0.08) 100%);
+            border-radius: 25px;
+            border: 1px solid rgba(74, 144, 226, 0.3);
+        }
+        
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            background: rgba(74, 144, 226, 0.6);
+            border-radius: 50%;
+            animation: typingDot 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typingDot {
+            0%, 80%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1.3);
+                opacity: 1;
+            }
+        }
+        
+        .typing-dots {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 16px 24px;
+            background: rgba(74, 144, 226, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(74, 144, 226, 0.1);
+        }
+        
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            background: rgba(74, 144, 226, 0.6);
+            border-radius: 50%;
+            animation: typingDot 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typingDot {
+            0%, 80%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1.3);
+                opacity: 1;
+            }
+        }
+        
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        .fade-out {
+            animation: fadeOut 0.6s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(10px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        @keyframes fadeOut {
+            from { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+            to { 
+                opacity: 0; 
+                transform: translateY(-10px); 
+            }
+        }
+        
+        /* CTA button */
+        .cta-gradient {
+            background: linear-gradient(135deg, #FB923C 0%, #F97316 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-gradient::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+            opacity: 0;
+        }
+        
+        .cta-gradient:hover::before {
+            animation: shine 0.5s ease-in-out;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-white flex items-center justify-center h-screen">
+<body class="bg-black text-white relative">
+    <div class="hero-bg"></div>
     
-    <div class="text-center p-4">
-        <h1 class="text-5xl md:text-7xl font-bold leading-tight">
-            Don't Visit Kauai Like a Tourist.
-        </h1>
-        <p class="text-xl md:text-2xl text-gray-300 mt-4">
-            Get authentic, real-time recommendations from Kai, your personal SMS guide to the Garden Isle.
-        </p>
-        <a href="#" class="mt-8 inline-block bg-cyan-400 text-gray-900 font-bold py-3 px-8 rounded-lg text-lg hover:bg-cyan-300 transition">
-            Meet Kai
-        </a>
-    </div>
+    <section class="min-h-screen flex flex-col items-center justify-center px-4 py-12 relative z-10">
+        <div class="max-w-5xl mx-auto w-full text-center">
+            <!-- New headline -->
+            <h1 class="text-5xl md:text-7xl font-bold mb-4 tracking-tight" style="animation: slideUp 0.6s ease-out;">
+                Explore Kauai with Kai
+            </h1>
+            
+            <!-- Subheadline in piercing blue -->
+            <p class="text-xl md:text-2xl mb-10" style="color: #4A90E2; animation: slideUp 0.6s 0.1s ease-out backwards;">
+                Unlock the island. Save money. Be pono.
+            </p>
+            
+            <!-- Value icons - 6 total -->
+            <div class="flex justify-center items-center gap-4 md:gap-6 mb-10">
+                <!-- Compass - Experience -->
+                <div class="icon-wrapper" style="animation-delay: 0.2s;">
+                    <div class="value-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="#FB923C" opacity="0.3"/>
+                        </svg>
+                    </div>
+                    <span class="icon-label">Experience</span>
+                </div>
+                
+                <!-- Dollar - Deals -->
+                <div class="icon-wrapper" style="animation-delay: 0.3s;">
+                    <div class="value-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="#FB923C"/>
+                        </svg>
+                    </div>
+                    <span class="icon-label">Deals</span>
+                </div>
+                
+                <!-- Plate & Fork - The Spots -->
+                <div class="icon-wrapper" style="animation-delay: 0.4s;">
+                    <div class="value-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="2">
+                            <circle cx="12" cy="12" r="9"/>
+                            <path d="M8 12h8M12 8v8" stroke="#FB923C"/>
+                            <path d="M7 3v6M7 6h2M17 3v18l2-2 2 2V3" stroke="#4A90E2" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <span class="icon-label">The Spots</span>
+                </div>
+                
+                <!-- Waves - Beaches -->
+                <div class="icon-wrapper" style="animation-delay: 0.5s;">
+                    <div class="value-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="2">
+                            <path d="M2 12c.6-.6 1.4-1 2.2-1 1.6 0 2.8 1.3 2.8 2.9s1.3 2.9 2.8 2.9c.8 0 1.6-.4 2.2-1 .6.6 1.4 1 2.2 1 1.6 0 2.8-1.3 2.8-2.9s1.3-2.9 2.8-2.9c.8 0 1.6.4 2.2 1" stroke="#FB923C" opacity="0.6"/>
+                            <path d="M2 17c.6-.6 1.4-1 2.2-1 1.6 0 2.8 1.3 2.8 2.9" opacity="0.4"/>
+                        </svg>
+                    </div>
+                    <span class="icon-label">Beaches</span>
+                </div>
+                
+                <!-- Beer - Happy Hours -->
+                <div class="icon-wrapper" style="animation-delay: 0.6s;">
+                    <div class="value-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="2">
+                            <path d="M5 12v7a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-7"/>
+                            <path d="M5 12V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v5"/>
+                            <path d="M15 12h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4" stroke="#FB923C"/>
+                            <path d="M5 8h10" opacity="0.5"/>
+                        </svg>
+                    </div>
+                    <span class="icon-label">Happy Hours</span>
+                </div>
+                
+                <!-- Dolphin - Adventures -->
+                <div class="icon-wrapper" style="animation-delay: 0.7s;">
+                    <div class="value-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="2">
+                            <path d="M21 12c0-3-2-6-6-6-2 0-3.5 1-4.5 2.5C9.5 7 8 6 6 6c-3 0-5 2-5 5s2 5 5 5c1.5 0 2.5-.5 3.5-1.5 1 1 2.5 1.5 4.5 1.5 4 0 7-3 7-4z" fill="#FB923C" opacity="0.2"/>
+                            <circle cx="9" cy="10" r="1" fill="#4A90E2"/>
+                            <path d="M12 16c0 2 1 5 1 5" stroke="#4A90E2"/>
+                        </svg>
+                    </div>
+                    <span class="icon-label">Adventures</span>
+                </div>
+            </div>
+            
+            <!-- Chat container - fixed height, no bouncing -->
+            <div class="relative max-w-2xl mx-auto mb-16" style="animation: slideUp 0.8s 0.6s ease-out backwards;">
+                <div id="chatContainer" class="glass-container rounded-3xl p-8 h-[400px] flex flex-col">
+                    <!-- Messages area - scrollable -->
+                    <div id="messagesArea" class="flex-1 overflow-y-auto space-y-4 mb-6">
+                        <!-- Kai's initial greeting -->
+                        <div class="flex justify-start">
+                            <div class="kai-greeting">
+                                Aloha! I'm Kai, how can I help you? 🌺
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Prompt buttons area - fixed at bottom -->
+                    <div id="promptsArea" class="flex flex-wrap justify-center gap-3">
+                        <!-- Buttons will appear here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Button - smaller and more elegant -->
+            <div class="text-center" style="animation: slideUp 0.8s 0.8s ease-out backwards;">
+                <a href="#" class="inline-block bg-orange-500 hover:bg-orange-400 text-white px-8 py-3 rounded-lg text-lg font-medium transition-all transform hover:scale-105 hover:shadow-lg hover:shadow-orange-500/20">
+                    Start Texting Kai → $10
+                </a>
+            </div>
+        </div>
+    </section>
 
+    <script>
+        const conversations = {
+            initial: {
+                prompts: [
+                    { text: 'How does this work?', response: 'Super easy! Just text me anything about Kauai - beaches, food, adventures - and I\'ll hook you up with real-time tips and exclusive deals 🤙' },
+                    { text: 'Best poke in Kapaa?', response: 'Pono Market has the best spicy ahi! Get there before noon for the fresh stuff. Show them this chat for 10% off your order 🍱' },
+                    { text: 'Any deals on adventures?', response: 'Yes! Na Pali Catamaran has 15% off sunset sails this week. Plus I know which helicopter tours have last-minute deals. Want me to check availability? 🚁' }
+                ]
+            }
+        };
+
+        const messagesArea = document.getElementById('messagesArea');
+        const promptsArea = document.getElementById('promptsArea');
+        let allPrompts = [];
+
+        function createPromptButtons(prompts) {
+            promptsArea.innerHTML = '';
+            allPrompts = prompts;
+            prompts.forEach((prompt, index) => {
+                const button = document.createElement('button');
+                button.className = 'prompt-btn';
+                button.style.animationDelay = `${index * 0.1}s`;
+                button.textContent = prompt.text;
+                button.dataset.index = index;
+                button.onclick = () => handlePromptClick(prompt, button);
+                promptsArea.appendChild(button);
+            });
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'flex justify-start';
+            typingDiv.innerHTML = `
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+            messagesArea.appendChild(typingDiv);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+            return typingDiv;
+        }
+
+        function handlePromptClick(prompt, button) {
+            // Hide clicked button only
+            button.style.display = 'none';
+            
+            // Add user message (right aligned)
+            const userDiv = document.createElement('div');
+            userDiv.className = 'flex justify-end';
+            userDiv.innerHTML = `<div class="user-message">${prompt.text}</div>`;
+            messagesArea.appendChild(userDiv);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+            
+            // Show typing indicator
+            const typingIndicator = showTypingIndicator();
+            
+            // Add Kai's response after delay
+            setTimeout(() => {
+                // Remove typing indicator
+                typingIndicator.remove();
+                
+                // Add Kai's response (left aligned)
+                const kaiDiv = document.createElement('div');
+                kaiDiv.className = 'flex justify-start';
+                kaiDiv.innerHTML = `<div class="kai-response">${prompt.response}</div>`;
+                messagesArea.appendChild(kaiDiv);
+                messagesArea.scrollTop = messagesArea.scrollHeight;
+                
+                // Check if all prompts have been used
+                const remainingButtons = promptsArea.querySelectorAll('button:not([style*="display: none"])');
+                if (remainingButtons.length === 0) {
+                    // All prompts used, show sign up button
+                    setTimeout(() => {
+                        const signUpBtn = document.createElement('button');
+                        signUpBtn.className = 'prompt-btn cta';
+                        signUpBtn.textContent = 'How do I sign up?';
+                        signUpBtn.onclick = () => handleSignUp();
+                        promptsArea.appendChild(signUpBtn);
+                    }, 1000);
+                }
+            }, 1500);
+        }
+
+        function handleSignUp() {
+            // Clear all buttons
+            promptsArea.innerHTML = '';
+            
+            // Add final user message
+            const finalUserDiv = document.createElement('div');
+            finalUserDiv.className = 'flex justify-end';
+            finalUserDiv.innerHTML = `<div class="user-message">How do I sign up?</div>`;
+            messagesArea.appendChild(finalUserDiv);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+            
+            // Show typing
+            const typingIndicator = showTypingIndicator();
+            
+            // Add final Kai response
+            setTimeout(() => {
+                typingIndicator.remove();
+                const finalKaiDiv = document.createElement('div');
+                finalKaiDiv.className = 'flex justify-start';
+                finalKaiDiv.innerHTML = `<div class="kai-response">Just click the button below to start texting me! First day free, then only $10 for your whole trip. I\'ll be your personal island guide 24/7 🌺</div>`;
+                messagesArea.appendChild(finalKaiDiv);
+                messagesArea.scrollTop = messagesArea.scrollHeight;
+            }, 1500);
+        }
+
+        // Initialize with first prompts
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                createPromptButtons(conversations.initial.prompts);
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
