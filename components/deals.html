@@ -1,5 +1,5 @@
 <!-- DISCOUNTS VALUE SECTION -->
-<section id="discountSection" class="py-24 px-4 bg-black relative z-10" style="margin-bottom: 96px;">
+<section id="discountSection" class="py-24 px-4 bg-black relative z-10" style="margin-bottom: 48px;">
     <div class="max-w-6xl mx-auto">
         <!-- Header -->
         <div class="text-center mb-16 fade-in-up">
@@ -117,6 +117,87 @@
                 <p class="text-gray-500 mt-4 text-lg">🤙</p>
             </div>
         </div>
+        <!-- Add this right before the closing </section> tag of your deals.html -->
+
+        <!-- Pixie dust drip effect -->
+        <div class="pixie-dust-container">
+            <div class="dust-particle dust-1"></div>
+            <div class="dust-particle dust-2"></div>
+            <div class="dust-particle dust-3"></div>
+            <div class="dust-particle dust-4"></div>
+            <div class="dust-particle dust-5"></div>
+        </div>
+    </div>
+</section>
+
+<style>
+.pixie-dust-container {
+    position: absolute;  /* CHANGE TO ABSOLUTE */
+    bottom: 60px;      /* Position it to overlap */
+    left: 50%;
+    transform: translateX(-50%);
+    height: 50px;
+    width: 100%;
+    overflow: visible;
+}
+
+.dust-particle {
+    position: absolute;
+    width: 3px;  /* Small and subtle */
+    height: 3px;
+    background: #67E8F9;
+    border-radius: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    box-shadow: 0 0 4px rgba(103, 232, 249, 0.6);
+}
+
+.dust-1 {
+    animation: dustFall 3s ease-in-out infinite;
+}
+
+.dust-2 {
+    left: 48%;
+    animation: dustFall 3s ease-in-out infinite 0.5s;
+}
+
+.dust-3 {
+    left: 52%;
+    animation: dustFall 3s ease-in-out infinite 1s;
+}
+
+.dust-4 {
+    left: 49%;
+    width: 3px;
+    height: 3px;
+    animation: dustFall 3s ease-in-out infinite 1.5s;
+}
+
+.dust-5 {
+    left: 51%;
+    width: 3px;
+    height: 3px;
+    animation: dustFall 3s ease-in-out infinite 2s;
+}
+
+@keyframes dustFall {
+    0% {
+        top: 0;
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.3;
+    }
+    100% {
+        top: 150px;  /* Just fall 60px */
+        opacity: 0;
+    }
+}
+</style>
     </div>
 </section>
 

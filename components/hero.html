@@ -1,5 +1,5 @@
 <!-- HERO SECTION -->
-<section id="heroSection" class="min-h-screen flex flex-col items-center justify-center px-4 py-12 relative z-10" style="margin-bottom: 96px;">
+<section id="heroSection" class="min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-12 relative z-10" style="margin-bottom: 96px;">
     <div class="max-w-4xl mx-auto w-full">
         <!-- Clean, minimal hero -->
         <div class="text-center">
@@ -13,14 +13,10 @@
             </h1>
             
             <!-- Softer subheadline -->
-          <p class="mb-10 text-gray-300 text-lg leading-relaxed text-center">
-  Real-time island intel from an AI trained on Kauai.<br>
-  <span class="text-pink-300 font-medium">And she’s got deal hookups.</span>
-</p>
-
-  </span>
-</p>
-
+            <p class="mb-10 text-gray-300 text-lg leading-relaxed text-center">
+                Real-time island intel from an AI trained on Kauai.<br>
+                <span class="text-pink-300 font-medium">And she's got deal hookups.</span>
+            </p>
             
             <!-- SMS demo with left-aligned messages and subtle animation -->
             <div id="chatDemo" class="max-w-md mx-auto mb-6" style="margin-bottom: 24px;">
@@ -76,27 +72,6 @@
                     Get Started → $10/week
                 </button>
             </div>
-
-                <!-- OPTION 2: All-in-one gradient button with icon -->
-                <div class="cta-option-2 hidden">
-                    <button class="cta-icon-button">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                        </svg>
-                        Text 808-KAI-TIPS → $10/week
-                    </button>
-                </div>
-
-                <!-- OPTION 3: Split design with border -->
-                <div class="cta-option-3 hidden">
-                    <div class="inline-flex items-center border-2 border-orange-400/30 rounded-full p-1">
-                        <span class="px-6 py-3 text-lg">Text <span class="font-semibold text-white">808-KAI-TIPS</span></span>
-                        <button class="cta-split-button">
-                            Get Started → $10
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </section>
@@ -120,8 +95,6 @@
 }
 
 /* CTA Button Styles */
-
-/* Option 1: Gradient button */
 .cta-gradient-button {
     color: #1F2937;
     padding: 16px 32px;
@@ -137,46 +110,5 @@
     transform: translateY(-2px);
     box-shadow: 0 15px 40px rgba(34, 211, 238, 0.35);
     filter: brightness(1.05);
-}
-
-/* Option 2: Icon button */
-.cta-icon-button {
-    background: linear-gradient(135deg, #4A90E2 0%, #3B82F6 100%);
-    color: white;
-    padding: 16px 36px;
-    font-size: 18px;
-    font-weight: 600;
-    border-radius: 50px;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 30px rgba(74, 144, 226, 0.3);
-    border: none;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.cta-icon-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(74, 144, 226, 0.4);
-}
-
-/* Option 3: Split button */
-.cta-split-button {
-    background: linear-gradient(135deg, #FB923C 0%, #F97316 100%);
-    color: white;
-    padding: 12px 28px;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 50px;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-    margin-left: 8px;
-}
-
-.cta-split-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 25px rgba(251, 146, 60, 0.3);
 }
 </style>

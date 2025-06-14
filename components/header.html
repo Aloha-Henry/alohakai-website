@@ -17,57 +17,15 @@
                     </a>
                 </div>
 
-                <!-- Desktop Navigation - Clean & Modern -->
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="#deals" class="nav-link group">
-                        <span class="relative">
-                            deals
-                            <span class="nav-dot"></span>
-                        </span>
-                    </a>
-                    <a href="#how" class="nav-link group">
-                        <span class="relative">
-                            how it works
-                            <span class="nav-dot"></span>
-                        </span>
-                    </a>
-                    <a href="#contact" class="nav-link group">
-                        <span class="relative">
-                            contact
-                            <span class="nav-dot"></span>
-                        </span>
-                    </a>
-                </nav>
-
-                <!-- CTA - Floating style -->
+                <!-- CTA - Text Kai Button (Desktop only) -->
                 <div class="hidden md:block">
-                    <a href="sms:8085248477?body=ALOHA" class="cta-float group">
-                        <span class="cta-text">start free</span>
-                        <span class="cta-price">$10</span>
-                        <span class="cta-arrow">↗</span>
+                    <a href="#smsSection" class="cta-float group">
+                        <span class="cta-text">Start Texting Kai</span>
+                        <span class="cta-arrow">↓</span>
                     </a>
                 </div>
-
-                <!-- Mobile Menu Toggle -->
-                <button class="md:hidden mobile-toggle" onclick="toggleMobileMenu()">
-                    <div class="menu-line line-1"></div>
-                    <div class="menu-line line-2"></div>
-                </button>
             </div>
         </div>
-    </div>
-
-    <!-- Mobile Menu - Fullscreen Modern -->
-    <div id="mobileMenu" class="mobile-menu">
-        <nav class="flex flex-col items-center justify-center h-full space-y-8">
-            <a href="#home" class="mobile-link" onclick="toggleMobileMenu()">home</a>
-            <a href="#deals" class="mobile-link" onclick="toggleMobileMenu()">deals</a>
-            <a href="#how" class="mobile-link" onclick="toggleMobileMenu()">how it works</a>
-            <a href="#contact" class="mobile-link" onclick="toggleMobileMenu()">contact</a>
-            <a href="sms:8085248477?body=ALOHA" class="mobile-cta">
-                start free → $10
-            </a>
-        </nav>
     </div>
 </header>
 
@@ -80,37 +38,6 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     z-index: 9999;
-}
-
-/* Navigation links */
-.nav-link {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.875rem;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-    text-decoration: none;
-}
-
-.nav-link:hover {
-    color: #67E8F9;
-}
-
-/* Navigation dots */
-.nav-dot {
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%) scale(0);
-    width: 4px;
-    height: 4px;
-    background: #FB7185;
-    border-radius: 50%;
-    transition: transform 0.3s ease;
-}
-
-.nav-link:hover .nav-dot {
-    transform: translateX(-50%) scale(1);
 }
 
 /* CTA Button */
@@ -156,98 +83,12 @@
     font-weight: 500;
 }
 
-.cta-price {
-    opacity: 0.6;
-    font-size: 0.75rem;
-}
-
 .cta-arrow {
     transition: transform 0.3s ease;
 }
 
 .cta-float:hover .cta-arrow {
-    transform: translate(2px, -2px);
-}
-
-/* Mobile menu toggle */
-.mobile-toggle {
-    width: 24px;
-    height: 24px;
-    position: relative;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.menu-line {
-    position: absolute;
-    width: 20px;
-    height: 1.5px;
-    background: white;
-    transition: all 0.3s ease;
-    left: 2px;
-}
-
-.line-1 {
-    top: 8px;
-}
-
-.line-2 {
-    bottom: 8px;
-}
-
-.mobile-toggle.active .line-1 {
-    transform: rotate(45deg);
-    top: 11px;
-}
-
-.mobile-toggle.active .line-2 {
-    transform: rotate(-45deg);
-    bottom: 11px;
-}
-
-/* Mobile menu */
-.mobile-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.98);
-    backdrop-filter: blur(20px);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-
-.mobile-menu.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.mobile-link {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 2rem;
-    font-weight: 300;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.mobile-link:hover {
-    color: #67E8F9;
-    transform: translateX(10px);
-}
-
-.mobile-cta {
-    margin-top: 2rem;
-    display: inline-block;
-    padding: 16px 32px;
-    background: linear-gradient(135deg, #FB7185 0%, #F43F5E 100%);
-    color: white;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    transform: translateY(2px);
 }
 
 /* Header hide/show on scroll */
@@ -283,29 +124,6 @@ window.addEventListener('scroll', () => {
             isScrolling = false;
         });
         isScrolling = true;
-    }
-});
-
-// Mobile menu toggle
-function toggleMobileMenu() {
-    const menu = document.getElementById('mobileMenu');
-    const toggle = document.querySelector('.mobile-toggle');
-    
-    menu.classList.toggle('active');
-    toggle.classList.toggle('active');
-    
-    // Prevent body scroll when menu is open
-    if (menu.classList.contains('active')) {
-        document.body.style.overflow = 'hidden';
-    } else {
-        document.body.style.overflow = '';
-    }
-}
-
-// Close mobile menu on escape key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && document.getElementById('mobileMenu').classList.contains('active')) {
-        toggleMobileMenu();
     }
 });
 </script>

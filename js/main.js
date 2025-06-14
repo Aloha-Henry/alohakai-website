@@ -17,8 +17,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         { name: 'hero', target: 'hero-component' },
         { name: 'deals', target: 'deals-component' },
         { name: 'sms', target: 'sms-component' },
-        { name: 'wisdom', target: 'wisdom-component' },
-        { name: 'cta', target: 'cta-component' },
         { name: 'footer', target: 'footer-component' }
     ];
 
@@ -40,7 +38,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     // Load spacing controls (dev mode only)
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        loadSpacingControls();
     }
 });
 
@@ -131,15 +128,6 @@ function initializeCardEffects() {
 }
 
 // Load spacing controls for development
-async function loadSpacingControls() {
-    try {
-        const response = await fetch('components/spacing-controls.html');
-        const html = await response.text();
-        document.getElementById('spacing-controls').innerHTML = html;
-    } catch (error) {
-        console.log('Spacing controls not loaded (production mode)');
-    }
-}
 
 // SMS Message Flow Animation
 function initializeKaiDemo() {
