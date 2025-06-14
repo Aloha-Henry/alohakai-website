@@ -8,13 +8,54 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="css/main.css">
-    
     <style>
         body {
             background: #000;
             color: white;
+        }
+        
+        .form-textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            width: 100%;
+            min-height: 200px;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+        
+        .form-textarea:focus {
+            outline: none;
+            border-color: #67E8F9;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.1);
+        }
+        
+        .form-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #FB7185 0%, #F43F5E 100%);
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1.125rem;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(251, 113, 133, 0.4);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -40,31 +81,58 @@
                     </span>
                 </h1>
                 <p class="text-xl text-gray-400">
-                    Help make Kai smarter! Drop your local spots, hidden gems, whatever's good.
+                    Drop your spots. We'll handle the rest.
                 </p>
             </div>
 
-            <!-- Google Form Embed -->
-            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 20px; backdrop-filter: blur(10px);">
-                <iframe 
-                    src="https://docs.google.com/forms/d/e/1FAIpQLSdjlNo0FFcMNwvsF694z0lcTLApbDQaACdoCc39z41GE3gJdg/viewform?embedded=true" 
-                    width="100%" 
-                    height="712" 
-                    frameborder="0" 
-                    marginheight="0" 
-                    marginwidth="0"
-                    style="border-radius: 12px;">
-                    Loading…
-                </iframe>
-            </div>
+            <!-- Custom Form -->
+            <form action="https://formsubmit.co/YOUR_EMAIL_HERE" method="POST" class="space-y-6">
+                <!-- Honeypot -->
+                <input type="text" name="_honey" style="display:none">
+                
+                <!-- Disable captcha -->
+                <input type="hidden" name="_captcha" value="false">
+                
+                <!-- Success page -->
+                <input type="hidden" name="_next" value="https://yoursite.com/thanks">
+                
+                <!-- Main textarea -->
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Tell Kai what's good:</label>
+                    <textarea 
+                        name="favorites"
+                        class="form-textarea" 
+                        placeholder="That new bakery by Safeway in Lihue has amazing malasadas. Also, the secret beach access is behind the yellow house on Aliomanu Rd..."
+                        required>
+                    </textarea>
+                </div>
+                
+                <!-- Optional name -->
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Your name (optional):</label>
+                    <input 
+                        type="text"
+                        name="name"
+                        class="form-textarea"
+                        style="min-height: auto; padding: 12px 16px;"
+                        placeholder="Anonymous is cool too">
+                </div>
+                
+                <!-- Submit -->
+                <div class="text-center pt-6">
+                    <button type="submit" class="submit-btn text-white">
+                        Share the Aloha →
+                    </button>
+                </div>
+            </form>
 
-            <!-- Bottom CTA -->
-            <div class="text-center mt-12">
+            <!-- Bottom text -->
+            <div class="text-center mt-16">
                 <p class="text-gray-500 mb-4">
-                    Want to discover spots right now?
+                    Want recommendations now?
                 </p>
                 <a href="sms:8085248477?body=ALOHA" class="inline-block text-lg" style="color: #FB7185;">
-                    Text Kai at 808-524-8477 →
+                    Text Kai: 808-524-8477 →
                 </a>
             </div>
         </div>
