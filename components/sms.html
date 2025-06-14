@@ -1,0 +1,242 @@
+<!-- INTERACTIVE SMS SECTION - TALK STORY WITH KAI -->
+<section id="smsSection" class="py-24 px-4 bg-black relative overflow-hidden" style="scroll-margin-top: 80px;">
+    <!-- Radial gradient background -->
+    <div class="absolute inset-0 opacity-30">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full"
+             style="background: radial-gradient(circle, #67E8F9 0%, transparent 70%); filter: blur(120px);"></div>
+    </div>
+    
+    <div class="relative z-10 max-w-6xl mx-auto">
+        <!-- Section Header -->
+        <div class="text-center mb-12 fade-in-up">
+            <div class="w-24 h-1 mx-auto mb-8" style="background: linear-gradient(90deg, transparent, #67E8F9, transparent);"></div>
+            <h2 class="text-4xl md:text-6xl font-bold mb-6">
+                Talk Story With 
+                <span style="background: linear-gradient(135deg, #67E8F9 0%, #22D3EE 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Kai
+                </span>
+            </h2>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                Test the AI SMS Guide. Just like texting her for real.
+            </p>
+        </div>
+        
+        <!-- Chat Container -->
+        <div class="chat-demo-container fade-in-up" style="animation-delay: 0.2s;">
+            <!-- Phone Frame -->
+            <div class="phone-frame">
+                <!-- Status Bar -->
+                <div class="phone-status-bar">
+                    <span>9:41 AM</span>
+                    <span class="flex items-center gap-2">
+                        <span>Kai</span>
+                        <span>🌺</span>
+                    </span>
+                    <div class="flex items-center gap-2">
+                        <span>📶</span>
+                        <span>🔋</span>
+                    </div>
+                </div>
+                
+                <!-- Chatbase Iframe -->
+                <div class="chat-iframe-wrapper">
+                    <iframe 
+                        src="https://www.chatbase.co/chatbot-iframe/n4pEzS6uQFXagUnju0eva" 
+                        width="100%" 
+                        style="height: 100%; min-height: 600px" 
+                        frameborder="0"
+                        loading="lazy"
+                        class="chat-iframe">
+                    </iframe>
+                </div>
+            </div>
+            
+            <!-- Floating elements for ambiance -->
+            <div class="floating-emoji emoji-1">🏄‍♂️</div>
+            <div class="floating-emoji emoji-2">🌴</div>
+            <div class="floating-emoji emoji-3">🤙</div>
+            <div class="floating-emoji emoji-4">🌺</div>
+        </div>
+        
+        <!-- Bottom Note -->
+        <div class="text-center mt-12 fade-in-up" style="animation-delay: 0.3s;">
+            <p class="text-gray-500 text-lg">
+                Demo is limited. Want the real thing? Just text 
+                <span style="color: #FB7185; font-weight: 600;">808-KAI-TIPS</span>.
+            </p>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Chat Demo Container */
+.chat-demo-container {
+    max-width: 450px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Phone Frame */
+.phone-frame {
+    background: #000;
+    border-radius: 40px;
+    padding: 12px;
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 0 12px #1a1a1a,
+        inset 0 0 0 2px #333;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Phone Status Bar */
+.phone-status-bar {
+    background: #000;
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 28px 28px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+/* Iframe Wrapper */
+.chat-iframe-wrapper {
+    background: #000;
+    border-radius: 0 0 28px 28px;
+    overflow: hidden;
+    position: relative;
+}
+
+.chat-iframe {
+    display: block;
+    border-radius: 0 0 28px 28px;
+}
+
+/* Floating Emojis */
+.floating-emoji {
+    position: absolute;
+    font-size: 2rem;
+    animation: float-around 20s ease-in-out infinite;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.emoji-1 {
+    top: 10%;
+    left: -60px;
+    animation-delay: 0s;
+}
+
+.emoji-2 {
+    top: 30%;
+    right: -60px;
+    animation-delay: 5s;
+}
+
+.emoji-3 {
+    bottom: 30%;
+    left: -60px;
+    animation-delay: 10s;
+}
+
+.emoji-4 {
+    bottom: 10%;
+    right: -60px;
+    animation-delay: 15s;
+}
+
+@keyframes float-around {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+    }
+    25% {
+        transform: translateY(-20px) rotate(10deg) scale(1.1);
+    }
+    50% {
+        transform: translateY(10px) rotate(-5deg) scale(0.9);
+    }
+    75% {
+        transform: translateY(-15px) rotate(15deg) scale(1.05);
+    }
+}
+
+/* Fade in animation */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .chat-demo-container {
+        max-width: 100%;
+        padding: 0 20px;
+    }
+    
+    .phone-frame {
+        border-radius: 30px;
+        padding: 8px;
+        box-shadow: 
+            0 20px 40px -10px rgba(0, 0, 0, 0.4),
+            0 0 0 8px #1a1a1a,
+            inset 0 0 0 1px #333;
+    }
+    
+    .chat-iframe-wrapper {
+        min-height: 500px;
+    }
+    
+    .floating-emoji {
+        font-size: 1.5rem;
+    }
+    
+    .emoji-1, .emoji-3 {
+        left: -40px;
+    }
+    
+    .emoji-2, .emoji-4 {
+        right: -40px;
+    }
+}
+
+/* Loading state for iframe */
+.chat-iframe-wrapper::before {
+    content: "Loading Kai...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #67E8F9;
+    font-size: 1.2rem;
+    opacity: 0.5;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.chat-iframe:not([src=""]) + ::before {
+    display: none;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* Ensure iframe is responsive */
+@media (max-width: 480px) {
+    .chat-iframe {
+        min-height: 450px !important;
+    }
+}
+</style>
