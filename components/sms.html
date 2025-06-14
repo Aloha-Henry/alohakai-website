@@ -1,35 +1,163 @@
-<!-- SIMPLE SMS TEST SECTION -->
+<!-- FINAL SMS SECTION - TALK STORY WITH KAI -->
 <section id="smsSection" class="py-24 px-4 bg-black relative overflow-hidden">
     <div class="relative z-10 max-w-4xl mx-auto">
         <!-- Section Header -->
-        <div class="text-center mb-12">
+        <div class="text-center mb-12 fade-in-up">
+            <div class="w-24 h-1 mx-auto mb-8" style="background: linear-gradient(90deg, transparent, #67E8F9, transparent);"></div>
             <h2 class="text-4xl md:text-6xl font-bold mb-6">
-                Talk Story With 
-                <span style="background: linear-gradient(135deg, #67E8F9 0%, #22D3EE 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                    Kai
-                </span>
+                Try Kai Right Now
             </h2>
-            <p class="text-xl text-gray-400">
-                Test the AI SMS Guide. Just like texting her for real.
+            <p class="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto">
+                No download. No signup. Just start chatting.
+                <br class="hidden md:block">
+                <span style="color: #67E8F9;">Ask her anything about Kauai.</span>
             </p>
         </div>
         
-        <!-- SIMPLE IFRAME - NO CONTAINER -->
-        <div style="max-width: 500px; margin: 0 auto;">
-            <iframe 
-                src="https://www.chatbase.co/chatbot-iframe/n4pEzS6uQFXagUnju0eva" 
-                width="100%" 
-                height="700"
-                style="border: 2px solid #333; border-radius: 20px;">
-            </iframe>
+        <!-- Chat Container with Working Phone Frame -->
+        <div style="max-width: 450px; margin: 0 auto; position: relative;" class="fade-in-up" style="animation-delay: 0.2s;">
+            <!-- Floating Emojis -->
+            <div class="floating-emoji emoji-1">🏄</div>
+            <div class="floating-emoji emoji-2">🌺</div>
+            <div class="floating-emoji emoji-3">🥥</div>
+            <div class="floating-emoji emoji-4">🌴</div>
+            
+            <!-- Phone Frame -->
+            <div style="background: #000; border-radius: 40px; padding: 12px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 12px #1a1a1a;">
+                <!-- Status Bar -->
+                <div style="background: #000; color: white; padding: 8px 20px; border-radius: 28px 28px 0 0; display: flex; justify-content: space-between; align-items: center; font-size: 14px; margin-bottom: 2px;">
+                    <span>9:41 AM</span>
+                    <span style="display: flex; align-items: center; gap: 8px;">
+                        <span>Kai</span>
+                        <span>🌺</span>
+                    </span>
+                    <span>📶 🔋</span>
+                </div>
+                
+                <!-- Working Iframe -->
+                <div style="border-radius: 0 0 28px 28px; overflow: hidden;">
+                    <iframe 
+                        src="https://www.chatbase.co/chatbot-iframe/n4pEzS6uQFXagUnju0eva" 
+                        width="100%" 
+                        height="600"
+                        style="border: 0; display: block;">
+                    </iframe>
+                </div>
+            </div>
         </div>
         
-        <!-- Bottom Note -->
-        <div class="text-center mt-12">
-            <p class="text-gray-500 text-lg">
-                Demo is limited. Want the real thing? Just text 
-                <span style="color: #FB7185; font-weight: 600;">808-KAI-TIPS</span>.
+        <!-- CTA Section -->
+        <div class="text-center mt-16 fade-in-up" style="animation-delay: 0.3s;">
+            <p class="text-2xl md:text-3xl font-semibold mb-6">
+                Ready for the 
+                <span style="background: linear-gradient(135deg, #FB7185 0%, #F43F5E 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Real Thing?
+                </span>
+            </p>
+            <a href="sms:8085248477?body=ALOHA" class="inline-block cta-button-primary">
+                Text ALOHA to Start Free →
+            </a>
+            <p class="text-gray-500 mt-4">
+                First day free • Then just $10 for your whole trip
             </p>
         </div>
     </div>
 </section>
+
+<style>
+/* CTA Button */
+.cta-button-primary {
+    background: linear-gradient(135deg, #FB7185 0%, #F43F5E 100%);
+    color: white;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(251, 113, 133, 0.3);
+}
+
+.cta-button-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(251, 113, 133, 0.4);
+}
+
+/* Floating Emojis */
+.floating-emoji {
+    position: absolute;
+    font-size: 2rem;
+    animation: float-gentle 15s ease-in-out infinite;
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.emoji-1 {
+    top: 5%;
+    left: -50px;
+    animation-delay: 0s;
+}
+
+.emoji-2 {
+    top: 25%;
+    right: -50px;
+    animation-delay: 3.75s;
+}
+
+.emoji-3 {
+    bottom: 25%;
+    left: -50px;
+    animation-delay: 7.5s;
+}
+
+.emoji-4 {
+    bottom: 5%;
+    right: -50px;
+    animation-delay: 11.25s;
+}
+
+@keyframes float-gentle {
+    0%, 100% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-15px) translateX(10px) rotate(5deg);
+    }
+    50% {
+        transform: translateY(5px) translateX(-5px) rotate(-3deg);
+    }
+    75% {
+        transform: translateY(-10px) translateX(8px) rotate(8deg);
+    }
+}
+
+/* Fade in animation */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .floating-emoji {
+        font-size: 1.5rem;
+    }
+    
+    .emoji-1, .emoji-3 {
+        left: -30px;
+    }
+    
+    .emoji-2, .emoji-4 {
+        right: -30px;
+    }
+}
+</style>
