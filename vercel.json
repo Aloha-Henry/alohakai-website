@@ -1,4 +1,10 @@
 {
+  "rewrites": [
+    {
+      "source": "/c/:couponId",
+      "destination": "/kai-coupons/index.html"
+    }
+  ],
   "headers": [
     {
       "source": "/:path*",

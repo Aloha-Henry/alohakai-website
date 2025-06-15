@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kai Coupon</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .coupon-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .emoji {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .business-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .discount {
+            font-size: 24px;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #ffe6e6;
+            border-radius: 10px;
+        }
+        
+        .redeem-button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 20px 40px;
+            border-radius: 15px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .redeem-button:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .instructions {
+            font-size: 14px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .redeemed {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .confirmation-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .confirmation-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 300px;
+            margin: 20px;
+        }
+        
+        .confirmation-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .confirm-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .cancel-btn {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .redeem-confirm-btn {
+            background: #e74c3c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="coupon-container" id="couponContainer">
+        <!-- Active Coupon State -->
+        <div id="activeCoupon">
+            <div class="emoji">🌺</div>
+            <div class="business-name" id="businessName">PONO MARKET</div>
+            <div class="discount" id="discountText">10% OFF ENTIRE BILL</div>
+            
+            <button class="redeem-button" id="redeemButton">
+                🏪 TO BE TAPPED BY CASHIER
+            </button>
+            
+            <div class="instructions">
+                Ask the cashier to tap the button above to redeem this offer
+            </div>
+        </div>
+        
+        <!-- Redeemed State (Hidden initially) -->
+        <div id="redeemedCoupon" style="display: none;">
+            <div class="emoji">✅</div>
+            <div class="business-name">REDEEMED!</div>
+            <div style="font-size: 18px; color: #2ecc71; margin-top: 20px;">
+                Mahalo for using Kai! 🤙
+            </div>
+            <div style="font-size: 14px; color: #7f8c8d; margin-top: 15px;">
+                This coupon has been used and is no longer valid
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confirmation Overlay -->
+    <div class="confirmation-overlay" id="confirmationOverlay">
+        <div class="confirmation-box">
+            <h2 style="margin-top: 0; color: #2c3e50;">CONFIRM REDEMPTION?</h2>
+            <p style="color: #7f8c8d;">This coupon can only be redeemed once by the business.</p>
+            
+            <div class="confirmation-buttons">
+                <button class="confirm-btn cancel-btn" onclick="cancelRedemption()">
+                    CANCEL
+                </button>
+                <button class="confirm-btn redeem-confirm-btn" onclick="confirmRedemption()">
+                    YES, REDEEM
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get coupon ID from URL parameter or hash
+        const urlParams = new URLSearchParams(window.location.search);
+        const couponId = urlParams.get('id') || window.location.hash.substring(1) || 'test123';
+        
+        // Your Supabase credentials
+        const SUPABASE_URL = 'https://redgthlqsfquqmqtnrfx.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlZGd0aGxxc2ZxdXFtcXRucmZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5NDkxMTEsImV4cCI6MjA2NTUyNTExMX0.fN8b3lsgzm5f0VZyfxJrh_2zqekMlbM5yq1_dfBAC30';
+        
+        // Check if coupon is already redeemed when page loads
+        window.addEventListener('load', checkCouponStatus);
+        
+        // Add click handler to redeem button
+        document.getElementById('redeemButton').addEventListener('click', startRedemption);
+        
+        async function checkCouponStatus() {
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/coupons?id=eq.${couponId}`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+                
+                const coupons = await response.json();
+                
+                if (coupons.length > 0) {
+                    const coupon = coupons[0];
+                    
+                    // Update page with coupon details
+                    document.getElementById('businessName').textContent = coupon.business_name.toUpperCase();
+                    document.getElementById('discountText').textContent = coupon.discount_description;
+                    
+                    // If already redeemed, show redeemed state
+                    if (coupon.status === 'redeemed') {
+                        showRedeemedState();
+                    }
+                } else {
+                    // Coupon not found
+                    document.getElementById('couponContainer').innerHTML = `
+                        <div style="text-align: center;">
+                            <div class="emoji">❌</div>
+                            <h2>Invalid Coupon</h2>
+                            <p>This coupon code is not valid.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error checking coupon:', error);
+            }
+        }
+        
+        function startRedemption() {
+            document.getElementById('confirmationOverlay').style.display = 'flex';
+        }
+        
+        function cancelRedemption() {
+            document.getElementById('confirmationOverlay').style.display = 'none';
+        }
+        
+        async function confirmRedemption() {
+            try {
+                // Update coupon status to redeemed
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/coupons?id=eq.${couponId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        status: 'redeemed',
+                        redeemed_at: new Date().toISOString()
+                    })
+                });
+                
+                if (response.ok) {
+                    // Hide confirmation overlay
+                    document.getElementById('confirmationOverlay').style.display = 'none';
+                    
+                    // Show redeemed state
+                    showRedeemedState();
+                } else {
+                    alert('Error redeeming coupon. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error redeeming coupon:', error);
+                alert('Error redeeming coupon. Please try again.');
+            }
+        }
+        
+        function showRedeemedState() {
+            document.getElementById('activeCoupon').style.display = 'none';
+            document.getElementById('redeemedCoupon').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
