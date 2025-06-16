@@ -14,63 +14,63 @@
           
            <!-- Softer subheadline -->
            <p class="mb-10 text-gray-300 text-lg leading-relaxed text-center">
-               Real-time island intel from an AI trained on Kauai.<br>
-               <span class="text-pink-300 font-medium">And she's got deal hookups.</span>
+               Your AI friend who actually lives here.<br>
+               <span class="text-pink-300 font-medium">Text me right now. Seriously.</span>
            </p>
           
            <!-- SMS demo with left-aligned messages and subtle animation -->
-           <div id="chatDemo" class="max-w-md mx-auto mb-6" style="margin-bottom: 24px;">
+           <div id="chatDemo" class="max-w-md mx-auto mb-8">
                <div class="glass-container rounded-2xl p-6" style="box-shadow: 0 20px 80px rgba(103, 232, 249, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);">
                    <div class="space-y-4">
                        <!-- User message 1 -->
                        <div class="flex justify-end message-animate" style="animation-delay: 0.5s;">
                            <div class="bg-blue-600 text-white rounded-2xl px-4 py-2 max-w-xs text-left">
-                               <p class="text-sm">Best beach for snorkeling today?</p>
+                               <p class="text-sm">Just landed! Where should we eat tonight?</p>
                            </div>
                        </div>
                       
                        <!-- Kai response 1 -->
                        <div class="flex justify-start message-animate" style="animation-delay: 1s;">
                            <div class="bg-gray-800 text-white rounded-2xl px-4 py-2 max-w-xs text-left">
-                               <p class="text-sm">Koloa Landing. Calm water, turtles guaranteed before 10am. Park on Hoʻonani Rd for free 🐢</p>
+                               <p class="text-sm">Welcome to Kauai! 🌺 For tonight: JO2 has the best garlic shrimp on island. Locals eat there. Show them this for <span class="font-semibold" style="color: #67E8F9;">free haupia dessert</span> 🍤</p>
                            </div>
                        </div>
                       
                        <!-- User message 2 -->
                        <div class="flex justify-end message-animate" style="animation-delay: 1.5s;">
                            <div class="bg-blue-600 text-white rounded-2xl px-4 py-2 max-w-xs text-left">
-                               <p class="text-sm">Best poke in Kapaa?</p>
+                               <p class="text-sm">OMG that was amazing! Secret beaches?</p>
                            </div>
                        </div>
                       
-                       <!-- Kai response 2 with discount -->
+                       <!-- Kai response 2 with insider tip -->
                        <div class="flex justify-start message-animate" style="animation-delay: 2s;">
                            <div class="bg-gray-800 text-white rounded-2xl px-4 py-2 max-w-xs text-left">
-                               <p class="text-sm">Pono Market has the freshest! Get the spicy ahi. Show them this text for <span class="font-semibold" style="color: #67E8F9;">10% off with Kai</span> 🍱</p>
+                               <p class="text-sm">Glad you loved it! For tomorrow: Mahaʻulepu Beach. Park at Grand Hyatt, walk past golf course. Cave on the left = best sunrise spot. Nobody knows about it 🌅</p>
                            </div>
                        </div>
                       
-                       <!-- Subtle typing indicator -->
-                       <div class="flex justify-start message-animate" style="animation-delay: 2.5s;">
-                           <div class="bg-gray-800 rounded-2xl px-4 py-2">
-                               <div class="flex gap-1">
-                                   <div class="w-2 h-2 bg-gray-500 rounded-full animate-pulse"></div>
-                                   <div class="w-2 h-2 bg-gray-500 rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
-                                   <div class="w-2 h-2 bg-gray-500 rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
-                               </div>
-                           </div>
+                       <!-- Real-time feel -->
+                       <div class="flex justify-center mt-4 message-animate" style="animation-delay: 2.5s;">
+                           <span class="text-xs text-gray-500">Sarah from Seattle • 10 minutes ago</span>
                        </div>
                    </div>
                </div>
-               <!-- Tagline right under the text box -->
-               <p class="text-gray-500 mt-4 text-base">No app. No account. Just text.</p>
            </div>
           
-           <!-- Simplified CTA Section -->
-           <div class="mb-8">
-               <button class="cta-gradient-button" style="background: linear-gradient(135deg, #67E8F9 0%, #22D3EE 100%); color: #1F2937; box-shadow: 0 10px 30px rgba(34, 211, 238, 0.25);">
-                   Get Started → $10/week
-               </button>
+           <!-- Clean CTA Section -->
+           <div class="space-y-3">
+               <!-- Launch week as primary CTA -->
+               <div class="flex items-center justify-center">
+                   <div class="inline-flex items-center gap-3 px-6 py-4 rounded-full cursor-pointer transition-all hover:scale-105" style="background: rgba(251, 113, 133, 0.1); border: 2px solid rgba(251, 113, 133, 0.3); box-shadow: 0 0 30px rgba(251, 113, 133, 0.2);">
+                       <span style="color: #FB7185; font-size: 1.5em;">🎉</span>
+                       <span class="text-lg font-medium text-pink-300">Launch Party: Text Kai for 1 Free Week</span>
+                   </div>
+               </div>
+               
+               <!-- Pricing info below -->
+               <p class="text-gray-500 text-sm text-center">Then $10/week. Cancel anytime via text.</p>
+               
            </div>
        </div>
    </div>
@@ -90,29 +90,15 @@
    }
 }
 
-
 .message-animate {
    opacity: 0;
    animation: fadeInUp 0.5s ease-out forwards;
 }
 
-
-/* CTA Button Styles */
-.cta-gradient-button {
-   color: #1F2937;
-   padding: 16px 32px;
-   font-size: 18px;
-   font-weight: 600;
-   border-radius: 50px;
-   transition: all 0.3s ease;
-   border: none;
-   cursor: pointer;
-}
-
-
-.cta-gradient-button:hover {
-   transform: translateY(-2px);
-   box-shadow: 0 15px 40px rgba(34, 211, 238, 0.35);
-   filter: brightness(1.05);
+/* Glass container */
+.glass-container {
+   background: rgba(31, 41, 55, 0.8);
+   backdrop-filter: blur(10px);
+   border: 1px solid rgba(103, 232, 249, 0.2);
 }
 </style>

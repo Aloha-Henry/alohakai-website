@@ -107,9 +107,7 @@
                     <span class="text-3xl font-semibold" style="background: linear-gradient(135deg, #67E8F9 0%, #22D3EE 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Kai's intel + hookups</span>
                     <span class="text-2xl">🤙</span>
                 </div>
-                <p class="text-gray-400 text-lg">
-                    (or 1/3 of a poolside mai tai at the resort)
-                </p>
+            
             </div>
         </div>
 
@@ -130,24 +128,95 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Hardware acceleration for smooth scrolling */
+/* Base glass card with optimized performance */
 .glass-card {
-    will-change: transform, opacity;
-    transform: translateZ(0);
+    background: rgba(31, 41, 55, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    /* Critical performance properties */
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    will-change: transform;
     backface-visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-backface-visibility: hidden;
+    perspective: 1000px;
+    -webkit-perspective: 1000px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Mobile-optimized smooth animations */
-@media (max-width: 768px) {
-    .glass-card:hover {
-        transform: translateY(-4px) scale(1.01);
-    }
-    
-    .fade-in-up {
-        transition: all 0.6s ease-out;
+/* Simplified hover for better performance */
+.glass-card:hover {
+    transform: translate3d(0, -6px, 0);
+    -webkit-transform: translate3d(0, -6px, 0);
+}
+
+/* Coral cards hover */
+.glass-card:not(.seafoam-accent):hover {
+    box-shadow: 0 10px 25px rgba(251, 113, 133, 0.15),
+                0 0 40px rgba(251, 113, 133, 0.1);
+    border-color: rgba(251, 113, 133, 0.3);
+}
+
+/* Seafoam cards hover */
+.glass-card.seafoam-accent:hover {
+    box-shadow: 0 10px 25px rgba(103, 232, 249, 0.15),
+                0 0 40px rgba(103, 232, 249, 0.1);
+    border-color: rgba(103, 232, 249, 0.3);
+}
+
+/* Remove the complex ::before pseudo-element on desktop */
+@media (min-width: 769px) {
+    .glass-card::before {
+        display: none;
     }
 }
+
+/* Partner logo styling */
+.partner-logo {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Discount badge */
+.discount-badge {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* Fade in animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Stagger animation delays */
+.partner-grid > :nth-child(1) { animation-delay: 0.1s; }
+.partner-grid > :nth-child(2) { animation-delay: 0.2s; }
+.partner-grid > :nth-child(3) { animation-delay: 0.3s; }
+.partner-grid > :nth-child(4) { animation-delay: 0.4s; }
+.partner-grid > :nth-child(5) { animation-delay: 0.5s; }
+.partner-grid > :nth-child(6) { animation-delay: 0.6s; }
 
 /* Compact value prop styling */
 .value-prop-compact {
@@ -156,17 +225,20 @@ html {
     border-radius: 20px;
     padding: 24px 32px;
     backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.3s ease;
 }
 
 .value-prop-compact:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    transform: translate3d(0, -2px, 0);
 }
 
-/* Mobile responsive for compact value prop */
+/* Mobile responsive */
 @media (max-width: 768px) {
+    .glass-card:hover {
+        transform: translate3d(0, -4px, 0);
+    }
+    
     .value-prop-compact .flex {
         flex-direction: column;
         gap: 2px;
@@ -185,44 +257,6 @@ html {
         order: 3;
         font-size: 1.75rem;
     }
-    
-    .value-prop-compact .flex span:last-child {
-        order: 4;
-    }
-}
-
-/* Optimized partner grid for mobile */
-.partner-grid {
-    contain: layout style paint;
-}
-
-/* Performance optimization for glass cards */
-.glass-card:hover {
-    contain: layout style paint;
-}
-
-/* Enhanced featured badge (FIXED CUTOFF - FINAL) */
-.featured-badge {
-    position: absolute;
-    top: -12px;
-    right: 12px;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    z-index: 20;
-    box-shadow: 0 4px 12px rgba(251, 113, 133, 0.4);
-    animation: pulse-glow 2s ease-in-out infinite;
-    white-space: nowrap;
-    overflow: visible;
-    transform: translateY(0);
-    min-width: max-content;
-}
-
-@keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 4px 12px rgba(251, 113, 133, 0.4); }
-    50% { box-shadow: 0 6px 20px rgba(251, 113, 133, 0.6); }
 }
 
 /* YOUR PIXIE DUST (PRESERVED EXACTLY) */
@@ -234,6 +268,7 @@ html {
     height: 50px;
     width: 100%;
     overflow: visible;
+    pointer-events: none;
 }
 
 .dust-particle {
@@ -248,94 +283,26 @@ html {
     box-shadow: 0 0 4px rgba(103, 232, 249, 0.6);
 }
 
-.dust-1 {
-    animation: dustFall 3s ease-in-out infinite;
-}
-
-.dust-2 {
-    left: 48%;
-    animation: dustFall 3s ease-in-out infinite 0.5s;
-}
-
-.dust-3 {
-    left: 52%;
-    animation: dustFall 3s ease-in-out infinite 1s;
-}
-
-.dust-4 {
-    left: 49%;
-    width: 3px;
-    height: 3px;
-    animation: dustFall 3s ease-in-out infinite 1.5s;
-}
-
-.dust-5 {
-    left: 51%;
-    width: 3px;
-    height: 3px;
-    animation: dustFall 3s ease-in-out infinite 2s;
-}
+.dust-1 { animation: dustFall 3s ease-in-out infinite; }
+.dust-2 { left: 48%; animation: dustFall 3s ease-in-out infinite 0.5s; }
+.dust-3 { left: 52%; animation: dustFall 3s ease-in-out infinite 1s; }
+.dust-4 { left: 49%; animation: dustFall 3s ease-in-out infinite 1.5s; }
+.dust-5 { left: 51%; animation: dustFall 3s ease-in-out infinite 2s; }
 
 @keyframes dustFall {
-    0% {
-        top: 0;
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.6;
-    }
-    90% {
-        opacity: 0.3;
-    }
-    100% {
-        top: 150px;
-        opacity: 0;
-    }
+    0% { top: 0; opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.3; }
+    100% { top: 150px; opacity: 0; }
 }
 
-/* YOUR EXISTING GLASS CARD HOVER EFFECTS (ENHANCED) */
-.glass-card.seafoam-accent:hover {
-    border-color: rgba(103, 232, 249, 0.5);
-    box-shadow: 0 20px 40px rgba(103, 232, 249, 0.2),
-                0 0 80px rgba(103, 232, 249, 0.1);
-}
-
-.glass-card.seafoam-accent::before {
-    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(103, 232, 249, 0.1) 0%, transparent 50%);
-}
-
-/* Coral hover for non-seafoam cards (ENHANCED) */
-.glass-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    border-color: rgba(251, 113, 133, 0.5);
-    box-shadow: 0 20px 40px rgba(251, 113, 133, 0.2),
-                0 0 80px rgba(251, 113, 133, 0.1);
-}
-
-.glass-card::before {
-    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(251, 113, 133, 0.1) 0%, transparent 50%);
-}
-
-/* MOBILE PERFORMANCE OPTIMIZATIONS */
-@media (max-width: 768px) {
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
     .glass-card {
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
+        transition: none;
     }
-    
     .dust-particle {
-        animation-duration: 2s; /* Faster on mobile for better performance */
-    }
-    
-    /* Reduce motion for users who prefer it */
-    @media (prefers-reduced-motion: reduce) {
-        .glass-card:hover {
-            transform: none;
-        }
-        
-        .dust-particle {
-            animation: none;
-        }
+        animation: none;
     }
 }
 </style>
