@@ -18,8 +18,7 @@
         <div class="partner-grid grid grid-cols-1 md:grid-cols-3 gap-6">
             
             <!-- Partner 1 - Featured -->
-            <div class="glass-card rounded-2xl p-8 fade-in-up relative">
-                <div class="featured-badge" style="background: linear-gradient(135deg, #FB7185 0%, #F43F5E 100%);">Most Popular</div>
+            <div class="glass-card rounded-2xl p-8 fade-in-up relative text-center">
                 <div class="partner-logo rounded-xl mx-auto mb-6" style="color: #FB7185;">
                     B1
                 </div>
@@ -30,7 +29,7 @@
             </div>
 
             <!-- Partner 2 -->
-            <div class="glass-card seafoam-accent rounded-2xl p-8 fade-in-up">
+            <div class="glass-card seafoam-accent rounded-2xl p-8 fade-in-up text-center">
                 <div class="partner-logo rounded-xl mx-auto mb-6" style="color: #67E8F9;">
                     C1
                 </div>
@@ -41,7 +40,7 @@
             </div>
 
             <!-- Partner 3 -->
-            <div class="glass-card rounded-2xl p-8 fade-in-up">
+            <div class="glass-card rounded-2xl p-8 fade-in-up text-center">
                 <div class="partner-logo rounded-xl mx-auto mb-6" style="color: #FB7185;">
                     A1
                 </div>
@@ -52,7 +51,7 @@
             </div>
 
             <!-- Partner 4 -->
-            <div class="glass-card seafoam-accent rounded-2xl p-8 fade-in-up">
+            <div class="glass-card seafoam-accent rounded-2xl p-8 fade-in-up text-center">
                 <div class="partner-logo rounded-xl mx-auto mb-6" style="color: #67E8F9;">
                     L1
                 </div>
@@ -63,7 +62,7 @@
             </div>
 
             <!-- Partner 5 -->
-            <div class="glass-card rounded-2xl p-8 fade-in-up">
+            <div class="glass-card rounded-2xl p-8 fade-in-up text-center">
                 <div class="partner-logo rounded-xl mx-auto mb-6" style="color: #FB7185;">
                     D1
                 </div>
@@ -74,7 +73,7 @@
             </div>
 
             <!-- Partner 6 -->
-            <div class="glass-card seafoam-accent rounded-2xl p-8 fade-in-up">
+            <div class="glass-card seafoam-accent rounded-2xl p-8 fade-in-up text-center">
                 <div class="partner-logo rounded-xl mx-auto mb-6" style="color: #67E8F9;">
                     T1
                 </div>
@@ -99,27 +98,22 @@
             </div>
         </div>
         
-        <!-- Simple Value Prop -->
+        <!-- Compact Value Prop -->
         <div class="mt-16 text-center fade-in-up" style="animation-delay: 0.8s;">
-            <div class="inline-block rounded-2xl p-8">
-                <p class="text-3xl font-semibold text-white mb-4">
-                    $10 gets you:
+            <div class="value-prop-compact max-w-4xl mx-auto">
+                <div class="flex items-center justify-center gap-4 mb-3">
+                    <span class="text-5xl font-black" style="background: linear-gradient(135deg, #FB7185 0%, #67E8F9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">$10</span>
+                    <span class="text-2xl text-gray-300">gets you</span>
+                    <span class="text-3xl font-semibold" style="background: linear-gradient(135deg, #67E8F9 0%, #22D3EE 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Kai's intel + hookups</span>
+                    <span class="text-2xl">🤙</span>
+                </div>
+                <p class="text-gray-400 text-lg">
+                    (or 1/3 of a poolside mai tai at the resort)
                 </p>
-                <p class="text-2xl font-light text-gray-300">
-                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #22D3EE 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                        Kai's intel + hookups
-                    </span>
-                    <br>
-                    <span class="text-gray-500 text-xl">
-                        (or 1/3 of a poolside mai tai at the resort)
-                    </span>
-                </p>
-                <p class="text-gray-500 mt-4 text-lg">🤙</p>
             </div>
         </div>
-        <!-- Add this right before the closing </section> tag of your deals.html -->
 
-        <!-- Pixie dust drip effect -->
+        <!-- Your Pixie dust drip effect (PRESERVED) -->
         <div class="pixie-dust-container">
             <div class="dust-particle dust-1"></div>
             <div class="dust-particle dust-2"></div>
@@ -131,9 +125,110 @@
 </section>
 
 <style>
+/* SMOOTH SCROLL PERFORMANCE ENHANCEMENTS */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Hardware acceleration for smooth scrolling */
+.glass-card {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile-optimized smooth animations */
+@media (max-width: 768px) {
+    .glass-card:hover {
+        transform: translateY(-4px) scale(1.01);
+    }
+    
+    .fade-in-up {
+        transition: all 0.6s ease-out;
+    }
+}
+
+/* Compact value prop styling */
+.value-prop-compact {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 24px 32px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.value-prop-compact:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile responsive for compact value prop */
+@media (max-width: 768px) {
+    .value-prop-compact .flex {
+        flex-direction: column;
+        gap: 2px;
+    }
+    
+    .value-prop-compact .flex span:first-child {
+        order: 2;
+    }
+    
+    .value-prop-compact .flex span:nth-child(2) {
+        order: 1;
+        font-size: 1.25rem;
+    }
+    
+    .value-prop-compact .flex span:nth-child(3) {
+        order: 3;
+        font-size: 1.75rem;
+    }
+    
+    .value-prop-compact .flex span:last-child {
+        order: 4;
+    }
+}
+
+/* Optimized partner grid for mobile */
+.partner-grid {
+    contain: layout style paint;
+}
+
+/* Performance optimization for glass cards */
+.glass-card:hover {
+    contain: layout style paint;
+}
+
+/* Enhanced featured badge (FIXED CUTOFF - FINAL) */
+.featured-badge {
+    position: absolute;
+    top: -12px;
+    right: 12px;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 20;
+    box-shadow: 0 4px 12px rgba(251, 113, 133, 0.4);
+    animation: pulse-glow 2s ease-in-out infinite;
+    white-space: nowrap;
+    overflow: visible;
+    transform: translateY(0);
+    min-width: max-content;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 4px 12px rgba(251, 113, 133, 0.4); }
+    50% { box-shadow: 0 6px 20px rgba(251, 113, 133, 0.6); }
+}
+
+/* YOUR PIXIE DUST (PRESERVED EXACTLY) */
 .pixie-dust-container {
-    position: absolute;  /* CHANGE TO ABSOLUTE */
-    bottom: 60px;      /* Position it to overlap */
+    position: absolute;
+    bottom: 60px;
     left: 50%;
     transform: translateX(-50%);
     height: 50px;
@@ -143,7 +238,7 @@
 
 .dust-particle {
     position: absolute;
-    width: 3px;  /* Small and subtle */
+    width: 3px;
     height: 3px;
     background: #67E8F9;
     border-radius: 50%;
@@ -193,16 +288,12 @@
         opacity: 0.3;
     }
     100% {
-        top: 150px;  /* Just fall 60px */
+        top: 150px;
         opacity: 0;
     }
 }
-</style>
-    </div>
-</section>
 
-<style>
-/* Update glass card hover effects */
+/* YOUR EXISTING GLASS CARD HOVER EFFECTS (ENHANCED) */
 .glass-card.seafoam-accent:hover {
     border-color: rgba(103, 232, 249, 0.5);
     box-shadow: 0 20px 40px rgba(103, 232, 249, 0.2),
@@ -213,7 +304,7 @@
     background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(103, 232, 249, 0.1) 0%, transparent 50%);
 }
 
-/* Coral hover for non-seafoam cards */
+/* Coral hover for non-seafoam cards (ENHANCED) */
 .glass-card:hover {
     transform: translateY(-8px) scale(1.02);
     border-color: rgba(251, 113, 133, 0.5);
@@ -223,5 +314,28 @@
 
 .glass-card::before {
     background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(251, 113, 133, 0.1) 0%, transparent 50%);
+}
+
+/* MOBILE PERFORMANCE OPTIMIZATIONS */
+@media (max-width: 768px) {
+    .glass-card {
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+    }
+    
+    .dust-particle {
+        animation-duration: 2s; /* Faster on mobile for better performance */
+    }
+    
+    /* Reduce motion for users who prefer it */
+    @media (prefers-reduced-motion: reduce) {
+        .glass-card:hover {
+            transform: none;
+        }
+        
+        .dust-particle {
+            animation: none;
+        }
+    }
 }
 </style>

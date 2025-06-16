@@ -132,8 +132,8 @@
         <!-- Active Coupon State -->
         <div id="activeCoupon">
             <div class="emoji">🌺</div>
-            <div class="business-name" id="businessName">PONO MARKET</div>
-            <div class="discount" id="discountText">10% OFF ENTIRE BILL</div>
+            <div class="business-name" id="businessName">Loading Deal...</div>
+            <div class="discount" id="discountText"></div>
             
             <button class="redeem-button" id="redeemButton">
                 🏪 TO BE TAPPED BY CASHIER
@@ -175,11 +175,12 @@
     </div>
 
     <script>
-        // Get coupon ID from URL parameter or hash
-        const urlParams = new URLSearchParams(window.location.search);
-        const couponId = urlParams.get('id') || window.location.hash.substring(1) || 'test123';
+        // --- THIS IS THE CORRECTED CODE ---
+        // It correctly reads the coupon ID from a URL like /c/some-id
+        const pathParts = window.location.pathname.split('/');
+        const couponId = pathParts[pathParts.length - 1];
         
-        // Your Supabase credentials
+        // Your Supabase credentials (this is a public 'anon' key)
         const SUPABASE_URL = 'https://redgthlqsfquqmqtnrfx.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlZGd0aGxxc2ZxdXFtcXRucmZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5NDkxMTEsImV4cCI6MjA2NTUyNTExMX0.fN8b3lsgzm5f0VZyfxJrh_2zqekMlbM5yq1_dfBAC30';
         
@@ -190,6 +191,10 @@
         document.getElementById('redeemButton').addEventListener('click', startRedemption);
         
         async function checkCouponStatus() {
+            if (!couponId) {
+                showInvalidCouponState();
+                return;
+            }
             try {
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/coupons?id=eq.${couponId}`, {
                     headers: {
@@ -212,17 +217,11 @@
                         showRedeemedState();
                     }
                 } else {
-                    // Coupon not found
-                    document.getElementById('couponContainer').innerHTML = `
-                        <div style="text-align: center;">
-                            <div class="emoji">❌</div>
-                            <h2>Invalid Coupon</h2>
-                            <p>This coupon code is not valid.</p>
-                        </div>
-                    `;
+                    showInvalidCouponState();
                 }
             } catch (error) {
                 console.error('Error checking coupon:', error);
+                showInvalidCouponState();
             }
         }
         
@@ -268,6 +267,16 @@
         function showRedeemedState() {
             document.getElementById('activeCoupon').style.display = 'none';
             document.getElementById('redeemedCoupon').style.display = 'block';
+        }
+
+        function showInvalidCouponState() {
+            document.getElementById('couponContainer').innerHTML = `
+                <div style="text-align: center;">
+                    <div class="emoji">❌</div>
+                    <h2>Invalid Coupon</h2>
+                    <p>This coupon code could not be found.</p>
+                </div>
+            `;
         }
     </script>
 </body>
