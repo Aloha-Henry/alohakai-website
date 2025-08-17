@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exclusive Deals - Kai | Kauai Local Guide</title>
+    <meta name="description" content="Exclusive deals and discounts at Kauai's best local spots. Real-time offers from restaurants, activities, and shops.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #e2e8f0;
+        }
+
+        /* Header styles */
+        .header-bg {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Base glass card */
+        .glass-card {
+            background: rgba(31, 41, 55, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transform: translate3d(0, 0, 0);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translate3d(0, -6px, 0);
+        }
+
+        .glass-card:not(.seafoam-accent):hover {
+            box-shadow: 0 10px 25px rgba(251, 113, 133, 0.1),
+                        0 0 40px rgba(251, 113, 133, 0.05);
+            border-color: rgba(251, 113, 133, 0.2);
+        }
+
+        .glass-card.seafoam-accent:hover {
+            box-shadow: 0 10px 25px rgba(103, 232, 249, 0.1),
+                        0 0 40px rgba(103, 232, 249, 0.05);
+            border-color: rgba(103, 232, 249, 0.2);
+        }
+
+        /* Partner logo styling */
+        .partner-logo {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Card flip animation */
+        .card-flip {
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-flip.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Search styles */
+        .search-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            color: #e2e8f0;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(103, 232, 249, 0.3);
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.05);
+        }
+
+        /* Tag pills */
+        .tag-pill {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .tag-pill.active {
+            background: rgba(103, 232, 249, 0.1);
+            border-color: rgba(103, 232, 249, 0.3);
+            color: rgba(103, 232, 249, 0.9);
+        }
+
+        .tag-pill:hover {
+            border-color: rgba(103, 232, 249, 0.3);
+            color: rgba(103, 232, 249, 0.9);
+            background: rgba(103, 232, 249, 0.05);
+        }
+
+        /* Deal card sizing */
+        .deal-card {
+            width: 280px;
+            height: 220px;
+            flex-shrink: 0;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Grid delays */
+        .deals-grid > *:nth-child(1) { animation-delay: 0.05s; }
+        .deals-grid > *:nth-child(2) { animation-delay: 0.1s; }
+        .deals-grid > *:nth-child(3) { animation-delay: 0.15s; }
+        .deals-grid > *:nth-child(4) { animation-delay: 0.2s; }
+        .deals-grid > *:nth-child(5) { animation-delay: 0.25s; }
+        .deals-grid > *:nth-child(6) { animation-delay: 0.3s; }
+        .deals-grid > *:nth-child(7) { animation-delay: 0.35s; }
+        .deals-grid > *:nth-child(8) { animation-delay: 0.4s; }
+        .deals-grid > *:nth-child(9) { animation-delay: 0.45s; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 header-bg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <a href="/" class="flex items-center gap-2">
+                    <span class="text-2xl font-semibold tracking-tight">
+                        <span style="color: #67E8F9;">kai</span>
+                    </span>
+                </a>
+                
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center gap-8">
+                    <a href="/" class="text-gray-400 hover:text-white transition-colors text-sm">Home</a>
+                    <a href="/adventures" class="text-gray-400 hover:text-white transition-colors text-sm">Adventures</a>
+                    <a href="/deals" class="text-white text-sm">Deals</a>
+                    <a href="/audio" class="text-gray-400 hover:text-white transition-colors text-sm">Audio</a>
+                    <a href="/shop" class="text-gray-400 hover:text-white transition-colors text-sm">Shop</a>
+                </nav>
+                
+                <!-- CTA -->
+                <a href="/signup" class="hidden md:inline-flex px-5 py-2 rounded-full border border-white/20 hover:border-white/40 transition-all text-white/90 hover:text-white text-sm">
+                    Start Free →
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="pt-24 pb-20 px-4 min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <!-- Page Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-6xl font-light mb-4">
+                    All Exclusive
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
+                        Deals
+                    </span>
+                </h1>
+                <p class="text-lg text-gray-400 font-light">
+                    Real-time offers from 24 local partners
+                </p>
+            </div>
+            
+            <!-- Search Bar -->
+            <div class="max-w-xl mx-auto mb-8">
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        placeholder="Search by name, type, or location..." 
+                        class="w-full search-input rounded-xl px-5 py-4 placeholder-gray-500 text-base"
+                        id="dealsSearch"
+                        oninput="filterDeals()"
+                    >
+                    <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+            </div>
+            
+            <!-- Filter Tags -->
+            <div class="flex flex-wrap justify-center gap-3 mb-12">
+                <button class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterByTag('all', this)">
+                    All
+                    <span class="ml-2 text-xs opacity-60">(24)</span>
+                </button>
+                <button class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="food" onclick="filterByTag('food', this)">
+                    Food
+                    <span class="ml-2 text-xs opacity-60">(12)</span>
+                </button>
+                <button class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="drinks" onclick="filterByTag('drinks', this)">
+                    Drinks
+                    <span class="ml-2 text-xs opacity-60">(6)</span>
+                </button>
+                <button class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="activity" onclick="filterByTag('activity', this)">
+                    Activities
+                    <span class="ml-2 text-xs opacity-60">(4)</span>
+                </button>
+                <button class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="treats" onclick="filterByTag('treats', this)">
+                    Treats
+                    <span class="ml-2 text-xs opacity-60">(2)</span>
+                </button>
+            </div>
+            
+            <!-- Results count -->
+            <div class="mb-6">
+                <p class="text-sm text-gray-500">
+                    Showing <span id="resultsCount">24</span> deals
+                </p>
+            </div>
+            
+            <!-- Deals Grid -->
+            <div class="deals-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="dealsContainer">
+                
+                <!-- Deal 1 -->
+                <div class="glass-card rounded-2xl deal-card fade-in-up" data-tags="food,breakfast" onclick="flipCard(this)">
+                    <div class="card-flip">
+                        <div class="card-front">
+                            <div class="partner-logo rounded-xl mb-3" style="color: #FB7185;">B1</div>
+                            <h3 class="text-base font-semibold mb-2">Breakfast Spot 1</h3>
+                            <p class="text-xl font-bold mb-1" style="color: #FB7185;">20% OFF</p>
+                            <p class="text-sm text-gray-400">Entire bill all day</p>
+                            <p class="text-xs text-gray-500 mt-2">Kapaa • Local favorite</p>
+                        </div>
+                        <div class="card-back glass-card">
+                            <h3 class="text-base font-semibold mb-3">Deal Terms</h3>
+                            <div class="text-xs text-gray-300 mb-3">
+                                • 20% off entire bill<br>
+                                • Valid all day, every day<br>
+                                • Dine-in only<br>
+                                • Cannot combine with other offers
+                            </div>
+                            <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-4 py-2 rounded-lg text-white font-medium text-sm hover:opacity-90 transition-opacity">
+                                Text Kai for Location
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deal 2 -->
+                <div class="glass-card seafoam-accent rounded-2xl deal-card fade-in-up" data-tags="drinks,coffee" onclick="flipCard(this)">
+                    <div class="card-flip">
+                        <div class="card-front">
+                            <div class="partner-logo rounded-xl mb-3" style="color: #67E8F9;">C1</div>
+                            <h3 class="text-base font-semibold mb-2">Coffee Shop 1</h3>
+                            <p class="text-xl font-bold mb-1" style="color: #67E8F9;">Buy 2 Get 1</p>
+                            <p class="text-sm text-gray-400">Any drink or pastry</p>
+                            <p class="text-xs text-gray-500 mt-2">Lihue • Best coffee</p>
+                        </div>
+                        <div class="card-back glass-card">
+                            <h3 class="text-base font-semibold mb-3">Deal Terms</h3>
+                            <div class="text-xs text-gray-300 mb-3">
+                                • Buy 2 get 1 free<br>
+                                • Any drinks or pastries<br>
+                                • Valid daily until 2PM<br>
+                                • Lowest price item free
+                            </div>
+                            <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-4 py-2 rounded-lg text-white font-medium text-sm hover:opacity-90 transition-opacity">
+                                Text Kai for Location
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deal 3 -->
+                <div class="glass-card rounded-2xl deal-card fade-in-up" data-tags="activity,adventure" onclick="flipCard(this)">
+                    <div class="card-flip">
+                        <div class="card-front">
+                            <div class="partner-logo rounded-xl mb-3" style="color: #FB7185;">A1</div>
+                            <h3 class="text-base font-semibold mb-2">Adventure Co. 1</h3>
+                            <p class="text-xl font-bold mb-1" style="color: #FB7185;">15% OFF</p>
+                            <p class="text-sm text-gray-400">All tours & rentals</p>
+                            <p class="text-xs text-gray-500 mt-2">Poipu • Skip crowds</p>
+                        </div>
+                        <div class="card-back glass-card">
+                            <h3 class="text-base font-semibold mb-3">Deal Terms</h3>
+                            <div class="text-xs text-gray-300 mb-3">
+                                • 15% off all bookings<br>
+                                • Tours, rentals & experiences<br>
+                                • Must book in advance<br>
+                                • Mention Kai when booking
+                            </div>
+                            <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-4 py-2 rounded-lg text-white font-medium text-sm hover:opacity-90 transition-opacity">
+                                Text Kai for Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deal 4 -->
+                <div class="glass-card seafoam-accent rounded-2xl deal-card fade-in-up" data-tags="food,lunch" onclick="flipCard(this)">
+                    <div class="card-flip">
+                        <div class="card-front">
+                            <div class="partner-logo rounded-xl mb-3" style="color: #67E8F9;">L1</div>
+                            <h3 class="text-base font-semibold mb-2">Pono Market</h3>
+                            <p class="text-xl font-bold mb-1" style="color: #67E8F9;">$5 OFF</p>
+                            <p class="text-sm text-gray-400">Any poke bowl</p>
+                            <p class="text-xs text-gray-500 mt-2">Kapaa • Fresh daily</p>
+                        </div>
+                        <div class="card-back glass-card">
+                            <h3 class="text-base font-semibold mb-3">Deal Terms</h3>
+                            <div class="text-xs text-gray-300 mb-3">
+                                • $5 off any poke bowl<br>
+                                • Fresh fish daily<br>
+                                • Min $15 purchase<br>
+                                • Closes at 2PM daily
+                            </div>
+                            <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-4 py-2 rounded-lg text-white font-medium text-sm hover:opacity-90 transition-opacity">
+                                Text Kai for Location
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deal 5 -->
+                <div class="glass-card rounded-2xl deal-card fade-in-up" data-tags="drinks,food" onclick="flipCard(this)">
+                    <div class="card-flip">
+                        <div class="card-front">
+                            <div class="partner-logo rounded-xl mb-3" style="color: #FB7185;">D1</div>
+                            <h3 class="text-base font-semibold mb-2">Duke's</h3>
+                            <p class="text-xl font-bold mb-1" style="color: #FB7185;">Happy Hour+</p>
+                            <p class="text-sm text-gray-400">Extended for Kai users</p>
+                            <p class="text-xs text-gray-500 mt-2">Lihue • Sunset views</p>
+                        </div>
+                        <div class="card-back glass-card">
+                            <h3 class="text-base font-semibold mb-3">Deal Terms</h3>
+                            <div class="text-xs text-gray-300 mb-3">
+                                • Extended happy hour<br>
+                                • Valid 3PM-7PM daily<br>
+                                • Show Kai text<br>
+                                • Bar area only
+                            </div>
+                            <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-4 py-2 rounded-lg text-white font-medium text-sm hover:opacity-90 transition-opacity">
+                                Text Kai for Location
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deal 6 -->
+                <div class="glass-card seafoam-accent rounded-2xl deal-card fade-in-up" data-tags="treats,dessert" onclick="flipCard(this)">
+                    <div class="card-flip">
+                        <div class="card-front">
+                            <div class="partner-logo rounded-xl mb-3" style="color: #67E8F9;">T1</div>
+                            <h3 class="text-base font-semibold mb-2">Wailua Shave Ice</h3>
+                            <p class="text-xl font-bold mb-1" style="color: #67E8F9;">Free Topping</p>
+                            <p class="text-sm text-gray-400">Premium topping free</p>
+                            <p class="text-xs text-gray-500 mt-2">Wailua • Kids love it</p>
+                        </div>
+                        <div class="card-back glass-card">
+                            <h3 class="text-base font-semibold mb-3">Deal Terms</h3>
+                            <div class="text-xs text-gray-300 mb-3">
+                                • Free premium topping<br>
+                                • Any size shave ice<br>
+                                • 20+ flavors<br>
+                                • One per customer
+                            </div>
+                            <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-4 py-2 rounded-lg text-white font-medium text-sm hover:opacity-90 transition-opacity">
+                                Text Kai for Location
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deal 7 -->
+                <div class="glass-card rounded-2xl deal-card fade-in-up" data-tags="food,dinner" onclick="flipCard(this)">
+                    <div class="card-flip">
+                        <div class="card-front">
+                            <div class="partner-logo rounded-xl mb-3" style="color: #FB7185;">R1</div>
+                            <h3 class="text-base font-semibold mb-2">Beach House Restaurant</h3>
+                            <p class="text-xl font-bold mb-1" style="color: #FB7185;">10% OFF</p>
+                            <p class="text-sm text-gray-400">Dinner only</p>
+                            <p class="text-xs text-gray-500 mt-2">Poipu • Oceanfront</p>
+                        </div>
+                        <div class="card-back glass-card">
+                            <h3 class="text-base font-semibold mb-3">Deal Terms</h3>
+                            <div class="text-xs text-gray-300 mb-3">
+                                • 10% off dinner<br>
+                                • After 5PM only<br>
+                                • Reservations required<br>
+                                • Mention Kai
+                            </div>
+                            <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-4 py-2 rounded-lg text-white font-medium text-sm hover:opacity-90 transition-opacity">
+                                Text Kai for Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deal 8 -->
+                <div class="glass-card seafoam-accent rounded-2xl deal-card fade-in-up" data-tags="activity,rental" onclick="flipCard(this)">
+                    <div class="card-flip">
+                        <div class="card-front">
+                            <div class="partner-logo rounded-xl mb-3" style="color: #67E8F9;">S1</div>
+                            <h3 class="text-base font-semibold mb-2">Surf Rental Co</h3>
+                            <p class="text-xl font-bold mb-1" style="color: #67E8F9;">2 for 1</p>
+                            <p class="text-sm text-gray-400">Board rentals</p>
+                            <p class="text-xs text-gray-500 mt-2">Hanalei • All day</p>
+                        </div>
+                        <div class="card-back glass-card">
+                            <h3 class="text-base font-semibold mb-3">Deal Terms</h3>
+                            <div class="text-xs text-gray-300 mb-3">
+                                • 2nd board free<br>
+                                • Same day rental<br>
+                                • All board types<br>
+                                • ID required
+                            </div>
+                            <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-4 py-2 rounded-lg text-white font-medium text-sm hover:opacity-90 transition-opacity">
+                                Text Kai for Location
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- More deals would continue... -->
+                
+            </div>
+            
+            <!-- No Results Message -->
+            <div id="noResults" class="hidden text-center py-20">
+                <p class="text-gray-500 text-lg mb-4">No deals found matching your search</p>
+                <button onclick="clearFilters()" class="text-cyan-400 hover:text-cyan-300 transition-colors text-sm">
+                    Clear filters
+                </button>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="border-t border-white/10 py-12 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-gray-500 text-sm mb-4">Built with aloha by locals who live here</p>
+            <div class="flex gap-8 justify-center text-sm">
+                <a href="/" class="text-gray-400 hover:text-white transition-colors">Home</a>
+                <a href="/about" class="text-gray-400 hover:text-white transition-colors">About</a>
+                <a href="/contact" class="text-gray-400 hover:text-white transition-colors">Contact</a>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Flip card function
+        function flipCard(card) {
+            const cardFlip = card.querySelector('.card-flip');
+            cardFlip.classList.toggle('flipped');
+        }
+        
+        // Filter by tag
+        function filterByTag(tag, element) {
+            // Update active state
+            document.querySelectorAll('.tag-pill').forEach(pill => pill.classList.remove('active'));
+            element.classList.add('active');
+            
+            // Filter cards
+            const cards = document.querySelectorAll('.deal-card');
+            let visibleCount = 0;
+            
+            cards.forEach(card => {
+                const cardTags = card.getAttribute('data-tags').split(',');
+                if (tag === 'all' || cardTags.includes(tag)) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Update results count
+            updateResultsCount(visibleCount);
+        }
+        
+        // Search filter
+        function filterDeals() {
+            const searchTerm = document.getElementById('dealsSearch').value.toLowerCase();
+            const cards = document.querySelectorAll('.deal-card');
+            let visibleCount = 0;
+            
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('.text-gray-400').textContent.toLowerCase();
+                const location = card.querySelector('.text-gray-500').textContent.toLowerCase();
+                const tags = card.getAttribute('data-tags').toLowerCase();
+                
+                if (title.includes(searchTerm) || 
+                    description.includes(searchTerm) || 
+                    location.includes(searchTerm) ||
+                    tags.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Update results count
+            updateResultsCount(visibleCount);
+        }
+        
+        // Update results count
+        function updateResultsCount(count) {
+            document.getElementById('resultsCount').textContent = count;
+            
+            // Show/hide no results message
+            if (count === 0) {
+                document.getElementById('noResults').classList.remove('hidden');
+                document.getElementById('dealsContainer').classList.add('hidden');
+            } else {
+                document.getElementById('noResults').classList.add('hidden');
+                document.getElementById('dealsContainer').classList.remove('hidden');
+            }
+        }
+        
+        // Clear all filters
+        function clearFilters() {
+            // Clear search
+            document.getElementById('dealsSearch').value = '';
+            
+            // Reset to "All" tag
+            const allButton = document.querySelector('[data-filter="all"]');
+            filterByTag('all', allButton);
+        }
+    </script>
+</body>
+</html>

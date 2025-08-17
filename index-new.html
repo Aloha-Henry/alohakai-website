@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alohakia - Your AI Local Friend in Kauai</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        /* Glass morphism */
+        .glass {
+            background: rgba(31, 41, 55, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Horizontal scroll container */
+        .scroll-container {
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+        }
+        
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Card hover effects */
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(103, 232, 249, 0.2);
+            border-color: rgba(103, 232, 249, 0.4);
+        }
+        
+        /* Vote buttons */
+        .vote-up:hover {
+            color: #67E8F9;
+            transform: scale(1.2);
+        }
+        
+        .vote-down:hover {
+            color: #FB7185;
+            transform: scale(1.2);
+        }
+        
+        /* Coconut animation */
+        @keyframes coconutBounce {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-2px) rotate(2deg); }
+        }
+        
+        .coconut-bounce {
+            display: inline-block;
+            animation: coconutBounce 2s ease-in-out infinite;
+        }
+        
+        /* Play button pulse */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+        
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 50;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        /* Chat input */
+        .chat-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s ease;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: rgba(103, 232, 249, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        /* Section spacing */
+        section {
+            scroll-margin-top: 80px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Header -->
+    <header class="fixed top-0 left-0 right-0 z-40 glass">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🌺</span>
+                    <span class="text-xl font-semibold text-white">Alohakia</span>
+                </div>
+                
+                <!-- Coconut Counter -->
+                <div class="glass px-4 py-2 rounded-full flex items-center gap-2">
+                    <span class="coconut-bounce">🥥</span>
+                    <span class="font-semibold" id="coconutCount">20</span>
+                    <button class="ml-2 text-xs text-cyan-400 hover:text-cyan-300">Get more</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="min-h-[60vh] flex items-center justify-center px-4 pt-20">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-light mb-4">
+                <span class="text-pink-400">Aloha,</span> 
+                <span class="text-cyan-400">I'm Kai</span>
+                <span class="text-3xl ml-2">🌺</span>
+            </h1>
+            <p class="text-xl text-gray-300 mb-8">
+                Your AI local friend who knows Kauai's secrets
+            </p>
+            
+            <!-- Chat Interface -->
+            <div class="glass rounded-2xl p-6 max-w-2xl mx-auto">
+                <div class="flex gap-3">
+                    <input 
+                        type="text" 
+                        placeholder="Ask me anything about Kauai..." 
+                        class="flex-1 chat-input rounded-xl px-4 py-3 text-white placeholder-gray-400"
+                        id="chatInput"
+                    >
+                    <button onclick="askKai()" class="bg-gradient-to-r from-cyan-500 to-pink-500 px-6 py-3 rounded-xl text-white font-medium hover:opacity-90 transition">
+                        Ask
+                    </button>
+                </div>
+                
+                <!-- Quick Questions -->
+                <div class="mt-4 flex flex-wrap gap-2 justify-center">
+                    <button onclick="quickAsk('Where do locals eat?')" class="text-xs px-3 py-1 rounded-full border border-white/20 text-gray-400 hover:text-white hover:border-cyan-400/50 transition">
+                        Where do locals eat?
+                    </button>
+                    <button onclick="quickAsk('Best beach for kids?')" class="text-xs px-3 py-1 rounded-full border border-white/20 text-gray-400 hover:text-white hover:border-cyan-400/50 transition">
+                        Best beach for kids?
+                    </button>
+                    <button onclick="quickAsk('Rainy day activities?')" class="text-xs px-3 py-1 rounded-full border border-white/20 text-gray-400 hover:text-white hover:border-cyan-400/50 transition">
+                        Rainy day activities?
+                    </button>
+                    <button onclick="quickAsk('Secret sunset spots?')" class="text-xs px-3 py-1 rounded-full border border-white/20 text-gray-400 hover:text-white hover:border-cyan-400/50 transition">
+                        Secret sunset spots?
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Value Props -->
+            <div class="mt-8 flex flex-wrap justify-center gap-6 text-sm text-gray-400">
+                <span>✓ Real local knowledge</span>
+                <span>✓ Live deals</span>
+                <span>✓ Instant answers</span>
+                <span>✓ No tourist traps</span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Adventures Section -->
+    <section class="py-16 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-8">
+                <h2 class="text-3xl md:text-4xl font-bold mb-2">
+                    Top Adventures <span class="text-cyan-400">This Week</span>
+                </h2>
+                <p class="text-gray-400">Voted by real visitors • Updated daily</p>
+            </div>
+            
+            <!-- Horizontal Scroll Container -->
+            <div class="scroll-container pb-4">
+                <div class="flex gap-4" style="width: max-content;">
+                    
+                    <!-- Adventure Card 1 -->
+                    <div class="glass rounded-xl w-80 overflow-hidden card-hover" onclick="openAdventureModal('north-shore')">
+                        <!-- Image placeholder -->
+                        <div class="h-48 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center">
+                            <span class="text-6xl">🌅</span>
+                        </div>
+                        
+                        <div class="p-5">
+                            <!-- Voting -->
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <button class="vote-up transition" onclick="event.stopPropagation(); vote('up', 'north-shore')">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
+                                        </svg>
+                                    </button>
+                                    <span class="font-bold text-lg" id="votes-north-shore">847</span>
+                                    <button class="vote-down transition" onclick="event.stopPropagation(); vote('down', 'north-shore')">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <span class="text-xs px-2 py-1 bg-cyan-500/20 rounded-full text-cyan-400 font-semibold">
+                                    #1 Trending
+                                </span>
+                            </div>
+                            
+                            <h3 class="text-xl font-semibold mb-2">Epic North Shore Day</h3>
+                            <p class="text-sm text-gray-400 mb-3">
+                                Tunnels Beach at sunrise, Hanalei town, secret waterfall, local lunch spots
+                            </p>
+                            
+                            <!-- Meta info -->
+                            <div class="flex items-center gap-4 text-xs text-gray-500 mb-3">
+                                <span>⏱️ 8 hours</span>
+                                <span>👥 2-6 people</span>
+                                <span>💪 Moderate</span>
+                            </div>
+                            
+                            <!-- Cost -->
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-semibold">
+                                    <span class="coconut-bounce">🥥</span> 3 coconuts
+                                </span>
+                                <span class="text-xs text-gray-400">Click for details →</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Adventure Card 2 -->
+                    <div class="glass rounded-xl w-80 overflow-hidden card-hover" onclick="openAdventureModal('food-crawl')">
+                        <div class="h-48 bg-gradient-to-br from-pink-500/20 to-orange-500/20 flex items-center justify-center">
+                            <span class="text-6xl">🍜</span>
+                        </div>
+                        
+                        <div class="p-5">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <button class="vote-up transition" onclick="event.stopPropagation(); vote('up', 'food-crawl')">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
+                                        </svg>
+                                    </button>
+                                    <span class="font-bold text-lg">623</span>
+                                    <button class="vote-down transition" onclick="event.stopPropagation(); vote('down', 'food-crawl')">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <span class="text-xs px-2 py-1 bg-pink-500/20 rounded-full text-pink-400 font-semibold">
+                                    Foodie Pick
+                                </span>
+                            </div>
+                            
+                            <h3 class="text-xl font-semibold mb-2">Local Food Crawl</h3>
+                            <p class="text-sm text-gray-400 mb-3">
+                                Pono Market poke, Hamura's saimin, food trucks, shave ice finale
+                            </p>
+                            
+                            <div class="flex items-center gap-4 text-xs text-gray-500 mb-3">
+                                <span>⏱️ 4 hours</span>
+                                <span>👥 2-4 people</span>
+                                <span>💪 Easy</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-semibold">
+                                    <span class="coconut-bounce">🥥</span> 2 coconuts
+                                </span>
+                                <span class="text-xs text-gray-400">Click for details →</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Adventure Card 3 -->
+                    <div class="glass rounded-xl w-80 overflow-hidden card-hover">
+                        <div class="h-48 bg-gradient-to-br from-green-500/20 to-cyan-500/20 flex items-center justify-center">
+                            <span class="text-6xl">🏖️</span>
+                        </div>
+                        
+                        <div class="p-5">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <button class="vote-up transition">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
+                                        </svg>
+                                    </button>
+                                    <span class="font-bold text-lg">445</span>
+                                    <button class="vote-down transition">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <span class="text-xs px-2 py-1 bg-green-500/20 rounded-full text-green-400 font-semibold">
+                                    Family Pick
+                                </span>
+                            </div>
+                            
+                            <h3 class="text-xl font-semibold mb-2">Perfect Beach Day</h3>
+                            <p class="text-sm text-gray-400 mb-3">
+                                Kid-friendly Poipu beaches, monk seals, tide pools, ice cream
+                            </p>
+                            
+                            <div class="flex items-center gap-4 text-xs text-gray-500 mb-3">
+                                <span>⏱️ 5 hours</span>
+                                <span>👥 Families</span>
+                                <span>💪 Easy</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-semibold">
+                                    <span class="coconut-bounce">🥥</span> 2 coconuts
+                                </span>
+                                <span class="text-xs text-gray-400">Click for details →</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- More cards would go here -->
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Deals Section -->
+    <section class="py-16 px-4 bg-gradient-to-b from-transparent to-pink-500/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-8">
+                <h2 class="text-3xl md:text-4xl font-bold mb-2">
+                    Live Deals <span class="text-pink-400">Right Now</span>
+                </h2>
+                <p class="text-gray-400">Exclusive offers from local partners • Time sensitive</p>
+            </div>
+            
+            <div class="scroll-container pb-4">
+                <div class="flex gap-4" style="width: max-content;">
+                    
+                    <!-- Deal Card 1 -->
+                    <div class="glass rounded-xl w-72 p-6 card-hover" onclick="openDealModal('happy-hour')">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-3xl">🍕</span>
+                            <span class="px-2 py-1 bg-pink-500/20 rounded-full text-xs font-semibold text-pink-400 pulse">
+                                LIVE NOW
+                            </span>
+                        </div>
+                        <h4 class="font-semibold mb-2">Happy Hour Special</h4>
+                        <p class="text-sm text-gray-400 mb-4">
+                            Local spot, great vibes. Details unlocked with coconuts.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm">
+                                <span class="coconut-bounce">🥥</span> 1 coconut
+                            </span>
+                            <span class="text-xs text-pink-400">3-6pm today</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Deal Card 2 -->
+                    <div class="glass rounded-xl w-72 p-6 card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-3xl">🏄</span>
+                            <span class="px-2 py-1 bg-cyan-500/20 rounded-full text-xs font-semibold text-cyan-400">
+                                20% OFF
+                            </span>
+                        </div>
+                        <h4 class="font-semibold mb-2">Surf Lesson Deal</h4>
+                        <p class="text-sm text-gray-400 mb-4">
+                            Morning lessons, perfect conditions. Small groups only.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm">
+                                <span class="coconut-bounce">🥥</span> 1 coconut
+                            </span>
+                            <span class="text-xs text-cyan-400">Tomorrow 7am</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Deal Card 3 -->
+                    <div class="glass rounded-xl w-72 p-6 card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-3xl">🍧</span>
+                            <span class="px-2 py-1 bg-green-500/20 rounded-full text-xs font-semibold text-green-400">
+                                FREE EXTRA
+                            </span>
+                        </div>
+                        <h4 class="font-semibold mb-2">Shave Ice Bonus</h4>
+                        <p class="text-sm text-gray-400 mb-4">
+                            Free topping at the best spot. Locals' favorite flavors.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm">
+                                <span class="coconut-bounce">🥥</span> 1 coconut
+                            </span>
+                            <span class="text-xs text-green-400">All day</span>
+                        </div>
+                    </div>
+                    
+                    <!-- More deal cards -->
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Audio Guides Section -->
+    <section class="py-16 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-8">
+                <h2 class="text-3xl md:text-4xl font-bold mb-2">
+                    Audio Guides <span class="text-purple-400">Listen & Explore</span>
+                </h2>
+                <p class="text-gray-400">Stories and secrets while you drive or hike</p>
+            </div>
+            
+            <div class="scroll-container pb-4">
+                <div class="flex gap-4" style="width: max-content;">
+                    
+                    <!-- Audio Card 1 -->
+                    <div class="glass rounded-xl w-80 p-6 card-hover">
+                        <div class="flex items-center gap-4">
+                            <button class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center hover:scale-105 transition">
+                                <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </button>
+                            
+                            <div class="flex-1">
+                                <h4 class="font-semibold mb-1">Hanalei Bay Stories</h4>
+                                <p class="text-sm text-gray-400 mb-2">
+                                    Legends and Hollywood secrets
+                                </p>
+                                <div class="flex items-center gap-4 text-xs text-gray-500">
+                                    <span>🎧 3:45</span>
+                                    <span>⬆️ 234</span>
+                                    <span class="text-purple-400">Free preview</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Audio Card 2 -->
+                    <div class="glass rounded-xl w-80 p-6 card-hover">
+                        <div class="flex items-center gap-4">
+                            <button class="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-full flex items-center justify-center hover:scale-105 transition">
+                                <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </button>
+                            
+                            <div class="flex-1">
+                                <h4 class="font-semibold mb-1">Road to Hana Guide</h4>
+                                <p class="text-sm text-gray-400 mb-2">
+                                    Turn-by-turn hidden spots
+                                </p>
+                                <div class="flex items-center gap-4 text-xs text-gray-500">
+                                    <span>🎧 12:30</span>
+                                    <span>⬆️ 567</span>
+                                    <span>🥥 2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Audio Card 3 -->
+                    <div class="glass rounded-xl w-80 p-6 card-hover">
+                        <div class="flex items-center gap-4">
+                            <button class="w-16 h-16 bg-gradient-to-br from-green-500 to-cyan-500 rounded-full flex items-center justify-center hover:scale-105 transition">
+                                <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </button>
+                            
+                            <div class="flex-1">
+                                <h4 class="font-semibold mb-1">Waimea Canyon Tour</h4>
+                                <p class="text-sm text-gray-400 mb-2">
+                                    Viewpoints and geology
+                                </p>
+                                <div class="flex items-center gap-4 text-xs text-gray-500">
+                                    <span>🎧 8:15</span>
+                                    <span>⬆️ 412</span>
+                                    <span>🥥 2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Goods Section -->
+    <section class="py-16 px-4 bg-gradient-to-b from-transparent to-purple-500/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-8">
+                <h2 class="text-3xl md:text-4xl font-bold mb-2">
+                    Island Goods <span class="text-yellow-400">Take Kauai Home</span>
+                </h2>
+                <p class="text-gray-400">Digital guides, merch, and local favorites</p>
+            </div>
+            
+            <div class="scroll-container pb-4">
+                <div class="flex gap-4" style="width: max-content;">
+                    
+                    <!-- Product Card 1 -->
+                    <div class="glass rounded-xl w-64 overflow-hidden card-hover">
+                        <div class="h-40 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 flex items-center justify-center">
+                            <span class="text-5xl">📱</span>
+                        </div>
+                        <div class="p-5">
+                            <h4 class="font-semibold mb-2">Complete Digital Guide</h4>
+                            <p class="text-sm text-gray-400 mb-3">
+                                Everything Kai knows in PDF
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-semibold">
+                                    <span class="coconut-bounce">🥥</span> 5
+                                </span>
+                                <button class="text-xs text-yellow-400 hover:text-yellow-300">
+                                    Get it →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product Card 2 -->
+                    <div class="glass rounded-xl w-64 overflow-hidden card-hover">
+                        <div class="h-40 bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center">
+                            <span class="text-5xl">🧢</span>
+                        </div>
+                        <div class="p-5">
+                            <h4 class="font-semibold mb-2">Kai Trucker Hat</h4>
+                            <p class="text-sm text-gray-400 mb-3">
+                                Limited edition island vibes
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-semibold">
+                                    <span class="coconut-bounce">🥥</span> 8
+                                </span>
+                                <button class="text-xs text-yellow-400 hover:text-yellow-300">
+                                    Order →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product Card 3 -->
+                    <div class="glass rounded-xl w-64 overflow-hidden card-hover">
+                        <div class="h-40 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center">
+                            <span class="text-5xl">🌺</span>
+                        </div>
+                        <div class="p-5">
+                            <h4 class="font-semibold mb-2">Sticker Pack</h4>
+                            <p class="text-sm text-gray-400 mb-3">
+                                Waterproof Kauai designs
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-semibold">
+                                    <span class="coconut-bounce">🥥</span> 3
+                                </span>
+                                <button class="text-xs text-yellow-400 hover:text-yellow-300">
+                                    Get it →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Adventure Modal -->
+    <div id="adventureModal" class="modal">
+        <div class="glass rounded-2xl max-w-2xl w-full mx-4 p-8">
+            <div class="flex justify-between items-start mb-6">
+                <h3 class="text-2xl font-bold">Epic North Shore Day</h3>
+                <button onclick="closeModal('adventureModal')" class="text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="mb-6">
+                <h4 class="font-semibold text-green-400 mb-3">✅ Free Preview:</h4>
+                <ul class="space-y-2 text-gray-300">
+                    <li>• Start at Tunnels Beach</li>
+                    <li>• Breakfast in Hanalei</li>
+                    <li>• Secret waterfall hike</li>
+                    <li>• Sunset at the pier</li>
+                </ul>
+            </div>
+            
+            <div class="mb-6 p-4 bg-black/30 rounded-xl">
+                <h4 class="font-semibold text-cyan-400 mb-3">🔒 Unlock with 3 Coconuts:</h4>
+                <ul class="space-y-2 text-gray-400">
+                    <li>• Exact timing for zero crowds</li>
+                    <li>• Secret parking spots (save $20)</li>
+                    <li>• Hidden trail to the best viewpoint</li>
+                    <li>• Local's lunch spot (not on Google)</li>
+                    <li>• Weather contingency plans</li>
+                    <li>• Photo spots locals keep secret</li>
+                </ul>
+            </div>
+            
+            <button onclick="unlockAdventure()" class="w-full bg-gradient-to-r from-cyan-500 to-pink-500 py-3 rounded-xl text-white font-medium hover:opacity-90 transition">
+                Unlock Full Details (3 🥥)
+            </button>
+        </div>
+    </div>
+    
+    <!-- Deal Modal -->
+    <div id="dealModal" class="modal">
+        <div class="glass rounded-2xl max-w-md w-full mx-4 p-8">
+            <div class="flex justify-between items-start mb-6">
+                <h3 class="text-2xl font-bold">Happy Hour Special</h3>
+                <button onclick="closeModal('dealModal')" class="text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="mb-6 text-center">
+                <p class="text-gray-400 mb-4">This exclusive deal is available for the next:</p>
+                <div class="text-3xl font-bold text-pink-400">2:34:15</div>
+            </div>
+            
+            <div class="mb-6 p-4 bg-black/30 rounded-xl text-center">
+                <p class="text-gray-400 mb-2">Unlock location and details for</p>
+                <p class="text-2xl font-bold">1 Coconut 🥥</p>
+            </div>
+            
+            <button onclick="unlockDeal()" class="w-full bg-gradient-to-r from-pink-500 to-orange-500 py-3 rounded-xl text-white font-medium hover:opacity-90 transition">
+                Reveal Deal (1 🥥)
+            </button>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="py-12 px-4 border-t border-white/10 mt-20">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-gray-500 mb-4">Built with 🌺 by locals who actually live here</p>
+            <div class="flex gap-6 justify-center text-sm">
+                <a href="#" class="text-gray-400 hover:text-white transition">About</a>
+                <a href="#" class="text-gray-400 hover:text-white transition">For Businesses</a>
+                <a href="#" class="text-gray-400 hover:text-white transition">Contact</a>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Coconut management
+        let coconuts = 20;
+        
+        function updateCoconuts(amount) {
+            coconuts += amount;
+            document.getElementById('coconutCount').textContent = coconuts;
+        }
+        
+        // Chat functions
+        function askKai() {
+            const input = document.getElementById('chatInput');
+            const question = input.value.trim();
+            if (question && coconuts > 0) {
+                updateCoconuts(-1);
+                // Here you'd connect to your Python backend
+                console.log('Asking Kai:', question);
+                input.value = '';
+            } else if (coconuts === 0) {
+                alert('No coconuts left! Get more to continue.');
+            }
+        }
+        
+        function quickAsk(question) {
+            document.getElementById('chatInput').value = question;
+            askKai();
+        }
+        
+        // Voting system
+        function vote(direction, id) {
+            const votesElement = document.getElementById(`votes-${id}`);
+            if (votesElement) {
+                let votes = parseInt(votesElement.textContent);
+                votes += direction === 'up' ? 1 : -1;
+                votesElement.textContent = votes;
+            }
+        }
+        
+        // Modal functions
+        function openAdventureModal(id) {
+            document.getElementById('adventureModal').classList.add('active');
+        }
+        
+        function openDealModal(id) {
+            document.getElementById('dealModal').classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        function unlockAdventure() {
+            if (coconuts >= 3) {
+                updateCoconuts(-3);
+                alert('Adventure unlocked! Full details would appear here.');
+                closeModal('adventureModal');
+            } else {
+                alert('Not enough coconuts! You need 3.');
+            }
+        }
+        
+        function unlockDeal() {
+            if (coconuts >= 1) {
+                updateCoconuts(-1);
+                alert('Deal revealed! Location: Bobby V\'s Pizza, 3-6pm, mention Kai for extra discount');
+                closeModal('dealModal');
+            } else {
+                alert('Not enough coconuts!');
+            }
+        }
+        
+        // Smooth scroll for sections
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

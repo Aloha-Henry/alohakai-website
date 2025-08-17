@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Stories - Alohakia</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cyan: #67E8F9;
+            --pink: #FB7185;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+        }
+
+        .glass-morphism {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .gradient-accent {
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--pink) 100%);
+        }
+
+        .audio-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 450px;
+        }
+
+        .audio-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .play-button {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 25px rgba(103, 232, 249, 0.4);
+        }
+
+        .play-area {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.08) 0%, rgba(251, 113, 133, 0.08) 100%);
+            border: 1px solid rgba(103, 232, 249, 0.15);
+            border-radius: 12px;
+            margin: 1rem 0;
+        }
+
+        .search-container {
+            margin-bottom: 3rem;
+        }
+
+        .audio-grid-container {
+            margin-top: 0;
+        }
+
+        .filter-btn, .category-pill {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .filter-btn:hover, .category-pill:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-btn.active, .category-pill.active {
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--pink) 100%);
+            border-color: transparent;
+        }
+
+        .category-pill {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .category-pill:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .duration-badge {
+            background: rgba(103, 232, 249, 0.15);
+            border: 1px solid rgba(103, 232, 249, 0.3);
+            color: #67E8F9;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .narrator-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="p-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-2xl font-light">
+                <span class="gradient-accent bg-clip-text text-transparent">Alohakia</span>
+            </a>
+            
+            <div class="flex gap-6">
+                <a href="/deals" class="text-gray-400 hover:text-white transition-colors">Deals</a>
+                <a href="/adventures" class="text-gray-400 hover:text-white transition-colors">Adventures</a>
+                <a href="/shop" class="text-gray-400 hover:text-white transition-colors">Shop</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-6xl font-extralight mb-6">
+                <span class="gradient-accent bg-clip-text text-transparent">Audio Stories</span>
+            </h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                Deep dives into Kauai's nature, history, and culture. Listen anywhere, learn from locals.
+            </p>
+        </div>
+    </section>
+
+    <!-- Search & Filters -->
+    <div class="search-container">
+        <div class="container mx-auto px-6 mb-12">
+            <div class="max-w-4xl mx-auto glass-morphism rounded-2xl p-6">
+                <div class="flex flex-col gap-4">
+                    <!-- Search Input -->
+                    <div class="flex-1">
+                        <input 
+                            type="text" 
+                            placeholder="Search audio stories..." 
+                            class="w-full bg-black/50 border border-white/10 rounded-xl px-6 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 transition-colors"
+                            id="audioSearch"
+                            oninput="filterAudio()"
+                        >
+                    </div>
+                    
+                    <!-- Category Filter Buttons -->
+                    <div class="flex gap-3 flex-wrap justify-center">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="nature">Nature</button>
+                        <button class="filter-btn" data-filter="history">History</button>
+                        <button class="filter-btn" data-filter="culture">Culture</button>
+                        <button class="filter-btn" data-filter="short">Short Listen</button>
+                    </div>
+                    
+                    <!-- Duration Filter Pills -->
+                    <div class="flex gap-3 flex-wrap justify-center">
+                        <button class="category-pill active" data-duration="all">All Lengths</button>
+                        <button class="category-pill" data-duration="short">Under 5 min</button>
+                        <button class="category-pill" data-duration="medium">5-10 min</button>
+                        <button class="category-pill" data-duration="long">10+ min</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Grid -->
+    <section class="pb-20">
+        <div class="container mx-auto px-6">
+            <div class="audio-grid-container">
+                <div id="audioGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Audio stories will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script>
+        // Audio stories data
+        const audioData = [
+            {
+                id: 1,
+                title: "Why Humpback Whales Choose Kauai Waters",
+                description: "Discover the scientific and cultural reasons these magnificent creatures travel 3,000 miles to birth their calves in Kauai's warm, shallow waters. Learn about their migration patterns, feeding habits, and the ancient Hawaiian beliefs surrounding these gentle giants.",
+                narrator: "Kai",
+                duration: 3,
+                category: "nature",
+                tags: ["Marine Life", "Science", "Migration", "Hawaiian Culture"],
+                audioUrl: "https://redgthlqsfquqmqtnrfx.supabase.co/storage/v1/object/public/Audio%20Guides/ElevenLabs_Kauai_Humpback_Brittany.mp3",
+                pageUrl: "/audio/humpback-whales-kauai",
+                transcript: "Available"
+            },
+            {
+                id: 2,
+                title: "The History of Hanalei Bay",
+                description: "From ancient taro fields to royal visits, explore the rich cultural tapestry of Kauai's most iconic bay. Hear stories of the families who shaped this land, the missionaries who arrived, and the Hollywood stars who discovered its magic.",
+                narrator: "Kai",
+                duration: 4,
+                category: "history",
+                tags: ["Ancient Hawaii", "Royalty", "Taro Fields", "Hollywood"],
+                audioUrl: "https://redgthlqsfquqmqtnrfx.supabase.co/storage/v1/object/public/Audio%20Guides/Hanalei.mp3",
+                pageUrl: "/audio/hanalei-bay-history",
+                transcript: "Available"
+            },
+            {
+                id: 3,
+                title: "The Last Independent Ruler",
+                description: "The fascinating story of King Kaumuali'i, who navigated between preserving Kauai's independence and the changing tides of Hawaiian politics. Learn about his strategic alliances, his exile to Oahu, and his lasting impact on Kauai's identity.",
+                narrator: "Kai",
+                duration: 4,
+                category: "culture",
+                tags: ["Hawaiian Royalty", "Politics", "Independence", "Legacy"],
+                audioUrl: "https://redgthlqsfquqmqtnrfx.supabase.co/storage/v1/object/public/Audio%20Guides/ElevenLabs_First_King.mp3",
+                pageUrl: "/audio/king-kaumuali-story",
+                transcript: "Available"
+            }
+        ];
+
+        function getDurationCategory(duration) {
+            if (duration < 5) return 'short';
+            if (duration <= 10) return 'medium';
+            return 'long';
+        }
+
+        function renderAudio(stories = audioData) {
+            const grid = document.getElementById('audioGrid');
+            grid.innerHTML = '';
+
+            stories.forEach(story => {
+                const audioCard = document.createElement('div');
+                audioCard.className = 'audio-card glass-morphism rounded-2xl p-6';
+                audioCard.dataset.category = story.category;
+                audioCard.dataset.duration = getDurationCategory(story.duration);
+                
+                audioCard.innerHTML = `
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="narrator-badge">
+                            Narrated by ${story.narrator}
+                        </div>
+                        <div class="duration-badge">
+                            🎧 ${story.duration} min
+                        </div>
+                    </div>
+                    
+                    <!-- Audio Preview Area -->
+                    <div class="play-area">
+                        <div class="play-button" onclick="playPreview('${story.id}', this)" data-audio-url="${story.audioUrl}">
+                            ▶
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-3 leading-tight">${story.title}</h3>
+                    <p class="text-sm text-gray-400 mb-4 leading-relaxed">
+                        ${story.description}
+                    </p>
+                    
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        ${story.tags.slice(0, 3).map(tag => `<span class="text-xs px-3 py-1 bg-cyan-500/10 text-cyan-400 rounded-full">${tag}</span>`).join('')}
+                    </div>
+                `;
+                
+                grid.appendChild(audioCard);
+            });
+        }
+
+        let currentlyPlaying = null;
+        let currentButton = null;
+
+        function playPreview(storyId, button) {
+            const audioUrl = button.dataset.audioUrl;
+            
+            // If clicking the same button that's currently playing, pause it
+            if (currentButton === button && currentlyPlaying && !currentlyPlaying.paused) {
+                currentlyPlaying.pause();
+                currentlyPlaying.currentTime = 0;
+                button.textContent = '▶';
+                currentlyPlaying = null;
+                currentButton = null;
+                return;
+            }
+            
+            // Stop any currently playing audio
+            if (currentlyPlaying) {
+                currentlyPlaying.pause();
+                currentlyPlaying.currentTime = 0;
+                if (currentButton) currentButton.textContent = '▶';
+            }
+            
+            // Create new audio element
+            const audio = new Audio(audioUrl);
+            
+            audio.play().then(() => {
+                button.textContent = '⏸';
+                currentlyPlaying = audio;
+                currentButton = button;
+                
+                // Auto-stop after 30 seconds
+                setTimeout(() => {
+                    if (currentlyPlaying === audio && !audio.paused) {
+                        audio.pause();
+                        audio.currentTime = 0;
+                        button.textContent = '▶';
+                        currentlyPlaying = null;
+                        currentButton = null;
+                    }
+                }, 30000);
+                
+                audio.onended = () => {
+                    button.textContent = '▶';
+                    currentlyPlaying = null;
+                    currentButton = null;
+                };
+                
+            }).catch(error => {
+                console.error('Error playing audio:', error);
+                button.textContent = '❌';
+                setTimeout(() => {
+                    button.textContent = '▶';
+                }, 2000);
+            });
+        }
+
+        function goToStory(pageUrl) {
+            // Navigate to individual story page
+            alert(`Going to ${pageUrl} - Full audio player + transcript`);
+            // window.location.href = pageUrl;
+        }
+
+        function filterAudio() {
+            const searchTerm = document.getElementById('audioSearch').value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            const activeDuration = document.querySelector('.category-pill.active').dataset.duration;
+            
+            const filteredStories = audioData.filter(story => {
+                const matchesSearch = story.title.toLowerCase().includes(searchTerm) || 
+                                    story.description.toLowerCase().includes(searchTerm) ||
+                                    story.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                const matchesFilter = activeFilter === 'all' || story.category === activeFilter;
+                const matchesDuration = activeDuration === 'all' || getDurationCategory(story.duration) === activeDuration;
+                
+                return matchesSearch && matchesFilter && matchesDuration;
+            });
+            
+            renderAudio(filteredStories);
+        }
+
+        // Filter button functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterAudio();
+            });
+        });
+
+        // Duration filter functionality
+        document.querySelectorAll('.category-pill').forEach(pill => {
+            pill.addEventListener('click', () => {
+                document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                filterAudio();
+            });
+        });
+
+        // Initialize audio on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAudio();
+        });
+    </script>
+</body>
+</html>

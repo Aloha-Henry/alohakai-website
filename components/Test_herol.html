@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K.A.I - Kauai Adventure Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: white;
+        }
+        
+        .glass-morphism {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .hero-gradient {
+            background: radial-gradient(ellipse at top right, rgba(251, 113, 133, 0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom left, rgba(103, 232, 249, 0.08) 0%, transparent 50%);
+        }
+        
+        .chat-container {
+            transition: all 0.3s ease-out;
+            max-height: 80px;
+            overflow: hidden;
+        }
+        
+        .chat-container.expanded {
+            max-height: 500px;
+        }
+        
+        .chat-messages {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease-out;
+        }
+        
+        .chat-container.expanded .chat-messages {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .coconut-float {
+            animation: coconutFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes coconutFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-3px) rotate(1deg); }
+        }
+        
+        .tag-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .tag-pill:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(103, 232, 249, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        .chat-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s ease;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: rgba(103, 232, 249, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.1);
+        }
+        
+        .message-user {
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+        }
+        
+        .message-kai {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="min-h-screen relative overflow-hidden hero-gradient">
+        <!-- Gradient line at top -->
+        <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#67E8F9] to-transparent opacity-60"></div>
+        
+        <!-- Main Hero Content -->
+        <div class="relative z-10 min-h-screen flex flex-col justify-center px-4 pt-24 pb-16">
+            <div class="max-w-4xl mx-auto text-center">
+                <!-- Main Headline -->
+                <h1 class="text-5xl md:text-7xl font-light mb-6 tracking-tight">
+                    <span style="color: #FB7185;" class="font-medium">Aloha,</span>
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #22D3EE 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
+                        I'm Kai
+                    </span>
+                    <span style="color: #FB7185;">🌺</span>
+                </h1>
+                
+                <!-- Tagline -->
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
+                    Your local island friend - text or chat to explore Kauai
+                </p>
+                
+                <!-- Quick category pills -->
+                <div class="mb-12">
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" onclick="askQuestion('Where do locals eat?')">🍽️ Local Food</span>
+                        <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" onclick="askQuestion('Best beaches for kids?')">🏖️ Best Beaches</span>
+                        <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" onclick="askQuestion('Epic adventures on Kauai?')">🚁 Adventures</span>
+                        <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" onclick="askQuestion('Secret sunset spots?')">🌅 Secret Spots</span>
+                        <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" onclick="askQuestion('Audio guides available?')">🎧 Audio Guides</span>
+                    </div>
+                </div>
+                
+                <!-- Chat Container -->
+                <div class="max-w-3xl mx-auto mb-8">
+                    <div id="chatContainer" class="chat-container glass-morphism rounded-2xl p-6">
+                        <!-- Chat Messages Area (hidden initially) -->
+                        <div class="chat-messages mb-4">
+                            <div id="messagesContainer" class="space-y-4 max-h-80 overflow-y-auto">
+                                <!-- Messages will appear here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Chat Input -->
+                        <div class="flex gap-3">
+                            <input 
+                                type="text" 
+                                placeholder="Ask Kai anything about Kauai..." 
+                                class="flex-1 chat-input rounded-xl px-4 py-4 text-white placeholder-gray-400 text-lg"
+                                id="chatInput"
+                                onkeypress="handleChatEnter(event)"
+                                onfocus="expandChat()"
+                            >
+                            <button onclick="sendMessage()" class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-6 py-4 rounded-xl text-white font-medium hover:opacity-90 transition-opacity flex-shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Coconut Counter -->
+                        <div class="mt-4 text-center">
+                            <span class="text-sm text-gray-400">
+                                <span class="coconut-float inline-block">🥥</span> 
+                                <span id="coconutCount">20</span> coconuts available • Each question costs 1 coconut
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CTA -->
+                <div class="flex flex-col items-center gap-4">
+                    <div class="glass-morphism px-8 py-4 rounded-2xl border border-[#FB7185]/30 hover:border-[#FB7185]/60 transition-all duration-300 cursor-pointer transform hover:scale-105">
+                        <div class="flex items-center gap-3">
+                            <span class="coconut-float text-xl">🥥</span>
+                            <span class="text-base font-medium text-white">Get 20 Free Coconuts to Start</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500">No signup required • Start chatting immediately</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center">
+            <div class="text-sm text-gray-500 mb-2">Explore below</div>
+            <div class="w-px h-8 bg-gradient-to-b from-gray-500 to-transparent mx-auto"></div>
+        </div>
+    </section>
+    
+    <script>
+        let coconuts = 20;
+        let chatExpanded = false;
+        
+        function expandChat() {
+            if (!chatExpanded) {
+                document.getElementById('chatContainer').classList.add('expanded');
+                chatExpanded = true;
+            }
+        }
+        
+        function askQuestion(question) {
+            document.getElementById('chatInput').value = question;
+            expandChat();
+            document.getElementById('chatInput').focus();
+        }
+        
+        function addMessage(message, isUser = false) {
+            const messagesContainer = document.getElementById('messagesContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'}`;
+            
+            messageDiv.innerHTML = `
+                <div class="${isUser ? 'message-user' : 'message-kai'} max-w-xs md:max-w-md px-4 py-3 rounded-2xl">
+                    ${isUser ? '' : '<div class="flex items-center gap-2 mb-1"><span class="text-sm">🌺</span><span class="text-xs text-gray-400">Kai</span></div>'}
+                    <div class="text-sm">${message}</div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message && coconuts > 0) {
+                // Add user message
+                addMessage(message, true);
+                
+                // Clear input
+                input.value = '';
+                
+                // Deduct coconut
+                coconuts--;
+                document.getElementById('coconutCount').textContent = coconuts;
+                
+                // Expand chat if not already
+                expandChat();
+                
+                // Simulate Kai's response (replace with actual API call)
+                setTimeout(() => {
+                    let response = "I'd love to help you with that! This is where I'll connect to the Python backend to give you amazing local insights about Kauai. 🌺";
+                    
+                    // Simple response logic for demo
+                    if (message.toLowerCase().includes('food') || message.toLowerCase().includes('eat')) {
+                        response = "For authentic local food, I absolutely recommend Pono Market in Kapaa! Their spicy ahi poke bowl is legendary. Opens at 6am and closes at 2pm, so get there early! 🍣";
+                    } else if (message.toLowerCase().includes('beach')) {
+                        response = "Kiahuna Beach is a gem! It's a less crowded alternative to Poipu Beach with great conditions for swimming and beginner surfing. Visit early morning for the best parking! 🏖️";
+                    } else if (message.toLowerCase().includes('adventure')) {
+                        response = "Blue Hawaiian Helicopters offers incredible aerial tours! You'll see parts of Kauai that are impossible to reach by land. The Na Pali Coast from above is absolutely breathtaking! 🚁";
+                    }
+                    
+                    addMessage(response);
+                }, 1000);
+                
+            } else if (coconuts <= 0) {
+                alert('No coconuts left! Get more to continue chatting 🥥');
+            }
+        }
+        
+        function handleChatEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        // Auto-focus input on page load
+        window.addEventListener('load', () => {
+            document.getElementById('chatInput').focus();
+        });
+    </script>
+</body>
+</html>

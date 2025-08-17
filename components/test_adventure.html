@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventures Section</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #e2e8f0;
+        }
+
+        /* Adventure card styling */
+        .adventure-card {
+            background: rgba(31, 41, 55, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transform: translate3d(0, 0, 0);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .adventure-card:hover {
+            transform: translate3d(0, -8px, 0);
+            box-shadow: 0 15px 35px rgba(103, 232, 249, 0.15),
+                        0 0 50px rgba(103, 232, 249, 0.1);
+            border-color: rgba(103, 232, 249, 0.3);
+        }
+
+        /* Author avatar */
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FB7185, #67E8F9);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: white;
+            overflow: hidden;
+        }
+
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Adventure tags */
+        .adventure-tag {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Coconut cost */
+        .coconut-cost {
+            background: rgba(251, 113, 133, 0.15);
+            border: 1px solid rgba(251, 113, 133, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            color: #FB7185;
+        }
+
+        /* Search and filter styles */
+        .search-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            color: #e2e8f0;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(103, 232, 249, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .tag-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .tag-pill.active {
+            background: rgba(103, 232, 249, 0.2);
+            border-color: rgba(103, 232, 249, 0.4);
+        }
+
+        .tag-pill:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(103, 232, 249, 0.3);
+        }
+
+        /* Fade in animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Stagger animation delays */
+        .adventure-grid > :nth-child(1) { animation-delay: 0.1s; }
+        .adventure-grid > :nth-child(2) { animation-delay: 0.2s; }
+        .adventure-grid > :nth-child(3) { animation-delay: 0.3s; }
+        .adventure-grid > :nth-child(4) { animation-delay: 0.4s; }
+        .adventure-grid > :nth-child(5) { animation-delay: 0.5s; }
+        .adventure-grid > :nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body class="bg-black text-gray-300">
+    <!-- Adventures Section -->
+    <section class="py-24 px-4 bg-black relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-4xl md:text-6xl font-bold mb-4">
+                    Curated
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #22D3EE 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        Adventures
+                    </span>
+                </h2>
+                <p class="text-xl text-gray-400 mb-8">
+                    Pre-planned experiences designed by locals and adventure experts
+                </p>
+                
+                <!-- Search Bar -->
+                <div class="max-w-md mx-auto mb-8">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            placeholder="Search adventures..." 
+                            class="w-full search-input rounded-xl px-4 py-3 placeholder-gray-400"
+                            id="adventuresSearch"
+                            oninput="filterAdventures()"
+                        >
+                        <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- Filter Tags -->
+                <div class="flex flex-wrap justify-center gap-3 mb-12">
+                    <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer active" data-filter="all" onclick="filterByTag('all', this)">All</span>
+                    <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" data-filter="half-day" onclick="filterByTag('half-day', this)">🌅 Half Day</span>
+                    <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" data-filter="full-day" onclick="filterByTag('full-day', this)">☀️ Full Day</span>
+                    <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" data-filter="family" onclick="filterByTag('family', this)">👨‍👩‍👧‍👦 Family</span>
+                    <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" data-filter="adventure" onclick="filterByTag('adventure', this)">🚁 Adventure</span>
+                    <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" data-filter="beach" onclick="filterByTag('beach', this)">🏖️ Beach</span>
+                    <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" data-filter="hiking" onclick="filterByTag('hiking', this)">🥾 Hiking</span>
+                </div>
+            </div>
+            
+            <!-- Adventures Grid -->
+            <div class="adventure-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="adventuresContainer">
+                
+                <!-- Adventure 1 - North Shore Epic -->
+                <div class="adventure-card rounded-2xl p-6 fade-in-up adventure-item" data-tags="full-day,adventure,beach,hiking">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="author-avatar rounded-full">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=2500w" alt="Henry" class="rounded-full">
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium">Henry</div>
+                                <div class="text-xs text-gray-400">AlohaHenry.com</div>
+                            </div>
+                        </div>
+                        <div class="coconut-cost">
+                            🥥 5
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-3">Epic North Shore Day</h3>
+                    <p class="text-sm text-gray-400 mb-4 leading-relaxed">
+                        Start with sunrise at Tunnels Beach, explore Hanalei town, lunch at local food trucks, afternoon at Anini Beach, and sunset cocktails with locals.
+                    </p>
+                    
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="adventure-tag">Full Day</span>
+                        <span class="adventure-tag">Beach Hopping</span>
+                        <span class="adventure-tag">Local Food</span>
+                        <span class="adventure-tag">Photography</span>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="flex items-center gap-4 text-xs text-gray-500 mb-4">
+                        <span>⏱️ 8 hours</span>
+                        <span>🚗 Car required</span>
+                        <span>💪 Easy</span>
+                        <span>👥 2-6 people</span>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-[#67E8F9] to-[#FB7185] text-white py-3 rounded-xl font-medium hover:opacity-90 transition-opacity">
+                        Get Full Itinerary
+                    </button>
+                </div>
+
+                <!-- Adventure 2 - Family Beach Day -->
+                <div class="adventure-card rounded-2xl p-6 fade-in-up adventure-item" data-tags="half-day,family,beach">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="author-avatar rounded-full">
+                                K
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium">Kai</div>
+                                <div class="text-xs text-gray-400">Local AI Guide</div>
+                            </div>
+                        </div>
+                        <div class="coconut-cost">
+                            🥥 2
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-3">Perfect Family Beach Day</h3>
+                    <p class="text-sm text-gray-400 mb-4 leading-relaxed">
+                        Kid-friendly beaches with calm waters, picnic spots, tide pools to explore, and ice cream stops. Designed for families with young children.
+                    </p>
+                    
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="adventure-tag">Half Day</span>
+                        <span class="adventure-tag">Kid-Friendly</span>
+                        <span class="adventure-tag">Safe Swimming</span>
+                        <span class="adventure-tag">Tide Pools</span>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="flex items-center gap-4 text-xs text-gray-500 mb-4">
+                        <span>⏱️ 4 hours</span>
+                        <span>🚗 Minimal driving</span>
+                        <span>💪 Very Easy</span>
+                        <span>👥 Perfect for kids</span>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-[#67E8F9] to-[#FB7185] text-white py-3 rounded-xl font-medium hover:opacity-90 transition-opacity">
+                        Get Full Itinerary
+                    </button>
+                </div>
+
+                <!-- Adventure 3 - Waterfall Hike -->
+                <div class="adventure-card rounded-2xl p-6 fade-in-up adventure-item" data-tags="half-day,hiking,adventure">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="author-avatar rounded-full">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=2500w" alt="Henry" class="rounded-full">
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium">Henry</div>
+                                <div class="text-xs text-gray-400">AlohaHenry.com</div>
+                            </div>
+                        </div>
+                        <div class="coconut-cost">
+                            🥥 3
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-3">Secret Waterfall Adventure</h3>
+                    <p class="text-sm text-gray-400 mb-4 leading-relaxed">
+                        Moderate hike to a hidden waterfall with swimming holes. Includes parking tips, trail conditions, and the best photo spots locals don't share.
+                    </p>
+                    
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="adventure-tag">Moderate Hike</span>
+                        <span class="adventure-tag">Swimming</span>
+                        <span class="adventure-tag">Photography</span>
+                        <span class="adventure-tag">Hidden Gem</span>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="flex items-center gap-4 text-xs text-gray-500 mb-4">
+                        <span>⏱️ 3-4 hours</span>
+                        <span>🥾 2 mile hike</span>
+                        <span>💪 Moderate</span>
+                        <span>👥 Adults preferred</span>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-[#67E8F9] to-[#FB7185] text-white py-3 rounded-xl font-medium hover:opacity-90 transition-opacity">
+                        Get Full Itinerary
+                    </button>
+                </div>
+
+                <!-- Adventure 4 - Foodie Tour -->
+                <div class="adventure-card rounded-2xl p-6 fade-in-up adventure-item" data-tags="half-day,food,family">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="author-avatar rounded-full">
+                                K
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium">Kai</div>
+                                <div class="text-xs text-gray-400">Local AI Guide</div>
+                            </div>
+                        </div>
+                        <div class="coconut-cost">
+                            🥥 3
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-3">Local Foodie Crawl</h3>
+                    <p class="text-sm text-gray-400 mb-4 leading-relaxed">
+                        Hit the best local food spots that tourists miss. Food trucks, family restaurants, and hidden gems. Includes insider ordering tips and timing.
+                    </p>
+                    
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="adventure-tag">Food Trucks</span>
+                        <span class="adventure-tag">Local Spots</span>
+                        <span class="adventure-tag">Insider Tips</span>
+                        <span class="adventure-tag">Budget-Friendly</span>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="flex items-center gap-4 text-xs text-gray-500 mb-4">
+                        <span>⏱️ 4-5 hours</span>
+                        <span>🚗 Island hopping</span>
+                        <span>💪 Easy</span>
+                        <span>👥 Any group size</span>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-[#67E8F9] to-[#FB7185] text-white py-3 rounded-xl font-medium hover:opacity-90 transition-opacity">
+                        Get Full Itinerary
+                    </button>
+                </div>
+
+                <!-- Adventure 5 - Sunset Chase -->
+                <div class="adventure-card rounded-2xl p-6 fade-in-up adventure-item" data-tags="half-day,beach,photography">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="author-avatar rounded-full">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=2500w" alt="Henry" class="rounded-full">
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium">Henry</div>
+                                <div class="text-xs text-gray-400">AlohaHenry.com</div>
+                            </div>
+                        </div>
+                        <div class="coconut-cost">
+                            🥥 2
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-3">Epic Sunset Spots</h3>
+                    <p class="text-sm text-gray-400 mb-4 leading-relaxed">
+                        Three amazing sunset locations with backup plans. Includes the best viewpoints, parking strategies, and cocktail spots for after-sunset drinks.
+                    </p>
+                    
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="adventure-tag">Sunset Views</span>
+                        <span class="adventure-tag">Photography</span>
+                        <span class="adventure-tag">Romantic</span>
+                        <span class="adventure-tag">Cocktails</span>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="flex items-center gap-4 text-xs text-gray-500 mb-4">
+                        <span>⏱️ 3 hours</span>
+                        <span>🚗 Multiple stops</span>
+                        <span>💪 Easy</span>
+                        <span>👥 Couples ideal</span>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-[#67E8F9] to-[#FB7185] text-white py-3 rounded-xl font-medium hover:opacity-90 transition-opacity">
+                        Get Full Itinerary
+                    </button>
+                </div>
+
+                <!-- Adventure 6 - Adventure Combo -->
+                <div class="adventure-card rounded-2xl p-6 fade-in-up adventure-item" data-tags="full-day,adventure,hiking,beach">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="author-avatar rounded-full">
+                                K
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium">Kai</div>
+                                <div class="text-xs text-gray-400">Local AI Guide</div>
+                            </div>
+                        </div>
+                        <div class="coconut-cost">
+                            🥥 4
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-3">Ultimate Adventure Combo</h3>
+                    <p class="text-sm text-gray-400 mb-4 leading-relaxed">
+                        Morning helicopter tour, afternoon ATV adventure, and evening beach relaxation. The perfect high-energy day for thrill seekers visiting Kauai.
+                    </p>
+                    
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="adventure-tag">Helicopter</span>
+                        <span class="adventure-tag">ATV Tour</span>
+                        <span class="adventure-tag">Beach Time</span>
+                        <span class="adventure-tag">Adrenaline</span>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="flex items-center gap-4 text-xs text-gray-500 mb-4">
+                        <span>⏱️ 8+ hours</span>
+                        <span>🚁 Tours included</span>
+                        <span>💪 Active</span>
+                        <span>👥 2-4 people</span>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-[#67E8F9] to-[#FB7185] text-white py-3 rounded-xl font-medium hover:opacity-90 transition-opacity">
+                        Get Full Itinerary
+                    </button>
+                </div>
+
+            </div>
+            
+            <!-- More Adventures Teaser -->
+            <div class="text-center mt-16 fade-in-up">
+                <p class="text-gray-500 mb-6">New adventures added weekly...</p>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <span class="px-4 py-2 bg-gray-900 rounded-full text-sm text-gray-400">Sunrise Photography</span>
+                    <span class="px-4 py-2 bg-gray-900 rounded-full text-sm text-gray-400">Snorkel Adventure</span>
+                    <span class="px-4 py-2 bg-gray-900 rounded-full text-sm text-gray-400">Cultural Tour</span>
+                    <span class="px-4 py-2 bg-gray-900 rounded-full text-sm text-gray-400">Luxury Day</span>
+                    <span class="px-4 py-2 bg-gray-900 rounded-full text-sm text-gray-400">Budget Explorer</span>
+                    <span class="px-4 py-2 bg-gray-900 rounded-full text-sm text-gray-400">+more coming</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        function filterByTag(tag, element) {
+            document.querySelectorAll('.tag-pill').forEach(pill => pill.classList.remove('active'));
+            element.classList.add('active');
+            
+            const cards = document.querySelectorAll('.adventure-item');
+            cards.forEach(card => {
+                const cardTags = card.getAttribute('data-tags').split(',');
+                if (tag === 'all' || cardTags.includes(tag)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        function filterAdventures() {
+            const searchTerm = document.getElementById('adventuresSearch').value.toLowerCase();
+            const cards = document.querySelectorAll('.adventure-item');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                const tags = card.getAttribute('data-tags').toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm) || tags.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

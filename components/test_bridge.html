@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kai Bridge Section</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: white;
+        }
+        
+        .hero-gradient {
+            background: radial-gradient(ellipse at center, rgba(103, 232, 249, 0.08) 0%, transparent 60%);
+        }
+        
+        .glass-morphism {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(103, 232, 249, 0.3);
+        }
+        
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+<body class="bg-black text-white">
+    <!-- Bridge Section -->
+    <section class="py-16 px-4 hero-gradient">
+        <div class="max-w-6xl mx-auto text-center">
+            <!-- Main Bridge Message -->
+            <h2 class="text-3xl md:text-5xl font-medium mb-6">
+                <span style="color: #67E8F9;">Kai</span> 
+                <span class="text-white">Helps You Explore</span> 
+                <span style="color: #FB7185;">Kauai</span>
+            </h2>
+            
+            <p class="text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+                264 curated local spots, exclusive deals, and insider knowledge that only comes from living here
+            </p>
+            
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+                <div class="glass-morphism stat-card rounded-xl p-6 border border-white/10">
+                    <div class="text-2xl md:text-3xl font-bold mb-2" style="color: #67E8F9;">264+</div>
+                    <div class="text-sm text-gray-400">Local Spots</div>
+                </div>
+                
+                <div class="glass-morphism stat-card rounded-xl p-6 border border-white/10">
+                    <div class="text-2xl md:text-3xl font-bold mb-2" style="color: #FB7185;">24/7</div>
+                    <div class="text-sm text-gray-400">AI Assistant</div>
+                </div>
+                
+                <div class="glass-morphism stat-card rounded-xl p-6 border border-white/10">
+                    <div class="text-2xl md:text-3xl font-bold mb-2" style="color: #67E8F9;">Real</div>
+                    <div class="text-sm text-gray-400">Local Intel</div>
+                </div>
+                
+                <div class="glass-morphism stat-card rounded-xl p-6 border border-white/10">
+                    <div class="flex items-center justify-center mb-2">
+                        <span class="text-2xl md:text-3xl font-bold text-green-400">Live</span>
+                        <span class="pulse-dot w-2 h-2 bg-green-400 rounded-full ml-2"></span>
+                    </div>
+                    <div class="text-sm text-gray-400">Updates</div>
+                </div>
+            </div>
+            
+            <!-- Feature Grid -->
+            <div class="grid md:grid-cols-3 gap-8 text-left">
+                <div class="glass-morphism rounded-xl p-8 border border-white/10">
+                    <div class="text-4xl mb-4">🏖️</div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Secret Beaches</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        Hidden gems that locals keep to themselves. Kai knows exactly when to visit and where to park.
+                    </p>
+                </div>
+                
+                <div class="glass-morphism rounded-xl p-8 border border-white/10">
+                    <div class="text-4xl mb-4">🍽️</div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Local Food Scene</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        From food trucks to fine dining, exclusive deals and insider tips on what locals actually eat.
+                    </p>
+                </div>
+                
+                <div class="glass-morphism rounded-xl p-8 border border-white/10">
+                    <div class="text-4xl mb-4">🚁</div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Epic Adventures</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        Helicopter tours, ATV adventures, and hidden waterfalls with real-time conditions and booking tips.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

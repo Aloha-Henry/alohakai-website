@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Deals - Alohakia</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cyan: #67E8F9;
+            --pink: #FB7185;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+        }
+
+        .glass-morphism {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .gradient-accent {
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--pink) 100%);
+        }
+
+        .deal-card {
+            perspective: 1000px;
+            height: 400px;
+        }
+
+        .deal-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .deal-card.flipped .deal-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .deal-card-front, .deal-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .deal-card-front {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .deal-card-back {
+            background: linear-gradient(135deg, var(--cyan)/10 0%, var(--pink)/10 100%);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transform: rotateY(180deg);
+            text-align: left;
+        }
+
+        .deal-card:hover .deal-card-front {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .search-container {
+            margin-bottom: 3rem;
+        }
+
+        .deals-grid-container {
+            margin-top: 0;
+        }
+
+        .filter-btn, .location-pill {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .filter-btn:hover, .location-pill:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-btn.active, .location-pill.active {
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--pink) 100%);
+            border-color: transparent;
+        }
+
+        .location-pill {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .location-pill:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="p-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-2xl font-light">
+                <span class="gradient-accent bg-clip-text text-transparent">Alohakia</span>
+            </a>
+            
+            <div class="flex gap-6">
+                <a href="/adventures" class="text-gray-400 hover:text-white transition-colors">Adventures</a>
+                <a href="/audio" class="text-gray-400 hover:text-white transition-colors">Audio Guides</a>
+                <a href="/shop" class="text-gray-400 hover:text-white transition-colors">Shop</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-6xl font-extralight mb-6">
+                <span class="gradient-accent bg-clip-text text-transparent">Live Deals</span>
+            </h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                Exclusive offers curated by locals. Updated in real-time.
+            </p>
+        </div>
+    </section>
+
+    <!-- Search & Filters -->
+    <div class="search-container">
+        <div class="container mx-auto px-6 mb-12">
+            <div class="max-w-4xl mx-auto glass-morphism rounded-2xl p-6">
+                <div class="flex flex-col gap-4">
+                    <!-- Search Input -->
+                    <div class="flex-1">
+                        <input 
+                            type="text" 
+                            placeholder="Search deals..." 
+                            class="w-full bg-black/50 border border-white/10 rounded-xl px-6 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 transition-colors"
+                            id="dealSearch"
+                            oninput="filterDeals()"
+                        >
+                    </div>
+                    
+                    <!-- Category Filter Buttons -->
+                    <div class="flex gap-3 flex-wrap justify-center">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="food">Food</button>
+                        <button class="filter-btn" data-filter="activities">Activities</button>
+                        <button class="filter-btn" data-filter="experiences">Experiences</button>
+                        <button class="filter-btn" data-filter="gear">Gear</button>
+                    </div>
+                    
+                    <!-- Location Filter Pills -->
+                    <div class="flex gap-3 flex-wrap justify-center">
+                        <button class="location-pill active" data-location="all">All Areas</button>
+                        <button class="location-pill" data-location="North Shore">North Shore</button>
+                        <button class="location-pill" data-location="East Side">East Side</button>
+                        <button class="location-pill" data-location="South Shore">South Shore</button>
+                        <button class="location-pill" data-location="West Side">West Side</button>
+                        <button class="location-pill" data-location="Beaches">Beaches</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deals Grid -->
+    <section class="pb-20">
+        <div class="container mx-auto px-6">
+            <div class="deals-grid-container">
+                <div id="dealsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Deals will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script>
+        // Generic placeholder deals data with "why we love it"
+        const dealsData = [
+            {
+                id: 1,
+                title: "Local Restaurant Special",
+                description: "Fresh seafood bowl with island vegetables. Chef's recommended preparation.",
+                location: "North Shore",
+                category: "food",
+                discount: "25% OFF",
+                discountType: "percentage",
+                currentPrice: 18,
+                originalPrice: 24,
+                timeLeft: "Ends in 2 days",
+                icon: "🍽️",
+                dealType: "INSIDER",
+                buttonText: "Text Kai",
+                whyWeLoveIt: "The owner sources fish directly from local boats every morning. The secret sauce has been in their family for three generations, and the portions are massive. Perfect spot when you're hungry after a beach day and want something real, not touristy."
+            },
+            {
+                id: 2,
+                title: "Water Activity Experience",
+                description: "Guided water sport lesson with equipment included. Perfect for beginners.",
+                location: "East Side",
+                category: "activities",
+                discount: "40% OFF",
+                discountType: "percentage", 
+                currentPrice: 75,
+                originalPrice: 125,
+                timeLeft: "Today only",
+                icon: "🏄‍♂️",
+                dealType: "LIMITED",
+                buttonText: "Text Kai",
+                whyWeLoveIt: "The instructor grew up on these waters and knows exactly where the gentle swells are perfect for learning. They're super patient and actually make it fun instead of scary. Plus the gear is top quality - not the cheap rental stuff most places use."
+            },
+            {
+                id: 3,
+                title: "Private Adventure Tour",
+                description: "Exclusive guided experience to hidden spots. Small group setting.",
+                location: "South Shore",
+                category: "experiences",
+                discount: "$50 OFF",
+                discountType: "dollar",
+                currentPrice: 150,
+                originalPrice: 200,
+                timeLeft: "3 days left",
+                icon: "🗺️",
+                dealType: "EXCLUSIVE",
+                buttonText: "Text Kai",
+                whyWeLoveIt: "This guide knows secret spots that aren't on any map or Instagram. You'll see waterfalls that most locals don't even know about. The small group means you get personal attention and can ask all the questions you want without feeling rushed."
+            },
+            {
+                id: 4,
+                title: "Local Gear Rental",
+                description: "High-quality equipment rental for outdoor activities. Daily or weekly rates.",
+                location: "West Side",
+                category: "gear",
+                discount: "30% OFF",
+                discountType: "percentage",
+                currentPrice: 35,
+                originalPrice: 50,
+                timeLeft: "While supplies last",
+                icon: "🎒",
+                dealType: "HOT DEAL",
+                buttonText: "Text Kai",
+                whyWeLoveIt: "They actually maintain their gear instead of renting out broken stuff. The owner is super helpful about matching you with the right equipment for your skill level. Plus they'll give you insider tips on the best spots to use it."
+            },
+            {
+                id: 5,
+                title: "Local Market Special",
+                description: "Fresh tropical treats and local specialties. Farm-to-table experience.",
+                location: "North Shore",
+                category: "food",
+                discount: "BOGO",
+                discountType: "bogo",
+                currentPrice: 12,
+                originalPrice: 24,
+                timeLeft: "6 hours left",
+                icon: "🥥",
+                dealType: "FLASH",
+                buttonText: "Text Kai",
+                whyWeLoveIt: "Everything is made fresh that morning with fruit picked within 24 hours. The smoothie bowls are Instagram-worthy but actually taste amazing too. It's where the local yoga instructors go after class - that tells you everything."
+            },
+            {
+                id: 6,
+                title: "Nature Walk Experience",
+                description: "Guided walking tour through scenic trails. Learn about local flora and fauna.",
+                location: "West Side",
+                category: "activities",
+                discount: "Free guide",
+                discountType: "free",
+                currentPrice: 0,
+                originalPrice: 30,
+                timeLeft: "This week",
+                icon: "🥾",
+                dealType: "LOCAL TIP",
+                buttonText: "Text Kai",
+                whyWeLoveIt: "This retired botanist leads the walks and knows every plant, bird, and story about the area. He'll show you medicinal plants the ancient Hawaiians used and point out wildlife you'd never notice on your own. Plus it's completely free!"
+            },
+            {
+                id: 7,
+                title: "Tropical Refreshment",
+                description: "Local-style frozen treat made with island flavors. Perfect for hot days.",
+                location: "East Side",
+                category: "food",
+                discount: "BOGO",
+                discountType: "bogo",
+                currentPrice: 8,
+                originalPrice: 16,
+                timeLeft: "Weekend only",
+                icon: "🍧",
+                dealType: "WEEKEND",
+                buttonText: "Text Kai",
+                whyWeLoveIt: "They use real fruit syrups made in-house, not the artificial stuff. The owner's grandmother's recipe for the special toppings is legendary among locals. It's the perfect cool-down after hiking in the heat."
+            },
+            {
+                id: 8,
+                title: "Beach Activity Session",
+                description: "Relaxing activity session at a scenic beach location. All levels welcome.",
+                location: "Beaches",
+                category: "activities",
+                discount: "50% OFF",
+                discountType: "percentage",
+                currentPrice: 20,
+                originalPrice: 40,
+                timeLeft: "Mornings only",
+                icon: "🏖️",
+                dealType: "MORNING",
+                buttonText: "Text Kai",
+                whyWeLoveIt: "The morning sessions catch the best light and calmest conditions. The instructor is super chill and focuses on actually relaxing instead of making it competitive. You'll leave feeling zen and ready for whatever the day brings."
+            }
+        ];
+
+        function getDiscountBadgeColor(dealType) {
+            const colors = {
+                'INSIDER': 'bg-purple-500/20 text-purple-400',
+                'LIMITED': 'bg-blue-500/20 text-blue-400',
+                'EXCLUSIVE': 'bg-pink-500/20 text-pink-400',
+                'HOT DEAL': 'bg-green-500/20 text-green-400',
+                'FLASH': 'bg-red-500/20 text-red-400',
+                'LOCAL TIP': 'bg-cyan-500/20 text-cyan-400',
+                'WEEKEND': 'bg-yellow-500/20 text-yellow-400',
+                'MORNING': 'bg-indigo-500/20 text-indigo-400',
+                'CREATIVE': 'bg-orange-500/20 text-orange-400',
+                'TRANSPORT': 'bg-teal-500/20 text-teal-400'
+            };
+            return colors[dealType] || 'bg-gray-500/20 text-gray-400';
+        }
+
+        function formatPrice(deal) {
+            if (deal.discountType === 'free') {
+                return `<span class="text-lg font-semibold text-cyan-400">FREE</span>`;
+            }
+            
+            let priceDisplay = `<span class="text-lg font-semibold text-cyan-400">$${deal.currentPrice}</span>`;
+            
+            if (deal.originalPrice > deal.currentPrice) {
+                priceDisplay += `<span class="text-sm text-gray-500 line-through ml-2">$${deal.originalPrice}</span>`;
+            }
+            
+            return priceDisplay;
+        }
+
+        function renderDeals(deals = dealsData) {
+            const grid = document.getElementById('dealsGrid');
+            grid.innerHTML = '';
+
+            deals.forEach(deal => {
+                const dealCard = document.createElement('div');
+                dealCard.className = 'deal-card';
+                dealCard.dataset.category = deal.category;
+                dealCard.onclick = () => dealCard.classList.toggle('flipped');
+                
+                dealCard.innerHTML = `
+                    <div class="deal-card-inner">
+                        <!-- Front of card -->
+                        <div class="deal-card-front">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="px-3 py-1 ${getDiscountBadgeColor(deal.dealType)} rounded-full text-sm font-medium">
+                                    ${deal.dealType}
+                                </span>
+                                <span class="text-xs text-gray-500">${deal.timeLeft}</span>
+                            </div>
+                            
+                            <div class="h-24 bg-gradient-to-br from-cyan-500/20 to-pink-500/20 rounded-xl mb-4 flex items-center justify-center">
+                                <span class="text-4xl">${deal.icon}</span>
+                            </div>
+                            
+                            <div class="mb-2">
+                                <h3 class="text-lg font-medium">${deal.title}</h3>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="text-xs text-cyan-400 bg-cyan-500/10 px-2 py-1 rounded">📍 ${deal.location}</span>
+                                </div>
+                            </div>
+                            
+                            <p class="text-gray-400 text-sm mb-4 flex-1">${deal.description}</p>
+                            
+                            <div class="flex justify-between items-center mt-auto">
+                                <div>
+                                    ${formatPrice(deal)}
+                                </div>
+                                <div class="text-xs text-gray-500">
+                                    Click to flip →
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Back of card -->
+                        <div class="deal-card-back">
+                            <div class="mb-4">
+                                <h3 class="text-xl font-medium mb-2">Why we love this deal</h3>
+                                <div class="h-1 w-12 bg-gradient-to-r from-cyan-500 to-pink-500 rounded mb-4"></div>
+                            </div>
+                            
+                            <p class="text-gray-300 text-sm leading-relaxed mb-6 flex-1">
+                                ${deal.whyWeLoveIt}
+                            </p>
+                            
+                            <div class="mt-auto">
+                                <div class="flex justify-between items-center mb-4">
+                                    <div>
+                                        ${formatPrice(deal)}
+                                    </div>
+                                    <span class="text-xs text-cyan-400 bg-cyan-500/10 px-2 py-1 rounded">📍 ${deal.location}</span>
+                                </div>
+                                
+                                <button class="w-full py-3 gradient-accent rounded-lg text-white font-medium hover:opacity-90 transition-opacity">
+                                    ${deal.buttonText} to Unlock
+                                </button>
+                                
+                                <div class="text-xs text-gray-500 text-center mt-2">
+                                    ← Click to flip back
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(dealCard);
+            });
+        }
+
+        function filterDeals() {
+            const searchTerm = document.getElementById('dealSearch').value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            const activeLocation = document.querySelector('.location-pill.active').dataset.location;
+            
+            const filteredDeals = dealsData.filter(deal => {
+                const matchesSearch = deal.title.toLowerCase().includes(searchTerm) || 
+                                    deal.description.toLowerCase().includes(searchTerm) ||
+                                    deal.location.toLowerCase().includes(searchTerm);
+                const matchesFilter = activeFilter === 'all' || deal.category === activeFilter;
+                const matchesLocation = activeLocation === 'all' || 
+                                      deal.location.includes(activeLocation) ||
+                                      (activeLocation === 'Beaches' && deal.location.includes('Beach'));
+                
+                return matchesSearch && matchesFilter && matchesLocation;
+            });
+            
+            renderDeals(filteredDeals);
+        }
+
+        // Filter button functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterDeals();
+            });
+        });
+
+        // Location pill functionality
+        document.querySelectorAll('.location-pill').forEach(pill => {
+            pill.addEventListener('click', () => {
+                document.querySelectorAll('.location-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                filterDeals();
+            });
+        });
+
+        // Initialize deals on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDeals();
+        });
+    </script>
+</body>
+</html>

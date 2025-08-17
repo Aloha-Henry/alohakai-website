@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Deals Section</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #e2e8f0;
+        }
+
+        /* Base glass card */
+        .glass-card {
+            background: rgba(31, 41, 55, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transform: translate3d(0, 0, 0);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translate3d(0, -6px, 0);
+        }
+
+        .glass-card:not(.seafoam-accent):hover {
+            box-shadow: 0 10px 25px rgba(251, 113, 133, 0.15),
+                        0 0 40px rgba(251, 113, 133, 0.1);
+            border-color: rgba(251, 113, 133, 0.3);
+        }
+
+        .glass-card.seafoam-accent:hover {
+            box-shadow: 0 10px 25px rgba(103, 232, 249, 0.15),
+                        0 0 40px rgba(103, 232, 249, 0.1);
+            border-color: rgba(103, 232, 249, 0.3);
+        }
+
+        /* Partner logo styling */
+        .partner-logo {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Discount badge */
+        .discount-badge {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        /* Horizontal scroll */
+        .deals-scroll {
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .deals-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Card flip animation */
+        .card-flip {
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-flip.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Search and filter styles */
+        .search-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            color: #e2e8f0;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(103, 232, 249, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .tag-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .tag-pill.active {
+            background: rgba(103, 232, 249, 0.2);
+            border-color: rgba(103, 232, 249, 0.4);
+        }
+
+        .tag-pill:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(103, 232, 249, 0.3);
+        }
+
+        /* Fade in animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .deal-card {
+            width: 260px;
+            height: 200px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-300">
+    <!-- Local Deals Section -->
+    <section class="py-24 px-4 bg-black relative z-10" style="margin-bottom: 48px;">
+        <div class="max-w-6xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-4xl md:text-6xl font-medium mb-8 text-gray-300">
+                    Explore Kauai with Kai
+                </h2>
+                
+                <h3 class="text-4xl md:text-6xl font-bold mb-4">
+                    Your Pass to
+                    <span style="background: linear-gradient(135deg, #FB7185 0%, #F43F5E 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        Exclusive Deals
+                    </span>
+                </h3>
+                <p class="text-xl text-gray-400 mb-8">
+                    Kai hooks you up at the best local spots. Here's just a taste...
+                </p>
+                
+                <!-- Search Bar -->
+                <div class="max-w-md mx-auto mb-8">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            placeholder="Search deals..." 
+                            class="w-full search-input rounded-xl px-4 py-3 placeholder-gray-400"
+                            id="dealsSearch"
+                            oninput="filterDeals()"
+                        >
+                        <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- Filter Tags -->
+                <div class="flex flex-wrap justify-center gap-3 mb-12">
+                    <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer active" data-filter="all" onclick="filterByTag('all', this)">All</span>
+                    <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" data-filter="food" onclick="filterByTag('food', this)">🍽️ Food</span>
+                    <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" data-filter="drinks" onclick="filterByTag('drinks', this)">🍹 Drinks</span>
+                    <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" data-filter="activity" onclick="filterByTag('activity', this)">🚁 Activities</span>
+                    <span class="tag-pill px-4 py-2 rounded-full text-sm cursor-pointer" data-filter="treats" onclick="filterByTag('treats', this)">🍧 Treats</span>
+                </div>
+            </div>
+            
+            <!-- Horizontal Deals -->
+            <div class="deals-scroll" id="dealsContainer">
+                <div class="flex gap-6 pb-4" style="width: max-content;">
+                    
+                    <!-- Deal 1 -->
+                    <div class="glass-card rounded-2xl deal-card fade-in-up relative" data-tags="food,breakfast" onclick="flipCard(this)">
+                        <div class="card-flip">
+                            <div class="card-front">
+                                <div class="partner-logo rounded-xl mb-3" style="color: #FB7185;">B1</div>
+                                <h3 class="text-base font-semibold mb-2">Breakfast Spot 1</h3>
+                                <p class="discount-badge mb-1" style="color: #FB7185;">20% OFF</p>
+                                <p class="text-sm text-gray-400">Entire bill all day</p>
+                                <p class="text-xs text-gray-500 mt-2">Local favorite</p>
+                            </div>
+                            <div class="card-back glass-card">
+                                <h3 class="text-base font-semibold mb-3">Deal Terms</h3>
+                                <div class="text-xs text-gray-300 mb-3">
+                                    • 20% off entire bill<br>
+                                    • Valid all day, every day<br>
+                                    • Dine-in only
+                                </div>
+                                <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-3 py-2 rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity">
+                                    Text Kai for Location
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deal 2 -->
+                    <div class="glass-card seafoam-accent rounded-2xl deal-card fade-in-up relative" data-tags="drinks,coffee" onclick="flipCard(this)">
+                        <div class="card-flip">
+                            <div class="card-front">
+                                <div class="partner-logo rounded-xl mb-3" style="color: #67E8F9;">C1</div>
+                                <h3 class="text-base font-semibold mb-2">Coffee Shop 1</h3>
+                                <p class="discount-badge mb-1" style="color: #67E8F9;">Buy 2 Get 1</p>
+                                <p class="text-sm text-gray-400">Any drink or pastry</p>
+                                <p class="text-xs text-gray-500 mt-2">Best coffee in town</p>
+                            </div>
+                            <div class="card-back glass-card">
+                                <h3 class="text-base font-semibold mb-3">Deal Terms</h3>
+                                <div class="text-xs text-gray-300 mb-3">
+                                    • Buy 2 get 1 free<br>
+                                    • Any drinks or pastries<br>
+                                    • Valid daily until 2PM
+                                </div>
+                                <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-3 py-2 rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity">
+                                    Text Kai for Location
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deal 3 -->
+                    <div class="glass-card rounded-2xl deal-card fade-in-up relative" data-tags="activity,adventure" onclick="flipCard(this)">
+                        <div class="card-flip">
+                            <div class="card-front">
+                                <div class="partner-logo rounded-xl mb-3" style="color: #FB7185;">A1</div>
+                                <h3 class="text-base font-semibold mb-2">Adventure Co. 1</h3>
+                                <p class="discount-badge mb-1" style="color: #FB7185;">15% OFF</p>
+                                <p class="text-sm text-gray-400">All tours & rentals</p>
+                                <p class="text-xs text-gray-500 mt-2">Skip the crowds</p>
+                            </div>
+                            <div class="card-back glass-card">
+                                <h3 class="text-base font-semibold mb-3">Deal Terms</h3>
+                                <div class="text-xs text-gray-300 mb-3">
+                                    • 15% off all bookings<br>
+                                    • Tours, rentals & experiences<br>
+                                    • Must book in advance
+                                </div>
+                                <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-3 py-2 rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity">
+                                    Text Kai for Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deal 4 -->
+                    <div class="glass-card seafoam-accent rounded-2xl deal-card fade-in-up relative" data-tags="food,lunch" onclick="flipCard(this)">
+                        <div class="card-flip">
+                            <div class="card-front">
+                                <div class="partner-logo rounded-xl mb-3" style="color: #67E8F9;">L1</div>
+                                <h3 class="text-base font-semibold mb-2">Lunch Spot 1</h3>
+                                <p class="discount-badge mb-1" style="color: #67E8F9;">$5 OFF</p>
+                                <p class="text-sm text-gray-400">Any poke bowl</p>
+                                <p class="text-xs text-gray-500 mt-2">Fresh daily catch</p>
+                            </div>
+                            <div class="card-back glass-card">
+                                <h3 class="text-base font-semibold mb-3">Deal Terms</h3>
+                                <div class="text-xs text-gray-300 mb-3">
+                                    • $5 off any poke bowl<br>
+                                    • Fresh fish delivered daily<br>
+                                    • Minimum $15 purchase
+                                </div>
+                                <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-3 py-2 rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity">
+                                    Text Kai for Location
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deal 5 -->
+                    <div class="glass-card rounded-2xl deal-card fade-in-up relative" data-tags="drinks,food" onclick="flipCard(this)">
+                        <div class="card-flip">
+                            <div class="card-front">
+                                <div class="partner-logo rounded-xl mb-3" style="color: #FB7185;">D1</div>
+                                <h3 class="text-base font-semibold mb-2">Dinner Spot 1</h3>
+                                <p class="discount-badge mb-1" style="color: #FB7185;">Happy Hour+</p>
+                                <p class="text-sm text-gray-400">Extended for Kai users</p>
+                                <p class="text-xs text-gray-500 mt-2">Sunset views</p>
+                            </div>
+                            <div class="card-back glass-card">
+                                <h3 class="text-base font-semibold mb-3">Deal Terms</h3>
+                                <div class="text-xs text-gray-300 mb-3">
+                                    • Extended happy hour pricing<br>
+                                    • Valid 3PM-7PM daily<br>
+                                    • Show Kai text for discount
+                                </div>
+                                <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-3 py-2 rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity">
+                                    Text Kai for Location
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deal 6 -->
+                    <div class="glass-card seafoam-accent rounded-2xl deal-card fade-in-up relative" data-tags="treats,dessert" onclick="flipCard(this)">
+                        <div class="card-flip">
+                            <div class="card-front">
+                                <div class="partner-logo rounded-xl mb-3" style="color: #67E8F9;">T1</div>
+                                <h3 class="text-base font-semibold mb-2">Treat Shop 1</h3>
+                                <p class="discount-badge mb-1" style="color: #67E8F9;">Free Topping</p>
+                                <p class="text-sm text-gray-400">Shave ice paradise</p>
+                                <p class="text-xs text-gray-500 mt-2">Kids love it</p>
+                            </div>
+                            <div class="card-back glass-card">
+                                <h3 class="text-base font-semibold mb-3">Deal Terms</h3>
+                                <div class="text-xs text-gray-300 mb-3">
+                                    • Free premium topping<br>
+                                    • With any size shave ice<br>
+                                    • Choose from 20+ flavors
+                                </div>
+                                <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-3 py-2 rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity">
+                                    Text Kai for Location
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <!-- More Partners Teaser -->
+            <div class="text-center mt-12 fade-in-up">
+                <p class="text-gray-500 mb-6">Plus more local favorites coming soon...</p>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <span class="px-4 py-2 bg-gray-900 rounded-full text-sm text-gray-400">Coffee Shop 2</span>
+                    <span class="px-4 py-2 bg-gray-900 rounded-full text-sm text-gray-400">Beach Rental 1</span>
+                    <span class="px-4 py-2 bg-gray-900 rounded-full text-sm text-gray-400">Local Market 1</span>
+                    <span class="px-4 py-2 bg-gray-900 rounded-full text-sm text-gray-400">Food Truck 1</span>
+                    <span class="px-4 py-2 bg-gray-900 rounded-full text-sm text-gray-400">Juice Bar 1</span>
+                    <span class="px-4 py-2 bg-gray-900 rounded-full text-sm text-gray-400">+more weekly</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        function flipCard(card) {
+            const cardFlip = card.querySelector('.card-flip');
+            cardFlip.classList.toggle('flipped');
+        }
+        
+        function filterByTag(tag, element) {
+            document.querySelectorAll('.tag-pill').forEach(pill => pill.classList.remove('active'));
+            element.classList.add('active');
+            
+            const cards = document.querySelectorAll('.deal-card');
+            cards.forEach(card => {
+                const cardTags = card.getAttribute('data-tags').split(',');
+                if (tag === 'all' || cardTags.includes(tag)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        function filterDeals() {
+            const searchTerm = document.getElementById('dealsSearch').value.toLowerCase();
+            const cards = document.querySelectorAll('.deal-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('.text-gray-400').textContent.toLowerCase();
+                const tags = card.getAttribute('data-tags').toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm) || tags.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

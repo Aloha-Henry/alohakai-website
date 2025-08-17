@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alohakia - Full Flow Test</title>
+    
+    <!-- Your existing CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    
+    <!-- Tailwind for new components -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom styles -->
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Component spacing - adjust as needed */
+        .component-section {
+            position: relative;
+            min-height: 100px;
+        }
+        
+        /* Add some spacing between sections */
+        .component-section + .component-section {
+            margin-top: 80px;
+        }
+        
+        /* Loading state */
+        .loading {
+            padding: 40px;
+            text-align: center;
+            color: #67E8F9;
+            font-size: 14px;
+        }
+        
+        /* Error state for missing components */
+        .component-error {
+            padding: 40px;
+            text-align: center;
+            border: 2px dashed rgba(251, 113, 133, 0.2);
+            border-radius: 12px;
+            margin: 20px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation (optional - uncomment if you want to test navigation) -->
+    <!-- <div id="nav-section" class="component-section"></div> -->
+    
+    <!-- Hero Section -->
+    <div id="hero-section" class="component-section">
+        <div class="loading">Loading Hero...</div>
+    </div>
+    
+    <!-- Deals Section -->
+    <div id="deals-section" class="component-section">
+        <div class="loading">Loading Deals...</div>
+    </div>
+    
+    <!-- Adventures Section -->
+    <div id="adventures-section" class="component-section">
+        <div class="loading">Loading Adventures...</div>
+    </div>
+    
+    <!-- Audio Guides Section -->
+    <div id="audio-guides-section" class="component-section">
+        <div class="loading">Loading Audio Guides...</div>
+    </div>
+    
+    <!-- Must-Have Goods Section -->
+    <div id="goods-section" class="component-section">
+        <div class="loading">Loading Goods...</div>
+    </div>
+    
+    <!-- Load all components -->
+    <script>
+        // Component configuration - using your actual file names
+        const components = [
+            { id: 'hero-section', file: 'components/test_hero1.html', name: 'Hero' },
+            { id: 'deals-section', file: 'components/test_deals.html', name: 'Deals' },
+            { id: 'adventures-section', file: 'components/test_adventure.html', name: 'Adventures' },
+            { id: 'audio-guides-section', file: 'components/test_audio.html', name: 'Audio Guides' },
+            { id: 'goods-section', file: 'components/test_goods.html', name: 'Goods' }
+        ];
+        
+        // Track loading status
+        let loadedCount = 0;
+        let totalComponents = components.length;
+        
+        // Load each component
+        async function loadComponents() {
+            for (const comp of components) {
+                try {
+                    const response = await fetch(comp.file);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.text();
+                    
+                    // Replace loading message with actual content
+                    document.getElementById(comp.id).innerHTML = data;
+                    
+                    loadedCount++;
+                    console.log(`✅ Loaded (${loadedCount}/${totalComponents}): ${comp.name}`);
+                    
+                } catch (error) {
+                    console.error(`❌ Failed to load ${comp.name}:`, error);
+                    
+                    // Show error placeholder
+                    document.getElementById(comp.id).innerHTML = `
+                        <div class="component-error">
+                            <h3 style="color: #FB7185; margin-bottom: 10px;">${comp.name} Section</h3>
+                            <p>Component not ready yet</p>
+                            <small style="opacity: 0.5;">${comp.file}</small>
+                        </div>
+                    `;
+                }
+            }
+            
+            // After all components load
+            if (loadedCount === totalComponents) {
+                console.log('🎉 All components loaded successfully!');
+            } else {
+                console.log(`⚠️ Loaded ${loadedCount} of ${totalComponents} components`);
+            }
+            
+            // Initialize any component JavaScript after loading
+            initializeComponents();
+        }
+        
+        // Initialize component interactions
+        function initializeComponents() {
+            // Add any global JavaScript initialization here
+            console.log('🚀 Initializing component interactions...');
+            
+            // Example: Initialize smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+            
+            // Add more initialization as needed
+        }
+        
+        // Start loading when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadComponents);
+        } else {
+            loadComponents();
+        }
+    </script>
+</body>
+</html>
