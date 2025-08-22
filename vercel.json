@@ -3,15 +3,39 @@
     {
       "source": "/c/:couponId",
       "destination": "/kai-coupons/index.html"
+    },
+    {
+      "source": "/deals",
+      "destination": "/deals.html"
+    },
+    {
+      "source": "/adventures", 
+      "destination": "/adventures.html"
+    },
+    {
+      "source": "/audio",
+      "destination": "/audio.html"
+    },
+    {
+      "source": "/shop",
+      "destination": "/shop.html"
     }
   ],
   "headers": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "headers": [
         {
-          "key": "Content-Security-Policy",
-          "value": "frame-src https://www.chatbase.co https://*.chatbase.co;"
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options", 
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
         }
       ]
     }

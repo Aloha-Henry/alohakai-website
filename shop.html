@@ -3,389 +3,818 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Must-Have Goods Section - Homepage</title>
+    <title>Island Essentials - Alohakia</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --gradient-cyan: #67E8F9;
+            --gradient-pink: #FB7185;
+            --bg-dark: #0a0a0a;
+            --bg-card: rgba(20, 20, 20, 0.6);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
             background: #000;
-            color: #e2e8f0;
+            color: var(--text-primary);
+            overflow-x: hidden;
         }
-
-        /* Base glass card - consistent with other sections */
-        .glass-card {
-            background: rgba(31, 41, 55, 0.9);
+        
+        /* Navigation - Same as homepage */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transform: translate3d(0, 0, 0);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .glass-card:hover {
-            transform: translate3d(0, -6px, 0);
-        }
-
-        .glass-card:not(.seafoam-accent):hover {
-            box-shadow: 0 10px 25px rgba(251, 113, 133, 0.1),
-                        0 0 40px rgba(251, 113, 133, 0.05);
-            border-color: rgba(251, 113, 133, 0.2);
-        }
-
-        .glass-card.seafoam-accent:hover {
-            box-shadow: 0 10px 25px rgba(103, 232, 249, 0.1),
-                        0 0 40px rgba(103, 232, 249, 0.05);
-            border-color: rgba(103, 232, 249, 0.2);
-        }
-
-        /* Product image placeholder */
-        .product-image {
-            height: 120px;
-            background: linear-gradient(135deg, rgba(103, 232, 249, 0.1) 0%, rgba(251, 113, 133, 0.1) 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(103, 232, 249, 0.2);
-            margin-bottom: 1rem;
-        }
-
-        .product-placeholder {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: white;
-            font-size: 0.875rem;
-        }
-
-        .price-badge {
-            background: rgba(251, 113, 133, 0.15);
-            border: 1px solid rgba(251, 113, 133, 0.3);
-            color: #FB7185;
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .rating-badge {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        /* Horizontal scroll */
-        .goods-scroll {
-            overflow-x: auto;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .goods-scroll::-webkit-scrollbar {
+        .mobile-menu {
             display: none;
         }
 
-        /* Filter tags */
+        .mobile-menu.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+        }
+
+        /* Glass morphism - Same as homepage */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        /* Product Cards - Updated to match homepage style */
+        .product-card {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 400px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(103, 232, 249, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
+                        0 10px 20px rgba(103, 232, 249, 0.05);
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gradient-cyan), var(--gradient-pink));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+        .product-image {
+            height: 180px;
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.03), rgba(251, 113, 133, 0.03));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            position: relative;
+        }
+
+        .product-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        /* Filter pills - Same as homepage */
         .tag-pill {
             background: transparent;
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.2s ease;
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
         }
-
-        .tag-pill.active {
-            background: rgba(103, 232, 249, 0.1);
-            border-color: rgba(103, 232, 249, 0.3);
-            color: rgba(103, 232, 249, 0.9);
-        }
-
+        
         .tag-pill:hover {
             border-color: rgba(103, 232, 249, 0.3);
             color: rgba(103, 232, 249, 0.9);
             background: rgba(103, 232, 249, 0.05);
+            transform: translateY(-1px);
         }
 
-        .goods-card {
-            width: 280px;
-            height: 320px;
-            flex-shrink: 0;
+        .tag-pill.active {
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.1), rgba(251, 113, 133, 0.1));
+            border-color: rgba(103, 232, 249, 0.3);
+            color: var(--text-primary);
         }
 
-        /* Mobile responsiveness */
-        @media (max-width: 768px) {
-            .goods-card {
-                width: 240px;
-                height: 300px;
-            }
-            
-            .product-image {
-                height: 100px;
-            }
-            
-            .product-placeholder {
-                width: 50px;
-                height: 50px;
-                font-size: 0.75rem;
-            }
+        /* Badge System - Same as homepage */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            border: 1px solid;
         }
 
-        /* Fade in animation */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .badge-gray {
+            background: rgba(148, 163, 184, 0.08);
+            border-color: rgba(148, 163, 184, 0.15);
+            color: var(--text-muted);
         }
 
-        .fade-in-up {
-            opacity: 0;
-            animation: fadeInUp 0.6s ease-out forwards;
+        .badge-pink {
+            background: rgba(251, 113, 133, 0.08);
+            border-color: rgba(251, 113, 133, 0.15);
+            color: var(--gradient-pink);
+        }
+
+        .badge-green {
+            background: rgba(34, 197, 94, 0.08);
+            border-color: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+        }
+
+        /* Search input */
+        .search-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            color: var(--text-primary);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(103, 232, 249, 0.3);
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.05);
+        }
+        
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Header button */
+        .get-coconuts-btn {
+            background: linear-gradient(135deg, #67E8F9, #FB7185);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .get-coconuts-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* Quick actions */
+        .quick-action-btn {
+            background: rgba(103, 232, 249, 0.1);
+            border: 1px solid rgba(103, 232, 249, 0.2);
+            color: var(--gradient-cyan);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-action-btn:hover {
+            background: rgba(103, 232, 249, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* Bestseller ribbon */
+        .bestseller-ribbon {
+            position: absolute;
+            top: 12px;
+            right: -6px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            padding: 4px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            transform: rotate(0deg);
+            border-radius: 4px;
+        }
+
+        /* Local made ribbon */
+        .local-ribbon {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: linear-gradient(135deg, var(--gradient-pink), #e11d48);
+            color: white;
+            padding: 4px 8px;
+            font-size: 10px;
+            font-weight: 600;
+            border-radius: 4px;
         }
     </style>
 </head>
-<body class="bg-black text-gray-300">
-    <!-- Must-Have Goods Section -->
-    <section class="py-20 px-4 bg-black relative z-10">
-        <div class="max-w-6xl mx-auto">
-            <!-- Header -->
-            <div class="text-center mb-12 fade-in-up">
-                <h2 class="text-4xl md:text-5xl font-light mb-4">
-                    Must-Have
-                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
-                        Goods
+<body>
+    <!-- Navigation Header - Same as homepage -->
+    <nav class="nav-header">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="/" class="text-2xl font-light">
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        Alohakia
                     </span>
-                </h2>
-                <p class="text-lg text-gray-400 font-light">
-                    Local favorites and travel essentials for your Kauai adventure
-                </p>
-            </div>
-            
-            <!-- Filter Tags -->
-            <div class="flex flex-wrap justify-center gap-3 mb-12">
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterByTag('all', this)">All</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="beach" onclick="filterByTag('beach', this)">Beach Gear</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="food" onclick="filterByTag('food', this)">Local Foods</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="apparel" onclick="filterByTag('apparel', this)">Apparel</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="gear" onclick="filterByTag('gear', this)">Adventure Gear</span>
-            </div>
-            
-            <!-- Horizontal Goods -->
-            <div class="goods-scroll" id="goodsContainer">
-                <div class="flex gap-6 pb-4" style="width: max-content;">
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <div class="desktop-nav hidden md:flex items-center gap-8">
+                    <!-- Section Links -->
+                    <div class="flex gap-6">
+                        <a href="/deals" class="text-gray-400 hover:text-white transition-colors text-sm">Deals</a>
+                        <a href="/adventures" class="text-gray-400 hover:text-white transition-colors text-sm">Adventures</a>
+                        <a href="/audio" class="text-gray-400 hover:text-white transition-colors text-sm">Audio</a>
+                        <a href="/shop" class="text-cyan-400 font-medium text-sm">Shop</a>
+                    </div>
                     
-                    <!-- Product 1 - Reef Safe Sunscreen -->
-                    <div class="glass-card rounded-2xl goods-card fade-in-up" data-tags="beach,essentials" onclick="goToProduct('reef-sunscreen')">
-                        <div class="p-6 h-full flex flex-col">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="rating-badge">⭐ 4.8 Local Favorite</div>
-                                <div class="price-badge">$24</div>
-                            </div>
-                            
-                            <!-- Product Image Placeholder -->
-                            <div class="product-image">
-                                <div class="product-placeholder">SUN</div>
-                            </div>
-                            
-                            <h3 class="text-lg font-semibold mb-2">Reef-Safe Sunscreen</h3>
-                            <p class="text-sm text-gray-400 mb-4 leading-relaxed flex-1">
-                                Hawaii-compliant mineral sunscreen that actually works. Protects coral reefs and your skin.
-                            </p>
-                            
-                            <div class="flex gap-2 mt-auto">
-                                <span class="text-xs px-2 py-1 bg-cyan-500/10 text-cyan-400 rounded">Hawaii Legal</span>
-                                <span class="text-xs px-2 py-1 bg-cyan-500/10 text-cyan-400 rounded">SPF 50</span>
-                            </div>
-                        </div>
+                    <!-- Divider -->
+                    <div class="h-4 w-px bg-gray-700"></div>
+                    
+                    <!-- Page Links -->
+                    <div class="flex items-center gap-6">
+                        <a href="/about" class="text-gray-400 hover:text-white transition-colors text-sm">About</a>
+                        <a href="/contact" class="text-gray-400 hover:text-white transition-colors text-sm">Contact</a>
+                        <a href="/signup" class="get-coconuts-btn">Get Coconuts</a>
                     </div>
+                </div>
 
-                    <!-- Product 2 - Local Coffee -->
-                    <div class="glass-card seafoam-accent rounded-2xl goods-card fade-in-up" data-tags="food,local" onclick="goToProduct('kauai-coffee')">
-                        <div class="p-6 h-full flex flex-col">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="rating-badge">⭐ 4.9 Best Seller</div>
-                                <div class="price-badge">$18</div>
-                            </div>
-                            
-                            <!-- Product Image Placeholder -->
-                            <div class="product-image">
-                                <div class="product-placeholder">☕</div>
-                            </div>
-                            
-                            <h3 class="text-lg font-semibold mb-2">Kauai Coffee Blend</h3>
-                            <p class="text-sm text-gray-400 mb-4 leading-relaxed flex-1">
-                                Single-origin beans grown on the island. Rich, smooth flavor that captures the essence of Kauai.
-                            </p>
-                            
-                            <div class="flex gap-2 mt-auto">
-                                <span class="text-xs px-2 py-1 bg-pink-500/10 text-pink-400 rounded">Local Grown</span>
-                                <span class="text-xs px-2 py-1 bg-pink-500/10 text-pink-400 rounded">Medium Roast</span>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Mobile menu button -->
+                <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
 
-                    <!-- Product 3 - Water Shoes -->
-                    <div class="glass-card rounded-2xl goods-card fade-in-up" data-tags="beach,gear" onclick="goToProduct('water-shoes')">
-                        <div class="p-6 h-full flex flex-col">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="rating-badge">⭐ 4.7 Essential</div>
-                                <div class="price-badge">$32</div>
-                            </div>
-                            
-                            <!-- Product Image Placeholder -->
-                            <div class="product-image">
-                                <div class="product-placeholder">👟</div>
-                            </div>
-                            
-                            <h3 class="text-lg font-semibold mb-2">Reef Walker Shoes</h3>
-                            <p class="text-sm text-gray-400 mb-4 leading-relaxed flex-1">
-                                Protect your feet on rocky beaches and coral. Quick-drying with excellent grip on wet surfaces.
-                            </p>
-                            
-                            <div class="flex gap-2 mt-auto">
-                                <span class="text-xs px-2 py-1 bg-purple-500/10 text-purple-400 rounded">Quick Dry</span>
-                                <span class="text-xs px-2 py-1 bg-purple-500/10 text-purple-400 rounded">All Sizes</span>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Mobile menu -->
+            <div id="mobileMenu" class="mobile-menu mt-4">
+                <a href="/deals" class="block py-2 text-gray-400 hover:text-white transition-colors">Deals</a>
+                <a href="/adventures" class="block py-2 text-gray-400 hover:text-white transition-colors">Adventures</a>
+                <a href="/audio" class="block py-2 text-gray-400 hover:text-white transition-colors">Audio</a>
+                <a href="/shop" class="block py-2 text-cyan-400 font-medium">Shop</a>
+                <div class="border-t border-gray-700 my-3"></div>
+                <a href="/about" class="block py-2 text-gray-400 hover:text-white transition-colors">About</a>
+                <a href="/contact" class="block py-2 text-gray-400 hover:text-white transition-colors">Contact</a>
+                <a href="/signup" class="block py-2 text-cyan-400 hover:text-cyan-300 transition-colors font-medium">Get Coconuts</a>
+            </div>
+        </div>
+    </nav>
 
-                    <!-- Product 4 - Snorkel Set -->
-                    <div class="glass-card seafoam-accent rounded-2xl goods-card fade-in-up" data-tags="beach,gear" onclick="goToProduct('snorkel-set')">
-                        <div class="p-6 h-full flex flex-col">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="rating-badge">⭐ 4.6 Quality</div>
-                                <div class="price-badge">$45</div>
-                            </div>
-                            
-                            <!-- Product Image Placeholder -->
-                            <div class="product-image">
-                                <div class="product-placeholder">🤿</div>
-                            </div>
-                            
-                            <h3 class="text-lg font-semibold mb-2">Premium Snorkel Set</h3>
-                            <p class="text-sm text-gray-400 mb-4 leading-relaxed flex-1">
-                                Professional-grade mask and snorkel. Anti-fog coating and comfortable silicone fit.
-                            </p>
-                            
-                            <div class="flex gap-2 mt-auto">
-                                <span class="text-xs px-2 py-1 bg-cyan-500/10 text-cyan-400 rounded">Anti-Fog</span>
-                                <span class="text-xs px-2 py-1 bg-cyan-500/10 text-cyan-400 rounded">Pro Grade</span>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Header -->
+    <section class="pt-32 pb-16">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-5xl md:text-6xl font-light mb-6">
+                <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
+                    Island Essentials
+                </span>
+            </h1>
+            <p class="text-xl font-light max-w-2xl mx-auto" style="color: var(--text-secondary);">
+                Curated gear and local favorites. Everything you need for the perfect Kauai experience.
+            </p>
+        </div>
+    </section>
 
-                    <!-- Product 5 - Aloha Shirt -->
-                    <div class="glass-card rounded-2xl goods-card fade-in-up" data-tags="apparel,local" onclick="goToProduct('aloha-shirt')">
-                        <div class="p-6 h-full flex flex-col">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="rating-badge">⭐ 4.8 Authentic</div>
-                                <div class="price-badge">$65</div>
-                            </div>
-                            
-                            <!-- Product Image Placeholder -->
-                            <div class="product-image">
-                                <div class="product-placeholder">👕</div>
-                            </div>
-                            
-                            <h3 class="text-lg font-semibold mb-2">Authentic Aloha Shirt</h3>
-                            <p class="text-sm text-gray-400 mb-4 leading-relaxed flex-1">
-                                Made in Hawaii with traditional patterns. Breathable cotton perfect for island weather.
-                            </p>
-                            
-                            <div class="flex gap-2 mt-auto">
-                                <span class="text-xs px-2 py-1 bg-yellow-500/10 text-yellow-400 rounded">Made in HI</span>
-                                <span class="text-xs px-2 py-1 bg-yellow-500/10 text-yellow-400 rounded">Cotton</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Coming Soon Card -->
-                    <div class="glass-card rounded-2xl goods-card fade-in-up opacity-60" data-tags="coming-soon">
-                        <div class="p-6 h-full flex flex-col">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="rating-badge">Coming Soon</div>
-                                <div class="price-badge">?</div>
-                            </div>
-                            
-                            <!-- Product Image Placeholder -->
-                            <div class="product-image opacity-50">
-                                <div class="product-placeholder opacity-50">...</div>
-                            </div>
-                            
-                            <h3 class="text-lg font-semibold mb-2">More Products Coming</h3>
-                            <p class="text-sm text-gray-400 mb-4 leading-relaxed flex-1">
-                                We're curating more local favorites and island essentials for your perfect Kauai experience.
-                            </p>
-                            
-                            <div class="flex gap-2 mt-auto">
-                                <span class="text-xs px-2 py-1 bg-gray-500/10 text-gray-400 rounded">Coming Soon</span>
-                            </div>
-                        </div>
-                    </div>
-
+    <!-- Quick Actions Bar -->
+    <div class="pb-8">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto glass-morphism rounded-2xl p-4">
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <button class="quick-action-btn" onclick="scrollToCategory('essentials')">
+                        🧴 Beach Essentials
+                    </button>
+                    <button class="quick-action-btn" onclick="scrollToCategory('gear')">
+                        🎒 Adventure Gear
+                    </button>
+                    <button class="quick-action-btn" onclick="scrollToCategory('local')">
+                        🌺 Made in Kauai
+                    </button>
+                    <button class="quick-action-btn" onclick="scrollToCategory('digital')">
+                        📱 Digital Guides
+                    </button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="pb-8">
+        <div class="container mx-auto px-6 mb-12">
+            <div class="max-w-4xl mx-auto glass-morphism rounded-2xl p-6">
+                <div class="flex flex-col gap-4">
+                    <!-- Search Input -->
+                    <div class="flex-1">
+                        <input 
+                            type="text" 
+                            placeholder="Search products..." 
+                            class="w-full search-input rounded-xl px-6 py-4 text-base font-light"
+                            id="productSearch"
+                            oninput="filterProducts()"
+                        >
+                    </div>
+                    
+                    <!-- Category Filter Buttons -->
+                    <div class="flex gap-3 flex-wrap justify-center">
+                        <button class="tag-pill active" data-filter="all">All Products</button>
+                        <button class="tag-pill" data-filter="beach-gear">Beach Gear</button>
+                        <button class="tag-pill" data-filter="local-goods">Local Goods</button>
+                        <button class="tag-pill" data-filter="essentials">Essentials</button>
+                        <button class="tag-pill" data-filter="apparel">Apparel</button>
+                        <button class="tag-pill" data-filter="digital">Digital</button>
+                    </div>
+                    
+                    <!-- Price Filter Pills -->
+                    <div class="flex gap-3 flex-wrap justify-center">
+                        <button class="tag-pill active" data-price="all">All Prices</button>
+                        <button class="tag-pill" data-price="low">Under 🥥15</button>
+                        <button class="tag-pill" data-price="medium">🥥15-30</button>
+                        <button class="tag-pill" data-price="high">🥥30+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <section class="pb-20">
+        <div class="container mx-auto px-6">
+            <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Products will be loaded dynamically -->
+            </div>
             
-            <!-- View All Link -->
-            <div class="text-center mt-12">
-                <a href="/shop" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium">
-                    View All Products
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </a>
+            <!-- No results message -->
+            <div id="noResults" class="text-center py-12 hidden">
+                <div class="text-4xl mb-4">🏪</div>
+                <h3 class="text-xl font-medium mb-2" style="color: var(--text-primary);">No products found</h3>
+                <p style="color: var(--text-secondary);">Try adjusting your search or filters</p>
             </div>
         </div>
     </section>
-    
+
+    <!-- Footer - Same as homepage -->
+    <footer class="py-16 border-t border-gray-900">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Logo & Tagline -->
+                <div class="md:col-span-1">
+                    <div class="mb-4">
+                        <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="text-2xl font-light">
+                            Alohakia
+                        </span>
+                    </div>
+                    <p class="text-sm" style="color: var(--text-muted);">
+                        Your AI-powered local guide to the Garden Isle
+                    </p>
+                </div>
+
+                <!-- Company -->
+                <div>
+                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/about" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">About Us</a></li>
+                        <li><a href="/contact" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Contact</a></li>
+                        <li><a href="/careers" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Careers</a></li>
+                        <li><a href="/blog" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Blog</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div>
+                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/help" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Help Center</a></li>
+                        <li><a href="/faq" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">FAQ</a></li>
+                        <li><a href="/privacy" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Privacy Policy</a></li>
+                        <li><a href="/terms" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Connect -->
+                <div>
+                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Connect</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Instagram</a></li>
+                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Twitter</a></li>
+                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">YouTube</a></li>
+                        <li><a href="/newsletter" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Newsletter</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p class="text-sm" style="color: var(--text-muted);">
+                    © 2025 Alohakia. Made with aloha in Kauai.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
     <script>
-        function goToProduct(productId) {
-            // Navigate to individual product page or shop page
-            const productPages = {
-                'reef-sunscreen': '/shop/reef-safe-sunscreen',
-                'kauai-coffee': '/shop/kauai-coffee-blend',
-                'water-shoes': '/shop/reef-walker-shoes',
-                'snorkel-set': '/shop/premium-snorkel-set',
-                'aloha-shirt': '/shop/authentic-aloha-shirt'
-            };
-            
-            // For now, just go to shop page
-            alert(`Going to shop page - ${productPages[productId] || '/shop'}`);
-            // window.location.href = '/shop';
+        // Products data with coconut pricing and local focus
+        const productsData = [
+            // Beach Essentials
+            {
+                id: 1,
+                name: "Reef-Safe Sunscreen",
+                description: "Hawaii-approved mineral sunscreen that actually works. Protects coral reefs and your skin with SPF 50.",
+                price: 24,
+                coconuts: 10,
+                category: "beach-gear,essentials",
+                tags: ["Essential", "Eco-Safe", "SPF 50"],
+                icon: "🧴",
+                rating: 4.8,
+                reviews: 234,
+                bestseller: true,
+                localMade: false,
+                inStock: true,
+                whySpecial: "Only sunscreen approved by Hawaii marine biologists. Won't turn water cloudy or harm sea life."
+            },
+            {
+                id: 2,
+                name: "Reef Walking Shoes",
+                description: "Essential for rocky beaches and coral exploration. Quick-drying with excellent grip on wet surfaces.",
+                price: 32,
+                coconuts: 15,
+                category: "beach-gear,essentials",
+                tags: ["Safety", "Quick Dry", "All Sizes"],
+                icon: "👟",
+                rating: 4.7,
+                reviews: 189,
+                bestseller: false,
+                localMade: false,
+                inStock: true,
+                whySpecial: "Saves your feet on lava rock beaches. Locals never go to tide pools without these."
+            },
+            {
+                id: 3,
+                name: "Pro Snorkel Set",
+                description: "Anti-fog mask and dry snorkel with perfect fit guarantee. Professional grade equipment.",
+                price: 45,
+                coconuts: 20,
+                category: "beach-gear",
+                tags: ["Pro Grade", "Anti-Fog", "Perfect Fit"],
+                icon: "🤿",
+                rating: 4.6,
+                reviews: 412,
+                bestseller: true,
+                localMade: false,
+                inStock: true,
+                whySpecial: "Same gear the dive shops use. Anti-fog coating actually works in tropical conditions."
+            },
+            {
+                id: 4,
+                name: "Waterproof Day Pack",
+                description: "Perfect for beach days and hikes. Keeps your gear dry through rain, spray, or unexpected swims.",
+                price: 38,
+                coconuts: 17,
+                category: "beach-gear,essentials",
+                tags: ["Waterproof", "Durable", "Versatile"],
+                icon: "🎒",
+                rating: 4.7,
+                reviews: 156,
+                bestseller: false,
+                localMade: false,
+                inStock: true,
+                whySpecial: "Survived multiple Kauai flash floods. Floats if you drop it in water."
+            },
+
+            // Local Goods
+            {
+                id: 5,
+                name: "Kauai Coffee Beans",
+                description: "Single-origin beans grown on the island. Rich, smooth flavor that captures the essence of Kauai.",
+                price: 18,
+                coconuts: 8,
+                category: "local-goods",
+                tags: ["Local Grown", "Single Origin", "Medium Roast"],
+                icon: "☕",
+                rating: 4.9,
+                reviews: 567,
+                bestseller: true,
+                localMade: true,
+                inStock: true,
+                whySpecial: "Grown in red dirt that makes the flavor unique. Ships fresh from the plantation."
+            },
+            {
+                id: 6,
+                name: "Authentic Aloha Shirt",
+                description: "Made in Hawaii with traditional patterns. Breathable cotton perfect for island weather.",
+                price: 65,
+                coconuts: 30,
+                category: "local-goods,apparel",
+                tags: ["Made in HI", "Cotton", "Traditional"],
+                icon: "👕",
+                rating: 4.8,
+                reviews: 298,
+                bestseller: false,
+                localMade: true,
+                inStock: true,
+                whySpecial: "Actual Hawaiian patterns, not tourist versions. Locals wear this brand to work."
+            },
+            {
+                id: 7,
+                name: "Local Honey",
+                description: "Raw honey from bees that visit native Hawaiian flowers. Unique island terroir in every jar.",
+                price: 22,
+                coconuts: 12,
+                category: "local-goods",
+                tags: ["Raw Honey", "Native Flowers", "Small Batch"],
+                icon: "🍯",
+                rating: 4.9,
+                reviews: 143,
+                bestseller: false,
+                localMade: true,
+                inStock: true,
+                whySpecial: "Tastes like nothing else - the native plants give it a floral complexity you can't find anywhere."
+            },
+
+            // Digital Products
+            {
+                id: 8,
+                name: "Complete Audio Guide Pack",
+                description: "All our audio stories plus exclusive content. Download and listen offline anywhere.",
+                price: 0,
+                coconuts: 25,
+                category: "digital",
+                tags: ["All Stories", "Offline", "Exclusive"],
+                icon: "🎧",
+                rating: 4.9,
+                reviews: 89,
+                bestseller: true,
+                localMade: false,
+                inStock: true,
+                whySpecial: "Includes stories not available anywhere else. Perfect for car rides around the island."
+            },
+            {
+                id: 9,
+                name: "Secret Spots GPS Pack",
+                description: "Exact coordinates to hidden beaches, waterfalls, and viewpoints. Local insider locations.",
+                price: 0,
+                coconuts: 15,
+                category: "digital",
+                tags: ["GPS Coords", "Secret Spots", "Offline Maps"],
+                icon: "📍",
+                rating: 4.7,
+                reviews: 234,
+                bestseller: false,
+                localMade: false,
+                inStock: true,
+                whySpecial: "Places locals keep secret. Some spots don't even have names, just GPS coordinates."
+            },
+            {
+                id: 10,
+                name: "Photography Location Guide",
+                description: "Best times, camera settings, and exact positioning for Instagram-worthy shots at 50+ locations.",
+                price: 0,
+                coconuts: 12,
+                category: "digital",
+                tags: ["Photography", "Camera Settings", "50+ Spots"],
+                icon: "📸",
+                rating: 4.8,
+                reviews: 167,
+                bestseller: false,
+                localMade: false,
+                inStock: true,
+                whySpecial: "Includes time of day, weather conditions, and camera settings for perfect shots."
+            },
+
+            // More Essentials
+            {
+                id: 11,
+                name: "Portable Beach Umbrella",
+                description: "UV-resistant umbrella that actually stays put in trade winds. Sand anchor included.",
+                price: 55,
+                coconuts: 25,
+                category: "beach-gear,essentials",
+                tags: ["UV Protection", "Wind Resistant", "Sand Anchor"],
+                icon: "🏖️",
+                rating: 4.5,
+                reviews: 124,
+                bestseller: false,
+                localMade: false,
+                inStock: true,
+                whySpecial: "Only umbrella that doesn't blow away in Kauai's constant trade winds."
+            },
+            {
+                id: 12,
+                name: "Local Soap Collection",
+                description: "Handmade soaps with native Hawaiian ingredients. Coconut, plumeria, and pikake scents.",
+                price: 28,
+                coconuts: 14,
+                category: "local-goods",
+                tags: ["Handmade", "Native Ingredients", "3-Pack"],
+                icon: "🧼",
+                rating: 4.6,
+                reviews: 203,
+                bestseller: false,
+                localMade: true,
+                inStock: true,
+                whySpecial: "Made with coconut oil from trees on the property. Smells like actual Hawaiian flowers."
+            }
+        ];
+
+        function getPriceRange(coconuts) {
+            if (coconuts < 15) return 'low';
+            if (coconuts <= 30) return 'medium';
+            return 'high';
         }
-        
-        function filterByTag(tag, element) {
-            document.querySelectorAll('.tag-pill').forEach(pill => pill.classList.remove('active'));
-            element.classList.add('active');
+
+        function renderProducts(products = productsData) {
+            const grid = document.getElementById('productsGrid');
+            const noResults = document.getElementById('noResults');
             
-            const cards = document.querySelectorAll('.goods-card');
-            cards.forEach(card => {
-                const cardTags = card.getAttribute('data-tags');
-                if (!cardTags) return;
+            if (products.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+            
+            noResults.classList.add('hidden');
+            grid.innerHTML = '';
+
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.dataset.category = product.category;
+                productCard.dataset.price = getPriceRange(product.coconuts);
                 
-                const tags = cardTags.split(',');
-                if (tag === 'all' || tags.includes(tag)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                productCard.innerHTML = `
+                    <div class="product-image">
+                        ${product.bestseller ? '<div class="bestseller-ribbon">BESTSELLER</div>' : ''}
+                        ${product.localMade ? '<div class="local-ribbon">MADE IN KAUAI</div>' : ''}
+                        <span class="text-4xl">${product.icon}</span>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">${product.name}</h3>
+                        <p class="text-sm mb-3" style="color: var(--text-secondary);">${product.description}</p>
+                        
+                        <!-- Tags -->
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            ${product.tags.slice(0, 2).map(tag => `<span class="badge badge-gray">${tag}</span>`).join('')}
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-sm" style="color: var(--text-secondary);">⭐ ${product.rating}</span>
+                            <span class="text-xs" style="color: var(--text-muted);">(${product.reviews} reviews)</span>
+                        </div>
+                        
+                        <!-- Price -->
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2">
+                                ${product.price > 0 ? 
+                                    `<span class="text-lg font-bold" style="color: var(--text-primary);">$${product.price}</span>` : 
+                                    `<span class="text-lg font-bold" style="color: var(--gradient-cyan);">Digital</span>`
+                                }
+                                <span class="badge badge-pink">🥥 ${product.coconuts}</span>
+                            </div>
+                            ${product.inStock ? 
+                                `<span class="badge badge-green">In Stock</span>` : 
+                                `<span class="badge badge-gray">Out of Stock</span>`
+                            }
+                        </div>
+                        
+                        <!-- Action Button -->
+                        <button class="w-full py-3 bg-gradient-to-r from-cyan-500 to-pink-500 rounded-lg text-white font-medium hover:opacity-90 transition-opacity ${!product.inStock ? 'opacity-50 cursor-not-allowed' : ''}" 
+                                onclick="viewProduct(${product.id})" ${!product.inStock ? 'disabled' : ''}>
+                            ${product.inStock ? 'View Details' : 'Out of Stock'}
+                        </button>
+                    </div>
+                `;
+                
+                grid.appendChild(productCard);
             });
         }
+
+        function viewProduct(productId) {
+            const product = productsData.find(p => p.id === productId);
+            alert(`${product.name}\n\n"${product.whySpecial}"\n\n🥥 ${product.coconuts} coconuts`);
+            // Here you would typically navigate to a product detail page
+        }
+
+        function scrollToCategory(category) {
+            // Activate the filter for that category
+            const filterButtons = document.querySelectorAll('.tag-pill[data-filter]');
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            
+            const targetButton = document.querySelector(`[data-filter="${category}"]`);
+            if (targetButton) {
+                targetButton.classList.add('active');
+                filterProducts();
+            }
+        }
+
+        function filterProducts() {
+            const searchTerm = document.getElementById('productSearch').value.toLowerCase();
+            const activeFilter = document.querySelector('.tag-pill.active[data-filter]').dataset.filter;
+            const activePrice = document.querySelector('.tag-pill.active[data-price]').dataset.price;
+            
+            const filteredProducts = productsData.filter(product => {
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm) || 
+                                    product.description.toLowerCase().includes(searchTerm) ||
+                                    product.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                const matchesFilter = activeFilter === 'all' || product.category.includes(activeFilter);
+                const matchesPrice = activePrice === 'all' || getPriceRange(product.coconuts) === activePrice;
+                
+                return matchesSearch && matchesFilter && matchesPrice;
+            });
+            
+            renderProducts(filteredProducts);
+        }
+
+        // Filter button functionality
+        document.querySelectorAll('.tag-pill[data-filter]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tag-pill[data-filter]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterProducts();
+            });
+        });
+
+        // Price filter functionality
+        document.querySelectorAll('.tag-pill[data-price]').forEach(pill => {
+            pill.addEventListener('click', () => {
+                document.querySelectorAll('.tag-pill[data-price]').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                filterProducts();
+            });
+        });
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Initialize products on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+        });
+
+        // Smooth scrolling for anchor links
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('a[href^="#"]')) {
+                e.preventDefault();
+                const target = document.querySelector(e.target.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                    document.getElementById('mobileMenu').classList.remove('active');
+                }
+            }
+        });
     </script>
 </body>
 </html>
