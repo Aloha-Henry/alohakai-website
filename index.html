@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alohakia - Your AI Guide to Kauai</title>
+    <title>AlohaKai - Your AI Guide to Kauai</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -494,7 +494,7 @@
                 <!-- Logo -->
                 <a href="#hero" class="text-2xl font-light">
                     <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                        Alohakia
+                        AlohaKai
                     </span>
                 </a>
                 
@@ -541,20 +541,19 @@
         </div>
     </nav>
 
-    <!-- Hero Section - Version 1 Quality -->
+<!-- Hero Section - Version 1 Quality -->
     <section id="hero" class="min-h-screen relative overflow-hidden hero-gradient" style="padding-top: 80px;">
         <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
         
         <div class="relative z-10 min-h-screen flex flex-col justify-center px-4 pt-24 pb-16">
             <div class="max-w-4xl mx-auto w-full">
                 <div class="text-center mb-12">
-                    <h1 class="text-5xl md:text-7xl font-light mb-6 tracking-tight">
-                        <span style="color: #FB7185;" class="font-medium">Aloha,</span>
-                        <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
-                            I'm Kai
+                    <h1 class="text-5xl md:text-7xl font-extralight mb-6 tracking-tight">
+                        <span style="color: #f8fafc;" class="font-extralight">Aloha, I'm </span>
+                        <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-light">
+                            Kai
                         </span>
                     </h1>
-                    
                     <p class="text-xl text-gray-400 font-light">
                         Your AI-powered local guide to Kauai
                     </p>
@@ -580,24 +579,24 @@
                     </div>
                 </div>
                 
-                <div class="max-w-3xl mx-auto mb-12">
-                    <div id="chatContainer" class="chat-container glass-morphism rounded-2xl p-6">
+                <div class="max-w-3xl mx-auto mb-12 px-4">
+                    <div id="chatContainer" class="chat-container glass-morphism rounded-2xl p-4 md:p-6">
                         <div class="chat-messages mb-4">
                             <div id="messagesContainer" class="space-y-3 max-h-72 overflow-y-auto">
                             </div>
                         </div>
                         
-                        <div class="flex gap-3">
+                        <div class="flex gap-2 md:gap-3">
                             <input 
                                 type="text" 
                                 placeholder="Ask me anything about Kauai..." 
-                                class="flex-1 chat-input rounded-xl px-5 py-4 text-base font-light"
+                                class="flex-1 chat-input rounded-xl px-3 py-3 md:px-5 md:py-4 text-sm md:text-base font-light"
                                 id="chatInput"
                                 onkeypress="handleChatEnter(event)"
                                 onfocus="expandChat()"
                             >
-                            <button onclick="sendMessage()" class="send-button px-6 py-4 rounded-xl text-white font-medium flex-shrink-0">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button onclick="sendMessage()" class="send-button px-4 py-3 md:px-6 md:py-4 rounded-xl text-white font-medium flex-shrink-0">
+                                <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                                 </svg>
                             </button>
@@ -805,7 +804,7 @@
         </div>
     </section>
 
-    <!-- Adventures Section -->
+       <!-- Adventures Section -->
     <section id="adventures" class="py-20 px-4 bg-black relative z-10">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12 fade-in-up">
@@ -816,169 +815,235 @@
                     </span>
                 </h2>
                 <p class="text-lg font-light" style="color: var(--text-secondary);">
-                    Pre-planned experiences designed by locals
+                    Real experiences designed by someone who actually lives here
                 </p>
             </div>
             
             <div class="flex flex-wrap justify-center gap-3 mb-12">
                 <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterAdventures('all', this)">All</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="half-day" onclick="filterAdventures('half-day', this)">Half Day</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="full-day" onclick="filterAdventures('full-day', this)">Full Day</span>
+                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="surfing" onclick="filterAdventures('surfing', this)">Surfing</span>
                 <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="family" onclick="filterAdventures('family', this)">Family</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="adventure" onclick="filterAdventures('adventure', this)">Adventure</span>
+                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="sports" onclick="filterAdventures('sports', this)">Sports</span>
+                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="wellness" onclick="filterAdventures('wellness', this)">Wellness</span>
+                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="snorkeling" onclick="filterAdventures('snorkeling', this)">Snorkeling</span>
             </div>
             
             <div class="deals-scroll">
                 <div class="flex gap-6 pb-4" style="width: max-content;">
                     
-                    <!-- Adventure 1 -->
-                    <div class="adventure-card fade-in-up" data-category="full-day,adventure">
-                        <div class="adventure-image">
-                            🏄
-                            <div class="absolute top-3 right-3">
-                                <span class="badge badge-pink">🥥 5</span>
-                            </div>
+                    <!-- Adventure 1 - Hanalei Surf -->
+                    <div class="adventure-card fade-in-up" data-category="surfing,half-day">
+                        <div class="adventure-image relative">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755917646940-EZLYMMX2IE6EVGWBMNB3/unsplash-image-5ZLDGa6Acug.jpg?format=750w" alt="Hanalei Bay" class="w-full h-40 object-cover rounded-t-xl">
                         </div>
-                        <div class="adventure-content">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center gap-2">
-                                    <div class="author-avatar">
-                                        <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w" alt="Henry">
-                                    </div>
-                                    <div>
-                                        <div class="text-sm font-medium" style="color: var(--text-primary);">Henry</div>
-                                        <div class="text-xs" style="color: var(--text-muted);">Local Expert</div>
-                                    </div>
+                        <div class="adventure-content p-4">
+                            <div class="author-info mb-3">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="w-12 h-12 rounded-full object-cover">
+                                <div>
+                                    <h4 class="text-sm font-medium" style="color: var(--text-primary);">Henry</h4>
+                                    <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);">AlohaHenry.com</a>
                                 </div>
-                                <span class="badge badge-gray">☀️ Perfect today</span>
                             </div>
-                            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Epic North Shore Day</h3>
-                            <p class="text-sm mb-3" style="color: var(--text-secondary);">Sunrise at secret beach, cliff jumping, food trucks, sunset beers</p>
-                            <div class="flex gap-4 text-xs" style="color: var(--text-muted);">
-                                <span>⏱️ 8h</span>
-                                <span>💪 Moderate</span>
-                                <span>👥 2-6</span>
+                            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Hanalei Surf Adventure</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">
+                                Breakfast, board rental, beginner-friendly waves, and post-surf lunch
+                            </p>
+                            
+                            <div class="flex gap-2 mb-4">
+                                <span class="badge badge-gray">🏄‍♂️ Surf</span>
+                                <span class="badge badge-gray">⏰ Half Day</span>
+                                <span class="badge badge-gray">📍 Hanalei</span>
                             </div>
+                            
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-4" style="color: var(--text-muted);">
+                                <span>⏱️ 5 hours</span>
+                                <span>🏃‍♂️ Easy</span>
+                                <span>👥 2-6 people</span>
+                            </div>
+                            
+                            <a href="/adventures/hanalei-surf-adventure" class="w-full btn-outline text-sm py-2 block text-center">
+                                View Details & Insider Tips →
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Adventure 2 -->
-                    <div class="adventure-card fade-in-up" data-category="half-day,family">
-                        <div class="adventure-image">
-                            🏖️
-                            <div class="absolute top-3 right-3">
-                                <span class="badge badge-pink">🥥 2</span>
-                            </div>
+                    <!-- Adventure 2 - Kids Beach Day -->
+                    <div class="adventure-card fade-in-up" data-category="family,half-day">
+                        <div class="adventure-image relative">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/9813df8b-695a-4b38-a9aa-a2536270c694/LN6.jpeg?format=750w" alt="Lae Nani Beach family day" class="w-full h-40 object-cover rounded-t-xl">
                         </div>
-                        <div class="adventure-content">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center gap-2">
-                                    <div class="author-avatar">K</div>
-                                    <div>
-                                        <div class="text-sm font-medium" style="color: var(--text-primary);">Kai</div>
-                                        <div class="text-xs" style="color: var(--text-muted);">AI Guide</div>
-                                    </div>
+                        <div class="adventure-content p-4">
+                            <div class="author-info mb-3">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="w-12 h-12 rounded-full object-cover">
+                                <div>
+                                    <h4 class="text-sm font-medium" style="color: var(--text-primary);">Henry</h4>
+                                    <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);">AlohaHenry.com</a>
                                 </div>
-                                <span class="badge badge-gray">👶 Kid-friendly</span>
                             </div>
-                            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Family Beach Paradise</h3>
-                            <p class="text-sm mb-3" style="color: var(--text-secondary);">Calm lagoons, tide pools, shave ice, perfect for kids under 10</p>
-                            <div class="flex gap-4 text-xs" style="color: var(--text-muted);">
-                                <span>⏱️ 4h</span>
-                                <span>💪 Easy</span>
-                                <span>👶 Kids</span>
+                            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Perfect Kids' Beach Day</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">
+                                Fresh malasadas from Passion Bakery, protected lagoon, and beachfront lunch
+                            </p>
+                            
+                            <div class="flex gap-2 mb-4">
+                                <span class="badge badge-gray">👨‍👩‍👧‍👦 Family</span>
+                                <span class="badge badge-gray">🏖️ East Side</span>
+                                <span class="badge badge-gray">⏰ Half Day</span>
                             </div>
+                            
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-4" style="color: var(--text-muted);">
+                                <span>⏱️ 4 hours</span>
+                                <span>👶 Easy</span>
+                                <span>👨‍👩‍👧‍👦 Perfect for kids</span>
+                            </div>
+                            
+                            <a href="/adventures/perfect-kids-beach-day" class="w-full btn-outline text-sm py-2 block text-center">
+                                View Details & Insider Tips →
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Adventure 3 -->
-                    <div class="adventure-card fade-in-up" data-category="half-day,adventure">
-                        <div class="adventure-image">
-                            💦
-                            <div class="absolute top-3 right-3">
-                                <span class="badge badge-pink">🥥 3</span>
-                            </div>
+                    <!-- Adventure 3 - Epic Football Weekend -->
+                    <div class="adventure-card fade-in-up" data-category="sports,full-day">
+                        <div class="adventure-image relative">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923190288-25YEVNPQSONE1LB9B4XU/unsplash-image-QrLLRsw73uA.jpg?format=750w" alt="Beachfront football watching" class="w-full h-40 object-cover rounded-t-xl">
                         </div>
-                        <div class="adventure-content">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center gap-2">
-                                    <div class="author-avatar">
-                                        <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w" alt="Henry">
-                                    </div>
-                                    <div>
-                                        <div class="text-sm font-medium" style="color: var(--text-primary);">Henry</div>
-                                        <div class="text-xs" style="color: var(--text-muted);">Local Expert</div>
-                                    </div>
+                        <div class="adventure-content p-4">
+                            <div class="author-info mb-3">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="w-12 h-12 rounded-full object-cover">
+                                <div>
+                                    <h4 class="text-sm font-medium" style="color: var(--text-primary);">Henry</h4>
+                                    <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);">AlohaHenry.com</a>
                                 </div>
-                                <span class="badge badge-gray">🏊 Swimming</span>
                             </div>
-                            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Secret Waterfall Trek</h3>
-                            <p class="text-sm mb-3" style="color: var(--text-secondary);">Hidden waterfall, rope swings, natural pools, zero crowds</p>
-                            <div class="flex gap-4 text-xs" style="color: var(--text-muted);">
-                                <span>⏱️ 3h</span>
-                                <span>💪 Moderate</span>
-                                <span>🏊 Swim</span>
+                            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Epic Football Weekend</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">
+                                Sunrise beers, bourbon house, and wings - all walkable on the East Side
+                            </p>
+                            
+                            <div class="flex gap-2 mb-4">
+                                <span class="badge badge-gray">🏈 Sports</span>
+                                <span class="badge badge-gray">🌅 East Side</span>
+                                <span class="badge badge-gray">🍻 All Day</span>
                             </div>
+                            
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-4" style="color: var(--text-muted);">
+                                <span>⏱️ 12 hours</span>
+                                <span>🍺 Easy</span>
+                                <span>👥 2-8 people</span>
+                            </div>
+                            
+                            <a href="/adventures/epic-football-weekend" class="w-full btn-outline text-sm py-2 block text-center">
+                                View Details & Insider Tips →
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Adventure 4 -->
-                    <div class="adventure-card fade-in-up" data-category="full-day,family">
-                        <div class="adventure-image">
-                            🍱
-                            <div class="absolute top-3 right-3">
-                                <span class="badge badge-pink">🥥 3</span>
-                            </div>
+                    <!-- Adventure 4 - Poipu Beach Day -->
+                    <div class="adventure-card fade-in-up" data-category="beach,full-day">
+                        <div class="adventure-image relative">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923394688-SYSF41OEDI34O2ZVLVAX/unsplash-image-GqEFbD-vgBs.jpg?format=750w" alt="Poipu Beach turtles" class="w-full h-40 object-cover rounded-t-xl">
                         </div>
-                        <div class="adventure-content">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center gap-2">
-                                    <div class="author-avatar">K</div>
-                                    <div>
-                                        <div class="text-sm font-medium" style="color: var(--text-primary);">Kai</div>
-                                        <div class="text-xs" style="color: var(--text-muted);">AI Guide</div>
-                                    </div>
+                        <div class="adventure-content p-4">
+                            <div class="author-info mb-3">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="w-12 h-12 rounded-full object-cover">
+                                <div>
+                                    <h4 class="text-sm font-medium" style="color: var(--text-primary);">Henry</h4>
+                                    <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);">AlohaHenry.com</a>
                                 </div>
-                                <span class="badge badge-gray">🍴 Foodie</span>
                             </div>
-                            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Local Food Crawl</h3>
-                            <p class="text-sm mb-3" style="color: var(--text-secondary);">Food trucks, farmers market, plate lunch spots, dessert heaven</p>
-                            <div class="flex gap-4 text-xs" style="color: var(--text-muted);">
-                                <span>⏱️ 5h</span>
-                                <span>💪 Easy</span>
-                                <span>🍴 Foodie</span>
+                            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Poipu Beach + Turtle Watch</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">
+                                America's best beach, turtle watching at sunset, and gourmet dinner
+                            </p>
+                            
+                            <div class="flex gap-2 mb-4">
+                                <span class="badge badge-gray">🐢 Turtles</span>
+                                <span class="badge badge-gray">🏖️ Poipu</span>
+                                <span class="badge badge-gray">🌅 Full Day</span>
                             </div>
+                            
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-4" style="color: var(--text-muted);">
+                                <span>⏱️ 8 hours</span>
+                                <span>🌊 Easy</span>
+                                <span>👥 2-6 people</span>
+                            </div>
+                            
+                            <a href="/adventures/poipu-beach-turtle-watch" class="w-full btn-outline text-sm py-2 block text-center">
+                                View Details & Insider Tips →
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Adventure 5 -->
-                    <div class="adventure-card fade-in-up" data-category="half-day,adventure">
-                        <div class="adventure-image">
-                            🌅
-                            <div class="absolute top-3 right-3">
-                                <span class="badge badge-pink">🥥 2</span>
-                            </div>
+                    <!-- Adventure 5 - Anini Snorkel + Lighthouse -->
+                    <div class="adventure-card fade-in-up" data-category="snorkeling,family">
+                        <div class="adventure-image relative">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923533561-BUQSQX02CQ7G4COH2MJQ/unsplash-image-9y7y26C-l4Y.jpg?format=750w" alt="Anini Beach snorkeling" class="w-full h-40 object-cover rounded-t-xl">
                         </div>
-                        <div class="adventure-content">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center gap-2">
-                                    <div class="author-avatar">
-                                        <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w" alt="Henry">
-                                    </div>
-                                    <div>
-                                        <div class="text-sm font-medium" style="color: var(--text-primary);">Henry</div>
-                                        <div class="text-xs" style="color: var(--text-muted);">Local Expert</div>
-                                    </div>
+                        <div class="adventure-content p-4">
+                            <div class="author-info mb-3">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="w-12 h-12 rounded-full object-cover">
+                                <div>
+                                    <h4 class="text-sm font-medium" style="color: var(--text-primary);">Henry</h4>
+                                    <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);">AlohaHenry.com</a>
                                 </div>
-                                <span class="badge badge-gray">📸 Views</span>
                             </div>
-                            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Sunrise Summit Hike</h3>
-                            <p class="text-sm mb-3" style="color: var(--text-secondary);">Early morning ridge trail, epic views, breakfast spot after</p>
-                            <div class="flex gap-4 text-xs" style="color: var(--text-muted);">
-                                <span>⏱️ 4h</span>
-                                <span>💪 Hard</span>
-                                <span>📸 Views</span>
+                            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Anini Snorkel + Lighthouse</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">
+                                Protected reef snorkeling, epic fish tacos, and historic lighthouse visit
+                            </p>
+                            
+                            <div class="flex gap-2 mb-4">
+                                <span class="badge badge-gray">🤿 Snorkel</span>
+                                <span class="badge badge-gray">🌊 North Shore</span>
+                                <span class="badge badge-gray">📸 Lighthouse</span>
                             </div>
+                            
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-4" style="color: var(--text-muted);">
+                                <span>⏱️ 6 hours</span>
+                                <span>🐠 Easy</span>
+                                <span>👨‍👩‍👧‍👦 Family</span>
+                            </div>
+                            
+                            <a href="/adventures/anini-snorkel-lighthouse" class="w-full btn-outline text-sm py-2 block text-center">
+                                View Details & Insider Tips →
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Adventure 6 - Yoga North Shore -->
+                    <div class="adventure-card fade-in-up" data-category="wellness,half-day">
+                        <div class="adventure-image relative">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755924297895-TM6E1SA0Z46H52SRKGV7/unsplash-image-n8L1VYaypcw.jpg?format=750w" alt="Sunrise yoga Hanalei Bay" class="w-full h-40 object-cover rounded-t-xl">
+                        </div>
+                        <div class="adventure-content p-4">
+                            <div class="author-info mb-3">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="w-12 h-12 rounded-full object-cover">
+                                <div>
+                                    <h4 class="text-sm font-medium" style="color: var(--text-primary);">Henry</h4>
+                                    <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);">AlohaHenry.com</a>
+                                </div>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Yoga North Shore</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">
+                                Sunrise beach yoga, Hanalei town wandering, and spa or studio afternoon
+                            </p>
+                            
+                            <div class="flex gap-2 mb-4">
+                                <span class="badge badge-gray">🧘‍♀️ Yoga</span>
+                                <span class="badge badge-gray">🌅 Sunrise</span>
+                                <span class="badge badge-gray">💆‍♀️ Wellness</span>
+                            </div>
+                            
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-4" style="color: var(--text-muted);">
+                                <span>⏱️ 6 hours</span>
+                                <span>🧘‍♀️ Gentle</span>
+                                <span>👥 1-4 people</span>
+                            </div>
+                            
+                            <a href="/adventures/yoga-north-shore" class="w-full btn-outline text-sm py-2 block text-center">
+                                View Details & Insider Tips →
+                            </a>
                         </div>
                     </div>
 
@@ -1262,7 +1327,7 @@
                 <div class="md:col-span-1">
                     <div class="mb-4">
                         <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="text-2xl font-light">
-                            Alohakia
+                            AlohaKai
                         </span>
                     </div>
                     <p class="text-sm" style="color: var(--text-muted);">
@@ -1306,7 +1371,7 @@
 
             <div class="border-t border-gray-800 mt-12 pt-8 text-center">
                 <p class="text-sm" style="color: var(--text-muted);">
-                    © 2025 Alohakia. Made with aloha in Kauai.
+                    © 2025 AlohaKai. Made with aloha in Kauai.
                 </p>
             </div>
         </div>

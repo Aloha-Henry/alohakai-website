@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curated Adventures - AlohaKai</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gradient-cyan: #67E8F9;
+            --gradient-pink: #FB7185;
+            --bg-dark: #0a0a0a;
+            --bg-card: rgba(20, 20, 20, 0.6);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+        
+        /* Navigation - Same as homepage */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+        }
+
+        /* Glass morphism - Same as homepage */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        /* Adventure Cards - Exact same as homepage */
+        .adventure-card {
+            width: 360px;
+            min-height: 400px;
+            flex-shrink: 0;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .adventure-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(103, 232, 249, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
+                        0 10px 20px rgba(103, 232, 249, 0.05);
+        }
+
+        .adventure-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gradient-cyan), var(--gradient-pink));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .adventure-card:hover::before {
+            opacity: 1;
+        }
+
+        .adventure-image {
+            height: 160px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .adventure-content {
+            padding: 20px;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .author-info img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info div h4 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .author-info div a {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Badge System - Same as homepage */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            border: 1px solid;
+        }
+
+        .badge-gray {
+            background: rgba(148, 163, 184, 0.08);
+            border-color: rgba(148, 163, 184, 0.15);
+            color: var(--text-muted);
+        }
+
+        .adventure-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .btn-outline {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            background: transparent;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .btn-outline:hover {
+            border-color: rgba(103, 232, 249, 0.3);
+            color: rgba(103, 232, 249, 0.9);
+            background: rgba(103, 232, 249, 0.05);
+        }
+
+        /* Grid layout for cards */
+        .adventures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 24px;
+            justify-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .adventures-grid {
+                grid-template-columns: 1fr;
+            }
+            .adventure-card {
+                width: 100%;
+                max-width: 360px;
+            }
+        }
+
+        /* Filter pills - Same as homepage */
+        .tag-pill {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+        }
+        
+        .tag-pill:hover {
+            border-color: rgba(103, 232, 249, 0.3);
+            color: rgba(103, 232, 249, 0.9);
+            background: rgba(103, 232, 249, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .tag-pill.active {
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.1), rgba(251, 113, 133, 0.1));
+            border-color: rgba(103, 232, 249, 0.3);
+            color: var(--text-primary);
+        }
+
+        /* Search input */
+        .search-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            color: var(--text-primary);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(103, 232, 249, 0.3);
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.05);
+        }
+        
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Header button */
+        .get-coconuts-btn {
+            background: linear-gradient(135deg, #67E8F9, #FB7185);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .get-coconuts-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header - Same as homepage -->
+    <nav class="nav-header">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="/" class="text-2xl font-light">
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        AlohaKai
+                    </span>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <div class="desktop-nav hidden md:flex items-center gap-8">
+                    <!-- Section Links -->
+                    <div class="flex gap-6">
+                        <a href="/deals" class="text-gray-400 hover:text-white transition-colors text-sm">Deals</a>
+                        <a href="/adventures" class="text-cyan-400 font-medium text-sm">Adventures</a>
+                        <a href="/audio" class="text-gray-400 hover:text-white transition-colors text-sm">Audio</a>
+                        <a href="/shop" class="text-gray-400 hover:text-white transition-colors text-sm">Shop</a>
+                    </div>
+                    
+                    <!-- Divider -->
+                    <div class="h-4 w-px bg-gray-700"></div>
+                    
+                    <!-- Page Links -->
+                    <div class="flex items-center gap-6">
+                        <a href="/about" class="text-gray-400 hover:text-white transition-colors text-sm">About</a>
+                        <a href="/contact" class="text-gray-400 hover:text-white transition-colors text-sm">Contact</a>
+                        <span class="badge badge-gray">🥥 20</span>
+                        <a href="/signup" class="get-coconuts-btn">Get Coconuts</a>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile menu -->
+            <div id="mobileMenu" class="mobile-menu mt-4">
+                <a href="/deals" class="block py-2 text-gray-400 hover:text-white transition-colors">Deals</a>
+                <a href="/adventures" class="block py-2 text-cyan-400 font-medium">Adventures</a>
+                <a href="/audio" class="block py-2 text-gray-400 hover:text-white transition-colors">Audio</a>
+                <a href="/shop" class="block py-2 text-gray-400 hover:text-white transition-colors">Shop</a>
+                <div class="border-t border-gray-700 my-3"></div>
+                <a href="/about" class="block py-2 text-gray-400 hover:text-white transition-colors">About</a>
+                <a href="/contact" class="block py-2 text-gray-400 hover:text-white transition-colors">Contact</a>
+                <a href="/signup" class="block py-2 text-cyan-400 hover:text-cyan-300 transition-colors font-medium">Get Coconuts</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="pt-32 pb-16">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-5xl md:text-6xl font-light mb-6">
+                <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
+                    Curated Adventures
+                </span>
+            </h1>
+            <p class="text-xl font-light max-w-2xl mx-auto" style="color: var(--text-secondary);">
+                Real experiences designed by someone who actually lives here. Skip the research, get the insider knowledge.
+            </p>
+        </div>
+    </section>
+
+    <!-- Search & Filters -->
+    <div class="pb-8">
+        <div class="container mx-auto px-6 mb-12">
+            <div class="max-w-4xl mx-auto glass-morphism rounded-2xl p-6">
+                <div class="flex flex-col gap-4">
+                    <!-- Search Input -->
+                    <div class="flex-1">
+                        <input 
+                            type="text" 
+                            placeholder="Search adventures..." 
+                            class="w-full search-input rounded-xl px-6 py-4 text-base font-light"
+                            id="adventureSearch"
+                            oninput="filterAdventures()"
+                        >
+                    </div>
+                    
+                    <!-- Category Filter Buttons -->
+                    <div class="flex gap-3 flex-wrap justify-center">
+                        <button class="tag-pill active" data-filter="all">All</button>
+                        <button class="tag-pill" data-filter="surf">Surf</button>
+                        <button class="tag-pill" data-filter="family">Family</button>
+                        <button class="tag-pill" data-filter="snorkel">Snorkel</button>
+                        <button class="tag-pill" data-filter="wellness">Wellness</button>
+                        <button class="tag-pill" data-filter="beach">Beach</button>
+                        <button class="tag-pill" data-filter="sports">Sports</button>
+                    </div>
+                    
+                    <!-- Duration Filter Pills -->
+                    <div class="flex gap-3 flex-wrap justify-center">
+                        <button class="tag-pill active" data-duration="all">All Durations</button>
+                        <button class="tag-pill" data-duration="half-day">Half Day</button>
+                        <button class="tag-pill" data-duration="full-day">Full Day</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adventures Grid -->
+    <section class="pb-20">
+        <div class="container mx-auto px-6">
+            <div class="adventures-grid-container">
+                <div id="adventuresGrid" class="adventures-grid">
+                    <!-- Adventures will be loaded dynamically -->
+                </div>
+                
+                <!-- No results message -->
+                <div id="noResults" class="text-center py-12 hidden col-span-full">
+                    <div class="text-4xl mb-4">🏔️</div>
+                    <h3 class="text-xl font-medium mb-2" style="color: var(--text-primary);">No adventures found</h3>
+                    <p style="color: var(--text-secondary);">Try adjusting your search or filters</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer - Same as homepage -->
+    <footer class="py-16 border-t border-gray-900">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Logo & Tagline -->
+                <div class="md:col-span-1">
+                    <div class="mb-4">
+                        <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="text-2xl font-light">
+                            AlohaKai
+                        </span>
+                    </div>
+                    <p class="text-sm" style="color: var(--text-muted);">
+                        Your AI-powered local guide to the Garden Isle
+                    </p>
+                </div>
+
+                <!-- Company -->
+                <div>
+                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/about" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">About Us</a></li>
+                        <li><a href="/contact" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Contact</a></li>
+                        <li><a href="/careers" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Careers</a></li>
+                        <li><a href="/blog" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Blog</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div>
+                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/help" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Help Center</a></li>
+                        <li><a href="/faq" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">FAQ</a></li>
+                        <li><a href="/privacy" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Privacy Policy</a></li>
+                        <li><a href="/terms" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Connect -->
+                <div>
+                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Connect</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Instagram</a></li>
+                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Twitter</a></li>
+                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">YouTube</a></li>
+                        <li><a href="/newsletter" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Newsletter</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p class="text-sm" style="color: var(--text-muted);">
+                    © 2025 AlohaKai. Made with aloha in Kauai.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Real adventure data from our 6 built adventures
+        const adventuresData = [
+            {
+                id: 1,
+                title: "Hanalei Surf Adventure",
+                description: "The perfect intro to North Shore surfing - breakfast, board rental, beginner waves, and legendary post-surf lunch at local favorites.",
+                author: "Henry",
+                authorType: "Local Expert & Surfer",
+                authorImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w",
+                heroImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755917646940-EZLYMMX2IE6EVGWBMNB3/unsplash-image-5ZLDGa6Acug.jpg?format=750w",
+                coconutCost: 3,
+                category: "surf",
+                tags: ["Surf", "Beginner Friendly", "North Shore"],
+                duration: "half-day",
+                difficulty: "beginner",
+                groupSize: "2-4 people",
+                requirements: "No experience needed",
+                whyLoveIt: "Hanalei Bay offers the most forgiving waves on the North Shore. Protected by the reef, it's where locals learn to surf. You'll support three beloved Hanalei institutions in one perfect day - from breakfast to boards to beers.",
+                buttonText: "View Adventure Details",
+                link: "/adventures/hanalei-surf-adventure.html"
+            },
+            {
+                id: 2,
+                title: "Epic Football Weekend (East Side)",
+                description: "Sunrise beers at Lava Lava → bourbon house at Bobby V's → wings for the late game at Johnny's. All walkable, all legendary.",
+                author: "Henry",
+                authorType: "Local Expert & Sports Fan",
+                authorImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w",
+                heroImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923394688-SYSF41OEDI34O2ZVLVAX/unsplash-image-GqEFbD-vgBs.jpg?format=750w",
+                coconutCost: 3,
+                category: "sports",
+                tags: ["Sports Bars", "East Side", "Walkable"],
+                duration: "full-day",
+                difficulty: "easy",
+                groupSize: "2-8 people",
+                requirements: "All walkable circuit",
+                whyLoveIt: "Perfect game day timing - beers at sunrise, bourbon house action, late game with wings. Every stop matches the football schedule. All walkable so you stay relaxed and focused on the games.",
+                buttonText: "View Adventure Details",
+                link: "/adventures/epic-football-weekend.html"
+            },
+            {
+                id: 3,
+                title: "Anini Beach Snorkel + Lighthouse",
+                description: "Morning snorkeling at protected Anini Beach → fresh fish tacos at Kilauea Fish Market → historic Kilauea Point Lighthouse visit.",
+                author: "Henry",
+                authorType: "Local Expert & Ocean Guide",
+                authorImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w",
+                heroImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923533561-BUQSQX02CQ7G4COH2MJQ/unsplash-image-9y7y26C-l4Y.jpg?format=750w",
+                coconutCost: 2,
+                category: "snorkel",
+                tags: ["Family Friendly", "Snorkeling", "Historic"],
+                duration: "half-day",
+                difficulty: "easy",
+                groupSize: "Any size",
+                requirements: "Book lighthouse ahead",
+                whyLoveIt: "Anini offers one of Kauai's most family-friendly snorkeling spots with protective reef and calm waters. Perfect blend of underwater exploration, island flavors, and historic beauty.",
+                buttonText: "View Adventure Details",
+                link: "/adventures/anini-snorkel-lighthouse.html"
+            },
+            {
+                id: 4,
+                title: "Yoga North Shore",
+                description: "Pre-sunrise yoga at Hanalei Bay → explore charming Hanalei town → choose between studio class or luxury spa session.",
+                author: "Henry",
+                authorType: "Local Expert & Wellness Guide",
+                authorImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w",
+                heroImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755924297895-TM6E1SA0Z46H52SRKGV7/unsplash-image-n8L1VYaypcw.jpg?format=750w",
+                coconutCost: 2,
+                category: "wellness",
+                tags: ["Yoga", "Wellness", "North Shore"],
+                duration: "full-day",
+                difficulty: "easy",
+                groupSize: "1-8 people",
+                requirements: "Early morning start",
+                whyLoveIt: "Start before dawn with beach-side yoga as the sun rises over tranquil waters. The Andy Irons mural and Hanalei environment unify movement with local culture. Choose your wellness finale - studio or spa.",
+                buttonText: "View Adventure Details",
+                link: "/adventures/yoga-north-shore.html"
+            },
+            {
+                id: 5,
+                title: "Perfect Poipu Beach Day + Pizza Night",
+                description: "Beach time at lifeguarded Poipu → Puka Dog lunch → sunset turtle watch → best pizza on South Shore at Koloa Pizza Kitchen.",
+                author: "Henry",
+                authorType: "Local Expert & Beach Enthusiast",
+                authorImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w",
+                heroImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923394688-SYSF41OEDI34O2ZVLVAX/unsplash-image-GqEFbD-vgBs.jpg?format=750w",
+                coconutCost: 2,
+                category: "beach",
+                tags: ["Beach", "Turtle Watching", "South Shore"],
+                duration: "full-day",
+                difficulty: "easy",
+                groupSize: "Any size",
+                requirements: "Beach day essentials",
+                whyLoveIt: "America's best beach (voted 2001) with turtle hour at sunset. Great sand-to-dinner flow with lifeguarded safety, wildlife encounters, and shower facilities for easy transitions.",
+                buttonText: "View Adventure Details",
+                link: "/adventures/perfect-poipu-beach-day.html"
+            },
+            {
+                id: 6,
+                title: "Perfect Kids' Beach Day",
+                description: "Malasadas, protected lagoon play, stroller-friendly access, and beachfront lunch - designed with keiki (children) in mind.",
+                author: "Henry",
+                authorType: "Local Expert & Parent",
+                authorImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w",
+                heroImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/9813df8b-695a-4b38-a9aa-a2536270c694/LN6.jpeg?format=1200w",
+                coconutCost: 2,
+                category: "family",
+                tags: ["Family", "Kid-Friendly", "East Side"],
+                duration: "half-day",
+                difficulty: "easy",
+                groupSize: "Families",
+                requirements: "Stroller accessible",
+                whyLoveIt: "Sweet treats + stroller access + protected lagoon = a day built around ease and safety for little ones. Lava rock reef creates a natural kiddie pool that stays calm and shallow.",
+                buttonText: "View Adventure Details",
+                link: "/adventures/perfect-kids-beach-day.html"
+            }
+        ];
+
+        function formatAuthor(adventure) {
+            if (adventure.authorImage) {
+                return `<img src="${adventure.authorImage}" alt="${adventure.author}" class="rounded-full">`;
+            } else {
+                return adventure.author.charAt(0);
+            }
+        }
+
+        function renderAdventures(adventures = adventuresData) {
+            const grid = document.getElementById('adventuresGrid');
+            const noResults = document.getElementById('noResults');
+            
+            if (adventures.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+            
+            noResults.classList.add('hidden');
+            grid.innerHTML = '';
+
+            adventures.forEach(adventure => {
+                const adventureCard = document.createElement('div');
+                adventureCard.className = 'adventure-card fade-in-up';
+                adventureCard.dataset.category = adventure.category;
+                adventureCard.dataset.duration = adventure.duration;
+                
+                adventureCard.innerHTML = `
+                    <div class="adventure-image relative">
+                        <img src="${adventure.heroImage}" alt="${adventure.title}" class="w-full h-40 object-cover rounded-t-xl">
+                    </div>
+                    <div class="adventure-content p-4">
+                        <div class="author-info mb-3">
+                            <img src="${adventure.authorImage}" alt="${adventure.author}" class="w-12 h-12 rounded-full object-cover">
+                            <div>
+                                <h4 class="text-sm font-medium" style="color: var(--text-primary);">${adventure.author}</h4>
+                                <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);">AlohaHenry.com</a>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">${adventure.title}</h3>
+                        <p class="text-sm mb-4" style="color: var(--text-secondary);">
+                            ${adventure.description}
+                        </p>
+                        
+                        <div class="flex gap-2 mb-4">
+                            ${adventure.tags.map(tag => `<span class="badge badge-gray">${tag}</span>`).join('')}
+                        </div>
+                        
+                        <div class="adventure-stats flex justify-between items-center text-xs mb-4" style="color: var(--text-muted);">
+                            <span>⏱️ ${adventure.duration.replace('-', ' ')}</span>
+                            <span>💪 ${adventure.difficulty}</span>
+                            <span>👥 ${adventure.groupSize}</span>
+                        </div>
+                        
+                        <a href="${adventure.link}" class="w-full btn-outline text-sm py-2 block text-center">
+                            View Details & Insider Tips →
+                        </a>
+                    </div>
+                `;
+                
+                grid.appendChild(adventureCard);
+            });
+        }
+
+        function filterAdventures() {
+            const searchTerm = document.getElementById('adventureSearch').value.toLowerCase();
+            const activeFilter = document.querySelector('.tag-pill.active[data-filter]')?.dataset.filter || 'all';
+            const activeDuration = document.querySelector('.tag-pill.active[data-duration]')?.dataset.duration || 'all';
+            
+            const filteredAdventures = adventuresData.filter(adventure => {
+                const matchesSearch = adventure.title.toLowerCase().includes(searchTerm) || 
+                                    adventure.description.toLowerCase().includes(searchTerm) ||
+                                    adventure.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                const matchesFilter = activeFilter === 'all' || adventure.category === activeFilter;
+                const matchesDuration = activeDuration === 'all' || adventure.duration === activeDuration;
+                
+                return matchesSearch && matchesFilter && matchesDuration;
+            });
+            
+            renderAdventures(filteredAdventures);
+        }
+
+        // Filter button functionality
+        document.querySelectorAll('.tag-pill[data-filter]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tag-pill[data-filter]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterAdventures();
+            });
+        });
+
+        // Duration filter functionality
+        document.querySelectorAll('.tag-pill[data-duration]').forEach(pill => {
+            pill.addEventListener('click', () => {
+                document.querySelectorAll('.tag-pill[data-duration]').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                filterAdventures();
+            });
+        });
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Initialize adventures on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAdventures();
+        });
+
+        // Smooth scrolling for anchor links
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('a[href^="#"]')) {
+                e.preventDefault();
+                const target = document.querySelector(e.target.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                    document.getElementById('mobileMenu').classList.remove('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
