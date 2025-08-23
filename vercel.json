@@ -13,6 +13,10 @@
       "destination": "/adventures.html"
     },
     {
+      "source": "/adventures/:slug",
+      "destination": "/adventures/:slug.html"
+    },
+    {
       "source": "/audio",
       "destination": "/audio.html"
     },

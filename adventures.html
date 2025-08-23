@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Curated Adventures - Alohakia</title>
+    <title>Curated Adventures - AlohaKai</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -70,10 +70,11 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
         
-        /* Adventure Cards - Updated to match homepage style */
+        /* Adventure Cards - Exact same as homepage */
         .adventure-card {
-            perspective: 1000px;
-            height: 500px;
+            width: 360px;
+            min-height: 400px;
+            flex-shrink: 0;
             background: rgba(20, 20, 20, 0.6);
             backdrop-filter: blur(10px);
             border: 1px solid var(--border-subtle);
@@ -106,61 +107,41 @@
             opacity: 1;
         }
 
-        .adventure-card-inner {
+        .adventure-image {
+            height: 160px;
             position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-
-        .adventure-card.flipped .adventure-card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .adventure-card-front, .adventure-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 16px;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .adventure-card-front {
-            background: rgba(20, 20, 20, 0.8);
-        }
-
-        .adventure-card-back {
-            background: rgba(20, 20, 20, 0.95);
-            backdrop-filter: blur(10px);
-            transform: rotateY(180deg);
-            text-align: left;
-        }
-
-        /* Author avatar - Same as homepage */
-        .author-avatar {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #FB7185, #67E8F9);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: white;
-            overflow: hidden;
         }
-        
-        .author-avatar img {
-            width: 100%;
-            height: 100%;
+
+        .adventure-content {
+            padding: 20px;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .author-info img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
             object-fit: cover;
+        }
+
+        .author-info div h4 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .author-info div a {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
         }
 
         /* Badge System - Same as homepage */
@@ -180,30 +161,52 @@
             color: var(--text-muted);
         }
 
-        .badge-pink {
-            background: rgba(251, 113, 133, 0.08);
-            border-color: rgba(251, 113, 133, 0.15);
-            color: var(--gradient-pink);
-        }
-
-        .coconut-cost {
-            background: rgba(251, 113, 133, 0.1);
-            border: 1px solid rgba(251, 113, 133, 0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            font-weight: 600;
-            color: var(--gradient-pink);
-            font-size: 0.875rem;
-        }
-
-        .adventure-tag {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
+        .adventure-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .btn-outline {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            background: transparent;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
             font-weight: 500;
-            color: var(--text-secondary);
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .btn-outline:hover {
+            border-color: rgba(103, 232, 249, 0.3);
+            color: rgba(103, 232, 249, 0.9);
+            background: rgba(103, 232, 249, 0.05);
+        }
+
+        /* Grid layout for cards */
+        .adventures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 24px;
+            justify-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .adventures-grid {
+                grid-template-columns: 1fr;
+            }
+            .adventure-card {
+                width: 100%;
+                max-width: 360px;
+            }
         }
 
         /* Filter pills - Same as homepage */
@@ -276,7 +279,7 @@
                 <!-- Logo -->
                 <a href="/" class="text-2xl font-light">
                     <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                        Alohakia
+                        AlohaKai
                     </span>
                 </a>
                 
@@ -297,6 +300,7 @@
                     <div class="flex items-center gap-6">
                         <a href="/about" class="text-gray-400 hover:text-white transition-colors text-sm">About</a>
                         <a href="/contact" class="text-gray-400 hover:text-white transition-colors text-sm">Contact</a>
+                        <span class="badge badge-gray">🥥 20</span>
                         <a href="/signup" class="get-coconuts-btn">Get Coconuts</a>
                     </div>
                 </div>
@@ -332,7 +336,7 @@
                 </span>
             </h1>
             <p class="text-xl font-light max-w-2xl mx-auto" style="color: var(--text-secondary);">
-                Pre-planned experiences designed by locals and adventure experts. Skip the research, get the insider knowledge.
+                Real experiences designed by someone who actually lives here. Skip the research, get the insider knowledge.
             </p>
         </div>
     </section>
@@ -356,22 +360,19 @@
                     <!-- Category Filter Buttons -->
                     <div class="flex gap-3 flex-wrap justify-center">
                         <button class="tag-pill active" data-filter="all">All</button>
-                        <button class="tag-pill" data-filter="half-day">Half Day</button>
-                        <button class="tag-pill" data-filter="full-day">Full Day</button>
+                        <button class="tag-pill" data-filter="surf">Surf</button>
                         <button class="tag-pill" data-filter="family">Family</button>
-                        <button class="tag-pill" data-filter="adventure">Adventure</button>
+                        <button class="tag-pill" data-filter="snorkel">Snorkel</button>
+                        <button class="tag-pill" data-filter="wellness">Wellness</button>
                         <button class="tag-pill" data-filter="beach">Beach</button>
-                        <button class="tag-pill" data-filter="hiking">Hiking</button>
-                        <button class="tag-pill" data-filter="food">Food</button>
+                        <button class="tag-pill" data-filter="sports">Sports</button>
                     </div>
                     
-                    <!-- Difficulty Filter Pills -->
+                    <!-- Duration Filter Pills -->
                     <div class="flex gap-3 flex-wrap justify-center">
-                        <button class="tag-pill active" data-difficulty="all">All Levels</button>
-                        <button class="tag-pill" data-difficulty="easy">Easy</button>
-                        <button class="tag-pill" data-difficulty="moderate">Moderate</button>
-                        <button class="tag-pill" data-difficulty="active">Active</button>
-                        <button class="tag-pill" data-difficulty="challenging">Challenging</button>
+                        <button class="tag-pill active" data-duration="all">All Durations</button>
+                        <button class="tag-pill" data-duration="half-day">Half Day</button>
+                        <button class="tag-pill" data-duration="full-day">Full Day</button>
                     </div>
                 </div>
             </div>
@@ -382,12 +383,12 @@
     <section class="pb-20">
         <div class="container mx-auto px-6">
             <div class="adventures-grid-container">
-                <div id="adventuresGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div id="adventuresGrid" class="adventures-grid">
                     <!-- Adventures will be loaded dynamically -->
                 </div>
                 
                 <!-- No results message -->
-                <div id="noResults" class="text-center py-12 hidden">
+                <div id="noResults" class="text-center py-12 hidden col-span-full">
                     <div class="text-4xl mb-4">🏔️</div>
                     <h3 class="text-xl font-medium mb-2" style="color: var(--text-primary);">No adventures found</h3>
                     <p style="color: var(--text-secondary);">Try adjusting your search or filters</p>
@@ -404,7 +405,7 @@
                 <div class="md:col-span-1">
                     <div class="mb-4">
                         <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="text-2xl font-light">
-                            Alohakia
+                            AlohaKai
                         </span>
                     </div>
                     <p class="text-sm" style="color: var(--text-muted);">
@@ -448,7 +449,7 @@
 
             <div class="border-t border-gray-800 mt-12 pt-8 text-center">
                 <p class="text-sm" style="color: var(--text-muted);">
-                    © 2025 Alohakia. Made with aloha in Kauai.
+                    © 2025 AlohaKai. Made with aloha in Kauai.
                 </p>
             </div>
         </div>
@@ -456,143 +457,121 @@
 
     <!-- Scripts -->
     <script>
-        // Adventure data with expanded options - Same content, updated styling
+        // Real adventure data from our 6 built adventures
         const adventuresData = [
             {
                 id: 1,
-                title: "Epic North Shore Day",
-                description: "Sunrise at Tunnels Beach, explore Hanalei town, lunch at local food trucks, afternoon at Anini Beach, sunset cocktails with locals.",
+                title: "Hanalei Surf Adventure",
+                description: "The perfect intro to North Shore surfing - breakfast, board rental, beginner waves, and legendary post-surf lunch at local favorites.",
                 author: "Henry",
-                authorType: "Local Expert",
+                authorType: "Local Expert & Surfer",
                 authorImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w",
-                coconutCost: 5,
-                category: "full-day",
-                tags: ["Beach Hopping", "Local Food", "Photography"],
-                duration: "8 hours",
-                difficulty: "easy",
-                groupSize: "2-6 people",
-                requirements: "Car required",
-                whyLoveIt: "This itinerary hits all the North Shore magic without tourist traps. Start early for the best light at Tunnels, grab coffee where locals go, and end at the sunset spot only residents know about. Perfect timing, no crowds, just pure Kauai beauty.",
-                buttonText: "Get Full Itinerary"
+                heroImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755917646940-EZLYMMX2IE6EVGWBMNB3/unsplash-image-5ZLDGa6Acug.jpg?format=750w",
+                coconutCost: 3,
+                category: "surf",
+                tags: ["Surf", "Beginner Friendly", "North Shore"],
+                duration: "half-day",
+                difficulty: "beginner",
+                groupSize: "2-4 people",
+                requirements: "No experience needed",
+                whyLoveIt: "Hanalei Bay offers the most forgiving waves on the North Shore. Protected by the reef, it's where locals learn to surf. You'll support three beloved Hanalei institutions in one perfect day - from breakfast to boards to beers.",
+                buttonText: "View Adventure Details",
+                link: "/adventures/hanalei-surf-adventure.html"
             },
             {
                 id: 2,
-                title: "Perfect Family Beach Day",
-                description: "Kid-friendly beaches with calm waters, picnic spots, tide pools to explore, and ice cream stops. Designed for families with young children.",
-                author: "Kai",
-                authorType: "AI Guide",
-                authorImage: null,
-                coconutCost: 2,
-                category: "family",
-                tags: ["Kid-Friendly", "Safe Swimming", "Tide Pools"],
-                duration: "4 hours",
+                title: "Epic Football Weekend (East Side)",
+                description: "Sunrise beers at Lava Lava → bourbon house at Bobby V's → wings for the late game at Johnny's. All walkable, all legendary.",
+                author: "Henry",
+                authorType: "Local Expert & Sports Fan",
+                authorImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w",
+                heroImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923394688-SYSF41OEDI34O2ZVLVAX/unsplash-image-GqEFbD-vgBs.jpg?format=750w",
+                coconutCost: 3,
+                category: "sports",
+                tags: ["Sports Bars", "East Side", "Walkable"],
+                duration: "full-day",
                 difficulty: "easy",
-                groupSize: "Perfect for kids",
-                requirements: "Minimal driving",
-                whyLoveIt: "Zero stress family day with beaches that have lifeguards, gentle waves, and clean facilities. Kids stay entertained for hours, parents actually relax. Includes backup plans for weather and detailed nap schedules.",
-                buttonText: "Get Full Itinerary"
+                groupSize: "2-8 people",
+                requirements: "All walkable circuit",
+                whyLoveIt: "Perfect game day timing - beers at sunrise, bourbon house action, late game with wings. Every stop matches the football schedule. All walkable so you stay relaxed and focused on the games.",
+                buttonText: "View Adventure Details",
+                link: "/adventures/epic-football-weekend.html"
             },
             {
                 id: 3,
-                title: "Secret Waterfall Adventure",
-                description: "Moderate hike to a hidden waterfall with swimming holes. Includes parking tips, trail conditions, and the best photo spots locals don't share.",
+                title: "Anini Beach Snorkel + Lighthouse",
+                description: "Morning snorkeling at protected Anini Beach → fresh fish tacos at Kilauea Fish Market → historic Kilauea Point Lighthouse visit.",
                 author: "Henry",
-                authorType: "Local Expert",
+                authorType: "Local Expert & Ocean Guide",
                 authorImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w",
-                coconutCost: 3,
-                category: "hiking",
-                tags: ["Moderate Hike", "Swimming", "Hidden Gem", "Photography"],
-                duration: "3-4 hours",
-                difficulty: "moderate",
-                groupSize: "Adults preferred",
-                requirements: "2 mile hike",
-                whyLoveIt: "While tourists pack the famous waterfalls, this gem stays empty. The swimming hole is deeper, the water clearer, and the hike more rewarding. Plus insider parking tricks that save you from the chaos.",
-                buttonText: "Get Full Itinerary"
+                heroImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923533561-BUQSQX02CQ7G4COH2MJQ/unsplash-image-9y7y26C-l4Y.jpg?format=750w",
+                coconutCost: 2,
+                category: "snorkel",
+                tags: ["Family Friendly", "Snorkeling", "Historic"],
+                duration: "half-day",
+                difficulty: "easy",
+                groupSize: "Any size",
+                requirements: "Book lighthouse ahead",
+                whyLoveIt: "Anini offers one of Kauai's most family-friendly snorkeling spots with protective reef and calm waters. Perfect blend of underwater exploration, island flavors, and historic beauty.",
+                buttonText: "View Adventure Details",
+                link: "/adventures/anini-snorkel-lighthouse.html"
             },
             {
                 id: 4,
-                title: "Local Foodie Crawl",
-                description: "Hit the best local food spots that tourists miss. Food trucks, family restaurants, and hidden gems. Includes insider ordering tips and timing.",
-                author: "Kai",
-                authorType: "AI Guide",
-                authorImage: null,
-                coconutCost: 3,
-                category: "food",
-                tags: ["Food Trucks", "Local Spots", "Insider Tips", "Budget-Friendly"],
-                duration: "4-5 hours",
+                title: "Yoga North Shore",
+                description: "Pre-sunrise yoga at Hanalei Bay → explore charming Hanalei town → choose between studio class or luxury spa session.",
+                author: "Henry",
+                authorType: "Local Expert & Wellness Guide",
+                authorImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w",
+                heroImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755924297895-TM6E1SA0Z46H52SRKGV7/unsplash-image-n8L1VYaypcw.jpg?format=750w",
+                coconutCost: 2,
+                category: "wellness",
+                tags: ["Yoga", "Wellness", "North Shore"],
+                duration: "full-day",
                 difficulty: "easy",
-                groupSize: "Any group size",
-                requirements: "Island hopping",
-                whyLoveIt: "Skip the resort restaurants charging $30 for average food. These spots serve incredible local dishes for half the price. Know what to order, when to go, and how to eat like you belong here.",
-                buttonText: "Get Full Itinerary"
+                groupSize: "1-8 people",
+                requirements: "Early morning start",
+                whyLoveIt: "Start before dawn with beach-side yoga as the sun rises over tranquil waters. The Andy Irons mural and Hanalei environment unify movement with local culture. Choose your wellness finale - studio or spa.",
+                buttonText: "View Adventure Details",
+                link: "/adventures/yoga-north-shore.html"
             },
             {
                 id: 5,
-                title: "Epic Sunset Spots",
-                description: "Three amazing sunset locations with backup plans. Includes the best viewpoints, parking strategies, and cocktail spots for after-sunset drinks.",
+                title: "Perfect Poipu Beach Day + Pizza Night",
+                description: "Beach time at lifeguarded Poipu → Puka Dog lunch → sunset turtle watch → best pizza on South Shore at Koloa Pizza Kitchen.",
                 author: "Henry",
-                authorType: "Local Expert",
+                authorType: "Local Expert & Beach Enthusiast",
                 authorImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w",
+                heroImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923394688-SYSF41OEDI34O2ZVLVAX/unsplash-image-GqEFbD-vgBs.jpg?format=750w",
                 coconutCost: 2,
                 category: "beach",
-                tags: ["Sunset Views", "Photography", "Romantic", "Cocktails"],
-                duration: "3 hours",
+                tags: ["Beach", "Turtle Watching", "South Shore"],
+                duration: "full-day",
                 difficulty: "easy",
-                groupSize: "Couples ideal",
-                requirements: "Multiple stops",
-                whyLoveIt: "Everyone goes to the same crowded sunset beach. These three spots offer better views, easier parking, and way fewer people. Plus backup locations for cloudy days that still deliver magic.",
-                buttonText: "Get Full Itinerary"
+                groupSize: "Any size",
+                requirements: "Beach day essentials",
+                whyLoveIt: "America's best beach (voted 2001) with turtle hour at sunset. Great sand-to-dinner flow with lifeguarded safety, wildlife encounters, and shower facilities for easy transitions.",
+                buttonText: "View Adventure Details",
+                link: "/adventures/perfect-poipu-beach-day.html"
             },
             {
                 id: 6,
-                title: "Ultimate Adventure Combo",
-                description: "Morning helicopter tour, afternoon ATV adventure, and evening beach relaxation. The perfect high-energy day for thrill seekers visiting Kauai.",
-                author: "Kai",
-                authorType: "AI Guide",
-                authorImage: null,
-                coconutCost: 4,
-                category: "adventure",
-                tags: ["Helicopter", "ATV Tour", "Beach Time", "Adrenaline"],
-                duration: "8+ hours",
-                difficulty: "active",
-                groupSize: "2-4 people",
-                requirements: "Tours included",
-                whyLoveIt: "The ultimate Kauai bucket list day. See the island from above, explore the backcountry, then unwind on a perfect beach. All logistics handled, just show up and experience the best of everything.",
-                buttonText: "Get Full Itinerary"
-            },
-            {
-                id: 7,
-                title: "Sunrise Photography Tour",
-                description: "Early morning adventure to the best photo spots on the island. Includes camera settings tips, composition advice, and insider access to hidden viewpoints.",
+                title: "Perfect Kids' Beach Day",
+                description: "Malasadas, protected lagoon play, stroller-friendly access, and beachfront lunch - designed with keiki (children) in mind.",
                 author: "Henry",
-                authorType: "Local Expert",
+                authorType: "Local Expert & Parent",
                 authorImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w",
-                coconutCost: 3,
-                category: "half-day",
-                tags: ["Photography", "Sunrise", "Hidden Spots", "Early Morning"],
-                duration: "4 hours",
-                difficulty: "moderate",
-                groupSize: "2-8 people",
-                requirements: "Early start (5 AM)",
-                whyLoveIt: "Golden hour on Kauai is pure magic, but most people miss it sleeping in. These spots offer incredible light with zero crowds. Pro photography tips included so your shots actually look like paradise.",
-                buttonText: "Get Full Itinerary"
-            },
-            {
-                id: 8,
-                title: "Cultural Immersion Day",
-                description: "Learn about Hawaiian culture through hands-on experiences. Traditional crafts, local history, and cultural practices with native Hawaiian guides.",
-                author: "Kai",
-                authorType: "AI Guide",
-                authorImage: null,
-                coconutCost: 4,
-                category: "full-day",
-                tags: ["Cultural", "Traditional Crafts", "Hawaiian History", "Educational"],
-                duration: "6-7 hours",
+                heroImage: "https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/9813df8b-695a-4b38-a9aa-a2536270c694/LN6.jpeg?format=1200w",
+                coconutCost: 2,
+                category: "family",
+                tags: ["Family", "Kid-Friendly", "East Side"],
+                duration: "half-day",
                 difficulty: "easy",
-                groupSize: "4-12 people",
-                requirements: "Cultural respect required",
-                whyLoveIt: "Go beyond the tourist version of Hawaii. Learn from people who actually live the culture, try traditional foods, and understand the real story of these islands. Respectful, authentic, and unforgettable.",
-                buttonText: "Get Full Itinerary"
+                groupSize: "Families",
+                requirements: "Stroller accessible",
+                whyLoveIt: "Sweet treats + stroller access + protected lagoon = a day built around ease and safety for little ones. Lava rock reef creates a natural kiddie pool that stays calm and shallow.",
+                buttonText: "View Adventure Details",
+                link: "/adventures/perfect-kids-beach-day.html"
             }
         ];
 
@@ -619,81 +598,40 @@
 
             adventures.forEach(adventure => {
                 const adventureCard = document.createElement('div');
-                adventureCard.className = 'adventure-card';
+                adventureCard.className = 'adventure-card fade-in-up';
                 adventureCard.dataset.category = adventure.category;
-                adventureCard.dataset.difficulty = adventure.difficulty;
-                adventureCard.onclick = () => adventureCard.classList.toggle('flipped');
+                adventureCard.dataset.duration = adventure.duration;
                 
                 adventureCard.innerHTML = `
-                    <div class="adventure-card-inner">
-                        <!-- Front of card -->
-                        <div class="adventure-card-front">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="author-avatar">
-                                        ${formatAuthor(adventure)}
-                                    </div>
-                                    <div>
-                                        <div class="text-sm font-medium" style="color: var(--text-primary);">${adventure.author}</div>
-                                        <div class="text-xs" style="color: var(--text-muted);">${adventure.authorType}</div>
-                                    </div>
-                                </div>
-                                <div class="coconut-cost">
-                                    🥥 ${adventure.coconutCost}
-                                </div>
-                            </div>
-                            
-                            <h3 class="text-xl font-semibold mb-3" style="color: var(--text-primary);">${adventure.title}</h3>
-                            <p class="text-sm mb-4 leading-relaxed flex-1" style="color: var(--text-secondary);">${adventure.description}</p>
-                            
-                            <!-- Tags -->
-                            <div class="flex flex-wrap gap-2 mb-4">
-                                ${adventure.tags.map(tag => `<span class="adventure-tag">${tag}</span>`).join('')}
-                            </div>
-                            
-                            <!-- Stats -->
-                            <div class="flex items-center gap-4 text-xs mb-4" style="color: var(--text-muted);">
-                                <span>⏱️ ${adventure.duration}</span>
-                                <span>🚗 ${adventure.requirements}</span>
-                                <span>💪 ${adventure.difficulty.charAt(0).toUpperCase() + adventure.difficulty.slice(1)}</span>
-                            </div>
-                            
-                            <div class="flex justify-between items-center mt-auto">
-                                <span class="text-xs" style="color: var(--text-muted);">👥 ${adventure.groupSize}</span>
-                                <div class="text-xs" style="color: var(--text-muted);">
-                                    Click to flip →
-                                </div>
+                    <div class="adventure-image relative">
+                        <img src="${adventure.heroImage}" alt="${adventure.title}" class="w-full h-40 object-cover rounded-t-xl">
+                    </div>
+                    <div class="adventure-content p-4">
+                        <div class="author-info mb-3">
+                            <img src="${adventure.authorImage}" alt="${adventure.author}" class="w-12 h-12 rounded-full object-cover">
+                            <div>
+                                <h4 class="text-sm font-medium" style="color: var(--text-primary);">${adventure.author}</h4>
+                                <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);">AlohaHenry.com</a>
                             </div>
                         </div>
-
-                        <!-- Back of card -->
-                        <div class="adventure-card-back">
-                            <div class="mb-4">
-                                <h3 class="text-xl font-medium mb-2" style="color: var(--text-primary);">Why this adventure rocks</h3>
-                                <div class="h-1 w-12 bg-gradient-to-r from-cyan-500 to-pink-500 rounded mb-4"></div>
-                            </div>
-                            
-                            <p class="text-sm leading-relaxed mb-6 flex-1" style="color: var(--text-secondary);">
-                                ${adventure.whyLoveIt}
-                            </p>
-                            
-                            <div class="mt-auto">
-                                <div class="flex justify-between items-center mb-4">
-                                    <div class="coconut-cost">
-                                        🥥 ${adventure.coconutCost}
-                                    </div>
-                                    <span class="text-xs" style="color: var(--text-muted);">⏱️ ${adventure.duration}</span>
-                                </div>
-                                
-                                <button class="w-full py-3 bg-gradient-to-r from-cyan-500 to-pink-500 rounded-lg text-white font-medium hover:opacity-90 transition-opacity">
-                                    ${adventure.buttonText}
-                                </button>
-                                
-                                <div class="text-xs text-center mt-2" style="color: var(--text-muted);">
-                                    ← Click to flip back
-                                </div>
-                            </div>
+                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">${adventure.title}</h3>
+                        <p class="text-sm mb-4" style="color: var(--text-secondary);">
+                            ${adventure.description}
+                        </p>
+                        
+                        <div class="flex gap-2 mb-4">
+                            ${adventure.tags.map(tag => `<span class="badge badge-gray">${tag}</span>`).join('')}
                         </div>
+                        
+                        <div class="adventure-stats flex justify-between items-center text-xs mb-4" style="color: var(--text-muted);">
+                            <span>⏱️ ${adventure.duration.replace('-', ' ')}</span>
+                            <span>💪 ${adventure.difficulty}</span>
+                            <span>👥 ${adventure.groupSize}</span>
+                        </div>
+                        
+                        <a href="${adventure.link}" class="w-full btn-outline text-sm py-2 block text-center">
+                            View Details & Insider Tips →
+                        </a>
                     </div>
                 `;
                 
@@ -703,17 +641,17 @@
 
         function filterAdventures() {
             const searchTerm = document.getElementById('adventureSearch').value.toLowerCase();
-            const activeFilter = document.querySelector('.tag-pill.active[data-filter]').dataset.filter;
-            const activeDifficulty = document.querySelector('.tag-pill.active[data-difficulty]').dataset.difficulty;
+            const activeFilter = document.querySelector('.tag-pill.active[data-filter]')?.dataset.filter || 'all';
+            const activeDuration = document.querySelector('.tag-pill.active[data-duration]')?.dataset.duration || 'all';
             
             const filteredAdventures = adventuresData.filter(adventure => {
                 const matchesSearch = adventure.title.toLowerCase().includes(searchTerm) || 
                                     adventure.description.toLowerCase().includes(searchTerm) ||
                                     adventure.tags.some(tag => tag.toLowerCase().includes(searchTerm));
                 const matchesFilter = activeFilter === 'all' || adventure.category === activeFilter;
-                const matchesDifficulty = activeDifficulty === 'all' || adventure.difficulty === activeDifficulty;
+                const matchesDuration = activeDuration === 'all' || adventure.duration === activeDuration;
                 
-                return matchesSearch && matchesFilter && matchesDifficulty;
+                return matchesSearch && matchesFilter && matchesDuration;
             });
             
             renderAdventures(filteredAdventures);
@@ -728,10 +666,10 @@
             });
         });
 
-        // Difficulty filter functionality
-        document.querySelectorAll('.tag-pill[data-difficulty]').forEach(pill => {
+        // Duration filter functionality
+        document.querySelectorAll('.tag-pill[data-duration]').forEach(pill => {
             pill.addEventListener('click', () => {
-                document.querySelectorAll('.tag-pill[data-difficulty]').forEach(p => p.classList.remove('active'));
+                document.querySelectorAll('.tag-pill[data-duration]').forEach(p => p.classList.remove('active'));
                 pill.classList.add('active');
                 filterAdventures();
             });
