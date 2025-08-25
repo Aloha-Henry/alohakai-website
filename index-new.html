@@ -1,763 +1,2058 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alohakia - Your AI Local Friend in Kauai</title>
+    <title>AlohaKai - Your AI Guide to Kauai</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --gradient-cyan: #67E8F9;
+            --gradient-pink: #FB7185;
+            --bg-dark: #0a0a0a;
+            --bg-card: rgba(20, 20, 20, 0.6);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
             background: #000;
-            color: #e2e8f0;
+            color: var(--text-primary);
             overflow-x: hidden;
         }
         
-        /* Glass morphism */
-        .glass {
-            background: rgba(31, 41, 55, 0.9);
+        /* Navigation */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+        }
+
+        section {
+            scroll-margin-top: 80px;
         }
         
-        /* Horizontal scroll container */
+        /* Hero Styles - Enhanced */
+        .hero-gradient {
+            background: radial-gradient(ellipse at top right, rgba(103, 232, 249, 0.05) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom left, rgba(251, 113, 133, 0.05) 0%, transparent 50%);
+        }
+        
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        /* FIXED CHAT CONTAINER */
+        .chat-container {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 80px;
+            overflow: hidden;
+            min-height: 80px;
+        }
+        
+        .chat-container.expanded {
+            max-height: 600px;
+            min-height: 400px;
+        }
+        
+        .chat-messages {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease-out 0.2s;
+            max-height: 320px;
+            overflow-y: auto;
+        }
+        
+        .chat-container.expanded .chat-messages {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Message animations */
+        .message-animate {
+            animation: slideInUp 0.3s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .tag-pill {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        
+        .tag-pill:hover {
+            border-color: rgba(103, 232, 249, 0.4);
+            color: rgba(103, 232, 249, 0.9);
+            background: rgba(103, 232, 249, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .tag-pill.active {
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.15), rgba(251, 113, 133, 0.15));
+            border-color: rgba(103, 232, 249, 0.4);
+            color: var(--text-primary);
+        }
+        
+        .chat-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: rgba(103, 232, 249, 0.4);
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.08);
+        }
+        
+        .chat-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .message-user {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+        }
+        
+        .message-kai {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .send-button {
+            background: linear-gradient(135deg, #67E8F9, #FB7185);
+            transition: all 0.2s ease;
+        }
+        
+        .send-button:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+        
+        .cta-button {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: transparent;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+        
+        .cta-button:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
+            color: var(--text-primary);
+        }
+        
+        /* RESPONSIVE CARD SYSTEM */
+        .glass-card {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transform: translate3d(0, 0, 0);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translate3d(0, -8px, 0);
+            border-color: rgba(103, 232, 249, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4),
+                        0 15px 30px rgba(103, 232, 249, 0.08);
+        }
+
+        /* Card flip animation */
+        .card-flip {
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .card-flip.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+        }
+
+        /* MOBILE RESPONSIVE SCROLL CONTAINERS */
         .scroll-container {
             overflow-x: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
             scroll-behavior: smooth;
+            position: relative;
+            padding-bottom: 8px;
         }
-        
+
         .scroll-container::-webkit-scrollbar {
             display: none;
         }
-        
-        /* Card hover effects */
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(103, 232, 249, 0.2);
-            border-color: rgba(103, 232, 249, 0.4);
-        }
-        
-        /* Vote buttons */
-        .vote-up:hover {
-            color: #67E8F9;
-            transform: scale(1.2);
-        }
-        
-        .vote-down:hover {
-            color: #FB7185;
-            transform: scale(1.2);
-        }
-        
-        /* Coconut animation */
-        @keyframes coconutBounce {
-            0%, 100% { transform: translateY(0) rotate(0); }
-            50% { transform: translateY(-2px) rotate(2deg); }
-        }
-        
-        .coconut-bounce {
-            display: inline-block;
-            animation: coconutBounce 2s ease-in-out infinite;
-        }
-        
-        /* Play button pulse */
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.9; }
-        }
-        
-        .pulse {
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        /* Modal styles */
-        .modal {
+
+        /* REMOVE ALL DOT NAVIGATION - Netflix Style */
+        .scroll-navigation {
             display: none;
-            position: fixed;
+        }
+
+        .nav-dot {
+            display: none;
+        }
+
+        /* NETFLIX-STYLE SMOOTH SCROLLING */
+        .scroll-container {
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+            scroll-snap-type: x proximity;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Optional subtle fade hints */
+        .scroll-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1));
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        /* TRENDING CARDS - Clean Blue Numbers */
+        .trending-number {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 24px;
+            height: 24px;
+            background: #67E8F9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #000;
+            z-index: 2;
+        }
+
+        @media (min-width: 768px) {
+            .swipe-hint {
+                display: none;
+            }
+        }
+
+        /* RESPONSIVE CARD SIZES */
+        .deal-card {
+            width: 280px;
+            height: 220px;
+            flex-shrink: 0;
+        }
+
+        .adventure-card {
+            width: 320px;
+            min-height: 400px;
+            flex-shrink: 0;
+        }
+
+        .audio-card {
+            width: 280px;
+            height: 160px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .goods-card {
+            width: 260px;
+            min-height: 340px;
+            flex-shrink: 0;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 640px) {
+            .deal-card {
+                width: 240px;
+                height: 200px;
+            }
+            
+            .adventure-card {
+                width: 280px;
+                min-height: 380px;
+            }
+            
+            .audio-card {
+                width: 240px;
+                height: 140px;
+            }
+            
+            .goods-card {
+                width: 220px;
+                min-height: 320px;
+            }
+        }
+
+        .partner-logo {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .discount-badge {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        /* Enhanced Adventure Cards */
+        .adventure-card {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .adventure-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(103, 232, 249, 0.15);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4),
+                        0 15px 30px rgba(103, 232, 249, 0.08);
+        }
+
+        .adventure-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gradient-cyan), var(--gradient-pink));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .adventure-card:hover::before {
+            opacity: 1;
+        }
+
+        .adventure-image {
+            height: 160px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .adventure-image img {
+            transition: transform 0.4s ease;
+        }
+
+        .adventure-card:hover .adventure-image img {
+            transform: scale(1.05);
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .author-avatar {
+            width: 44px;
+            height: 44px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        /* Enhanced Audio Cards */
+        .audio-card {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .audio-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(103, 232, 249, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .audio-card::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 50;
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.03), rgba(251, 113, 133, 0.03));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .audio-card:hover::before {
+            opacity: 1;
+        }
+
+        .audio-duration {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(103, 232, 249, 0.15);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gradient-cyan);
+            z-index: 2;
+        }
+
+        .play-button {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--gradient-cyan), var(--gradient-pink));
+            border-radius: 50%;
+            display: flex;
             align-items: center;
             justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            color: white;
+            z-index: 2;
         }
-        
-        .modal.active {
+
+        .audio-card:hover .play-button {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* Enhanced Goods Cards */
+        .goods-card {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .goods-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(103, 232, 249, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .goods-image {
+            height: 140px;
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.03), rgba(251, 113, 133, 0.03));
             display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            transition: transform 0.3s ease;
         }
-        
-        /* Chat input */
-        .chat-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.2s ease;
+
+        .goods-card:hover .goods-image {
+            transform: scale(1.05);
         }
-        
-        .chat-input:focus {
-            outline: none;
-            border-color: rgba(103, 232, 249, 0.5);
-            background: rgba(255, 255, 255, 0.08);
+
+        .goods-content {
+            padding: 20px;
         }
-        
-        /* Section spacing */
-        section {
-            scroll-margin-top: 80px;
+
+        /* Enhanced Badge System */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .badge-cyan {
+            background: rgba(103, 232, 249, 0.1);
+            border-color: rgba(103, 232, 249, 0.2);
+            color: var(--gradient-cyan);
+        }
+
+        .badge-pink {
+            background: rgba(251, 113, 133, 0.1);
+            border-color: rgba(251, 113, 133, 0.2);
+            color: var(--gradient-pink);
+        }
+
+        .badge-gray {
+            background: rgba(148, 163, 184, 0.08);
+            border-color: rgba(148, 163, 184, 0.15);
+            color: var(--text-muted);
+        }
+
+        /* Enhanced animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* Header button */
+        .get-coconuts-btn {
+            background: linear-gradient(135deg, #67E8F9, #FB7185);
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .get-coconuts-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(103, 232, 249, 0.3);
+        }
+
+        /* COLOR HIERARCHY FOR CARD TITLES */
+        /* Adventure titles - Clean Blue */
+        #adventures .adventure-card h3 {
+            color: #67E8F9 !important;
+        }
+
+        /* Audio titles - Muted Grey */
+        #audio .audio-card h3 {
+            color: #94a3b8 !important;
+        }
+
+        /* Goods/Essentials titles - Clean Blue */
+        #goods .goods-card h3 {
+            color: #67E8F9 !important;
+        }
+
+        /* Deal titles - Muted Grey-White */
+        #deals .deal-card h3 {
+            color: #cbd5e1 !important;
+        }
+
+        /* Trending titles - Muted Grey-White */
+        #trending .trending-title {
+            color: #cbd5e1 !important;
+        }
+
+        /* TRENDING CARDS - Clean Design */
+        .trending-card {
+            width: 200px;
+            height: 240px;
+            flex-shrink: 0;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .trending-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(103, 232, 249, 0.2);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .trending-icon {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.03), rgba(251, 113, 133, 0.03));
+        }
+
+        .trending-content {
+            padding: 16px;
+            text-align: center;
+        }
+
+        .trending-type {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            opacity: 0.7;
+        }
+
+        .trending-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .trending-description {
+            font-size: 11px;
+            line-height: 1.4;
+            color: var(--text-secondary);
         }
     </style>
 </head>
 <body>
-    <!-- Fixed Header -->
-    <header class="fixed top-0 left-0 right-0 z-40 glass">
-        <div class="max-w-7xl mx-auto px-4 py-3">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl">🌺</span>
-                    <span class="text-xl font-semibold text-white">Alohakia</span>
-                </div>
+    <!-- Navigation Header -->
+    <nav class="nav-header">
+        <div class="container mx-auto px-4 md:px-6 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="#hero" class="text-2xl font-light">
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        AlohaKai
+                    </span>
+                </a>
                 
-                <!-- Coconut Counter -->
-                <div class="glass px-4 py-2 rounded-full flex items-center gap-2">
-                    <span class="coconut-bounce">🥥</span>
-                    <span class="font-semibold" id="coconutCount">20</span>
-                    <button class="ml-2 text-xs text-cyan-400 hover:text-cyan-300">Get more</button>
+                <!-- Desktop Navigation -->
+                <div class="desktop-nav hidden md:flex items-center gap-8">
+                    <!-- Section Links -->
+                    <div class="flex gap-6">
+                        <a href="#deals" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Deals</a>
+                        <a href="#adventures" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Adventures</a>
+                        <a href="#audio" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Audio</a>
+                        <a href="#goods" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Shop</a>
+                    </div>
+                    
+                    <!-- Divider -->
+                    <div class="h-4 w-px bg-gray-700"></div>
+                    
+                    <!-- Page Links -->
+                    <div class="flex items-center gap-6">
+                        <a href="/about" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">About</a>
+                        <a href="/contact" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Contact</a>
+                        <a href="/signup" class="get-coconuts-btn">Get Coconuts</a>
+                    </div>
                 </div>
+
+                <!-- Mobile menu button -->
+                <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile menu -->
+            <div id="mobileMenu" class="mobile-menu mt-4">
+                <a href="#deals" class="block py-2 text-gray-400 hover:text-white transition-colors">Deals</a>
+                <a href="#adventures" class="block py-2 text-gray-400 hover:text-white transition-colors">Adventures</a>
+                <a href="#audio" class="block py-2 text-gray-400 hover:text-white transition-colors">Audio</a>
+                <a href="#goods" class="block py-2 text-gray-400 hover:text-white transition-colors">Shop</a>
+                <div class="border-t border-gray-700 my-3"></div>
+                <a href="/about" class="block py-2 text-gray-400 hover:text-white transition-colors">About</a>
+                <a href="/contact" class="block py-2 text-gray-400 hover:text-white transition-colors">Contact</a>
+                <a href="/signup" class="block py-2 text-cyan-400 hover:text-cyan-300 transition-colors font-medium">Get Coconuts</a>
             </div>
         </div>
-    </header>
-    
-    <!-- Hero Section -->
-    <section class="min-h-[60vh] flex items-center justify-center px-4 pt-20">
-        <div class="max-w-4xl mx-auto text-center">
-            <h1 class="text-4xl md:text-6xl font-light mb-4">
-                <span class="text-pink-400">Aloha,</span> 
-                <span class="text-cyan-400">I'm Kai</span>
-                <span class="text-3xl ml-2">🌺</span>
-            </h1>
-            <p class="text-xl text-gray-300 mb-8">
-                Your AI local friend who knows Kauai's secrets
-            </p>
-            
-            <!-- Chat Interface -->
-            <div class="glass rounded-2xl p-6 max-w-2xl mx-auto">
-                <div class="flex gap-3">
-                    <input 
-                        type="text" 
-                        placeholder="Ask me anything about Kauai..." 
-                        class="flex-1 chat-input rounded-xl px-4 py-3 text-white placeholder-gray-400"
-                        id="chatInput"
-                    >
-                    <button onclick="askKai()" class="bg-gradient-to-r from-cyan-500 to-pink-500 px-6 py-3 rounded-xl text-white font-medium hover:opacity-90 transition">
-                        Ask
-                    </button>
+    </nav>
+
+    <!-- Hero Section - Enhanced -->
+    <section id="hero" class="min-h-screen relative overflow-hidden hero-gradient" style="padding-top: 80px;">
+        <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+        
+        <div class="relative z-10 min-h-screen flex flex-col justify-center px-4 md:px-6 pt-16 md:pt-24 pb-16">
+            <div class="max-w-5xl mx-auto w-full">
+                <div class="text-center mb-16">
+                    <h1 class="text-5xl md:text-8xl font-extralight mb-8 tracking-tight leading-none">
+                        <span style="color: #f8fafc;" class="font-extralight">Aloha, I'm </span>
+                        <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-light">
+                            Kai
+                        </span>
+                    </h1>
+                    <p class="text-xl md:text-2xl text-gray-300 font-light max-w-2xl mx-auto leading-relaxed">
+                        Your AI-powered local guide to Kauai
+                    </p>
                 </div>
                 
-                <!-- Quick Questions -->
-                <div class="mt-4 flex flex-wrap gap-2 justify-center">
-                    <button onclick="quickAsk('Where do locals eat?')" class="text-xs px-3 py-1 rounded-full border border-white/20 text-gray-400 hover:text-white hover:border-cyan-400/50 transition">
-                        Where do locals eat?
-                    </button>
-                    <button onclick="quickAsk('Best beach for kids?')" class="text-xs px-3 py-1 rounded-full border border-white/20 text-gray-400 hover:text-white hover:border-cyan-400/50 transition">
-                        Best beach for kids?
-                    </button>
-                    <button onclick="quickAsk('Rainy day activities?')" class="text-xs px-3 py-1 rounded-full border border-white/20 text-gray-400 hover:text-white hover:border-cyan-400/50 transition">
-                        Rainy day activities?
-                    </button>
-                    <button onclick="quickAsk('Secret sunset spots?')" class="text-xs px-3 py-1 rounded-full border border-white/20 text-gray-400 hover:text-white hover:border-cyan-400/50 transition">
-                        Secret sunset spots?
-                    </button>
+                <div class="mb-16">
+                    <div class="flex flex-wrap justify-center gap-3 md:gap-4">
+                        <button class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Where do locals eat?')">
+                            Local Eats
+                        </button>
+                        <button class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Best beaches for kids?')">
+                            Hidden Beaches
+                        </button>
+                        <button class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Epic adventures on Kauai?')">
+                            Adventures
+                        </button>
+                        <button class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Secret sunset spots?')">
+                            Sunset Spots
+                        </button>
+                        <button class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Audio guides available?')">
+                            Audio Guides
+                        </button>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Value Props -->
-            <div class="mt-8 flex flex-wrap justify-center gap-6 text-sm text-gray-400">
-                <span>✓ Real local knowledge</span>
-                <span>✓ Live deals</span>
-                <span>✓ Instant answers</span>
-                <span>✓ No tourist traps</span>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Adventures Section -->
-    <section class="py-16 px-4">
-        <div class="max-w-7xl mx-auto">
-            <div class="mb-8">
-                <h2 class="text-3xl md:text-4xl font-bold mb-2">
-                    Top Adventures <span class="text-cyan-400">This Week</span>
-                </h2>
-                <p class="text-gray-400">Voted by real visitors • Updated daily</p>
-            </div>
-            
-            <!-- Horizontal Scroll Container -->
-            <div class="scroll-container pb-4">
-                <div class="flex gap-4" style="width: max-content;">
-                    
-                    <!-- Adventure Card 1 -->
-                    <div class="glass rounded-xl w-80 overflow-hidden card-hover" onclick="openAdventureModal('north-shore')">
-                        <!-- Image placeholder -->
-                        <div class="h-48 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center">
-                            <span class="text-6xl">🌅</span>
+                
+                <!-- FIXED CHAT CONTAINER -->
+                <div class="max-w-4xl mx-auto mb-16 px-4">
+                    <div id="chatContainer" class="chat-container glass-morphism rounded-3xl p-6 md:p-8">
+                        <div class="chat-messages mb-6">
+                            <div id="messagesContainer" class="space-y-4">
+                                <!-- Messages will appear here -->
+                            </div>
                         </div>
                         
-                        <div class="p-5">
-                            <!-- Voting -->
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center gap-3">
-                                    <button class="vote-up transition" onclick="event.stopPropagation(); vote('up', 'north-shore')">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
-                                        </svg>
-                                    </button>
-                                    <span class="font-bold text-lg" id="votes-north-shore">847</span>
-                                    <button class="vote-down transition" onclick="event.stopPropagation(); vote('down', 'north-shore')">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <span class="text-xs px-2 py-1 bg-cyan-500/20 rounded-full text-cyan-400 font-semibold">
-                                    #1 Trending
-                                </span>
-                            </div>
-                            
-                            <h3 class="text-xl font-semibold mb-2">Epic North Shore Day</h3>
-                            <p class="text-sm text-gray-400 mb-3">
-                                Tunnels Beach at sunrise, Hanalei town, secret waterfall, local lunch spots
-                            </p>
-                            
-                            <!-- Meta info -->
-                            <div class="flex items-center gap-4 text-xs text-gray-500 mb-3">
-                                <span>⏱️ 8 hours</span>
-                                <span>👥 2-6 people</span>
-                                <span>💪 Moderate</span>
-                            </div>
-                            
-                            <!-- Cost -->
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-semibold">
-                                    <span class="coconut-bounce">🥥</span> 3 coconuts
-                                </span>
-                                <span class="text-xs text-gray-400">Click for details →</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Adventure Card 2 -->
-                    <div class="glass rounded-xl w-80 overflow-hidden card-hover" onclick="openAdventureModal('food-crawl')">
-                        <div class="h-48 bg-gradient-to-br from-pink-500/20 to-orange-500/20 flex items-center justify-center">
-                            <span class="text-6xl">🍜</span>
+                        <div class="flex gap-3 md:gap-4">
+                            <input 
+                                type="text" 
+                                placeholder="Ask me anything about Kauai..." 
+                                class="flex-1 chat-input rounded-2xl px-4 py-4 md:px-6 md:py-5 text-sm md:text-base font-light"
+                                id="chatInput"
+                                onkeypress="handleChatEnter(event)"
+                                onfocus="expandChat()"
+                            >
+                            <button onclick="sendMessage()" class="send-button px-5 py-4 md:px-7 md:py-5 rounded-2xl text-white font-medium flex-shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                            </button>
                         </div>
                         
-                        <div class="p-5">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center gap-3">
-                                    <button class="vote-up transition" onclick="event.stopPropagation(); vote('up', 'food-crawl')">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
-                                        </svg>
-                                    </button>
-                                    <span class="font-bold text-lg">623</span>
-                                    <button class="vote-down transition" onclick="event.stopPropagation(); vote('down', 'food-crawl')">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <span class="text-xs px-2 py-1 bg-pink-500/20 rounded-full text-pink-400 font-semibold">
-                                    Foodie Pick
-                                </span>
-                            </div>
-                            
-                            <h3 class="text-xl font-semibold mb-2">Local Food Crawl</h3>
-                            <p class="text-sm text-gray-400 mb-3">
-                                Pono Market poke, Hamura's saimin, food trucks, shave ice finale
-                            </p>
-                            
-                            <div class="flex items-center gap-4 text-xs text-gray-500 mb-3">
-                                <span>⏱️ 4 hours</span>
-                                <span>👥 2-4 people</span>
-                                <span>💪 Easy</span>
-                            </div>
-                            
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-semibold">
-                                    <span class="coconut-bounce">🥥</span> 2 coconuts
-                                </span>
-                                <span class="text-xs text-gray-400">Click for details →</span>
-                            </div>
+                        <div class="mt-6 text-center">
+                            <span class="text-sm font-medium" style="color: var(--text-muted);">
+                                20 free questions to start
+                            </span>
                         </div>
                     </div>
-                    
-                    <!-- Adventure Card 3 -->
-                    <div class="glass rounded-xl w-80 overflow-hidden card-hover">
-                        <div class="h-48 bg-gradient-to-br from-green-500/20 to-cyan-500/20 flex items-center justify-center">
-                            <span class="text-6xl">🏖️</span>
-                        </div>
-                        
-                        <div class="p-5">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center gap-3">
-                                    <button class="vote-up transition">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
-                                        </svg>
-                                    </button>
-                                    <span class="font-bold text-lg">445</span>
-                                    <button class="vote-down transition">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <span class="text-xs px-2 py-1 bg-green-500/20 rounded-full text-green-400 font-semibold">
-                                    Family Pick
-                                </span>
-                            </div>
-                            
-                            <h3 class="text-xl font-semibold mb-2">Perfect Beach Day</h3>
-                            <p class="text-sm text-gray-400 mb-3">
-                                Kid-friendly Poipu beaches, monk seals, tide pools, ice cream
-                            </p>
-                            
-                            <div class="flex items-center gap-4 text-xs text-gray-500 mb-3">
-                                <span>⏱️ 5 hours</span>
-                                <span>👥 Families</span>
-                                <span>💪 Easy</span>
-                            </div>
-                            
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-semibold">
-                                    <span class="coconut-bounce">🥥</span> 2 coconuts
-                                </span>
-                                <span class="text-xs text-gray-400">Click for details →</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- More cards would go here -->
-                    
+                </div>
+                
+                <div class="flex flex-col items-center gap-4">
+                    <button class="cta-button px-10 py-4 rounded-full font-medium text-base">
+                        Start Your Journey →
+                    </button>
+                    <p class="text-sm font-medium" style="color: var(--text-muted);">No signup required</p>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- Deals Section -->
-    <section class="py-16 px-4 bg-gradient-to-b from-transparent to-pink-500/5">
+    <section id="deals" class="py-24 md:py-32 px-4 bg-black relative z-10">
         <div class="max-w-7xl mx-auto">
-            <div class="mb-8">
-                <h2 class="text-3xl md:text-4xl font-bold mb-2">
-                    Live Deals <span class="text-pink-400">Right Now</span>
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="section-title text-4xl md:text-6xl mb-6">
+                    Exclusive 
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
+                        Deals
+                    </span>
                 </h2>
-                <p class="text-gray-400">Exclusive offers from local partners • Time sensitive</p>
+                <p class="section-subtitle text-lg md:text-xl" style="color: var(--text-secondary);">
+                    Real-time offers from local partners
+                </p>
             </div>
             
-            <div class="scroll-container pb-4">
-                <div class="flex gap-4" style="width: max-content;">
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-16">
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterDeals('all', this)">All</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="food" onclick="filterDeals('food', this)">Food</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="drinks" onclick="filterDeals('drinks', this)">Drinks</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="activities" onclick="filterDeals('activities', this)">Activities</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="shopping" onclick="filterDeals('shopping', this)">Shopping</span>
+            </div>
+            
+            <div class="scroll-container" id="dealsContainer">
+                <div class="flex gap-6 pb-4" style="width: max-content; padding-left: 1rem; padding-right: 1rem;">
                     
-                    <!-- Deal Card 1 -->
-                    <div class="glass rounded-xl w-72 p-6 card-hover" onclick="openDealModal('happy-hour')">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-3xl">🍕</span>
-                            <span class="px-2 py-1 bg-pink-500/20 rounded-full text-xs font-semibold text-pink-400 pulse">
-                                LIVE NOW
-                            </span>
-                        </div>
-                        <h4 class="font-semibold mb-2">Happy Hour Special</h4>
-                        <p class="text-sm text-gray-400 mb-4">
-                            Local spot, great vibes. Details unlocked with coconuts.
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm">
-                                <span class="coconut-bounce">🥥</span> 1 coconut
-                            </span>
-                            <span class="text-xs text-pink-400">3-6pm today</span>
+                    <!-- Deal 1 -->
+                    <div class="glass-card rounded-2xl deal-card fade-in-up" data-category="food" onclick="flipCard(this)">
+                        <div class="card-flip">
+                            <div class="card-front">
+                                <div class="partner-logo rounded-xl mb-4" style="color: #FB7185;">🍕</div>
+                                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Island Pizza Co</h3>
+                                <p class="discount-badge mb-2" style="color: #FB7185;">25% OFF</p>
+                                <p class="text-sm mb-3" style="color: var(--text-secondary);">Lunch specials only</p>
+                                <p class="text-sm font-medium" style="color: var(--text-muted);">🥥 Free</p>
+                            </div>
+                            <div class="card-back glass-card">
+                                <h3 class="text-lg font-semibold mb-4" style="color: var(--text-primary);">Deal Terms</h3>
+                                <div class="text-sm mb-6" style="color: var(--text-secondary);">
+                                    • 25% off lunch combos<br>
+                                    • Valid 11AM - 2PM<br>
+                                    • Dine-in or takeout
+                                </div>
+                                <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-4 py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-opacity">
+                                    Claim Deal
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    
-                    <!-- Deal Card 2 -->
-                    <div class="glass rounded-xl w-72 p-6 card-hover">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-3xl">🏄</span>
-                            <span class="px-2 py-1 bg-cyan-500/20 rounded-full text-xs font-semibold text-cyan-400">
-                                20% OFF
-                            </span>
-                        </div>
-                        <h4 class="font-semibold mb-2">Surf Lesson Deal</h4>
-                        <p class="text-sm text-gray-400 mb-4">
-                            Morning lessons, perfect conditions. Small groups only.
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm">
-                                <span class="coconut-bounce">🥥</span> 1 coconut
-                            </span>
-                            <span class="text-xs text-cyan-400">Tomorrow 7am</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Deal Card 3 -->
-                    <div class="glass rounded-xl w-72 p-6 card-hover">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-3xl">🍧</span>
-                            <span class="px-2 py-1 bg-green-500/20 rounded-full text-xs font-semibold text-green-400">
-                                FREE EXTRA
-                            </span>
-                        </div>
-                        <h4 class="font-semibold mb-2">Shave Ice Bonus</h4>
-                        <p class="text-sm text-gray-400 mb-4">
-                            Free topping at the best spot. Locals' favorite flavors.
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm">
-                                <span class="coconut-bounce">🥥</span> 1 coconut
-                            </span>
-                            <span class="text-xs text-green-400">All day</span>
+
+                    <!-- Deal 2 -->
+                    <div class="glass-card rounded-2xl deal-card fade-in-up" data-category="drinks" onclick="flipCard(this)">
+                        <div class="card-flip">
+                            <div class="card-front">
+                                <div class="partner-logo rounded-xl mb-4" style="color: #67E8F9;">☕</div>
+                                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Sunrise Coffee</h3>
+                                <p class="discount-badge mb-2" style="color: #67E8F9;">BOGO</p>
+                                <p class="text-sm mb-3" style="color: var(--text-secondary);">Any specialty drink</p>
+                                <p class="text-sm font-medium" style="color: var(--text-muted);">🥥 1</p>
+                            </div>
+                            <div class="card-back glass-card">
+                                <h3 class="text-lg font-semibold mb-4" style="color: var(--text-primary);">Deal Terms</h3>
+                                <div class="text-sm mb-6" style="color: var(--text-secondary);">
+                                    • Buy one get one free<br>
+                                    • All specialty drinks<br>
+                                    • Before 10AM daily
+                                </div>
+                                <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-4 py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-opacity">
+                                    Claim Deal
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    
-                    <!-- More deal cards -->
-                    
+
+                    <!-- Deal 3 -->
+                    <div class="glass-card rounded-2xl deal-card fade-in-up" data-category="activities" onclick="flipCard(this)">
+                        <div class="card-flip">
+                            <div class="card-front">
+                                <div class="partner-logo rounded-xl mb-4" style="color: #FB7185;">🏄</div>
+                                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Wave Riders</h3>
+                                <p class="discount-badge mb-2" style="color: #FB7185;">$30 OFF</p>
+                                <p class="text-sm mb-3" style="color: var(--text-secondary);">Surf lessons</p>
+                                <p class="text-sm font-medium" style="color: var(--text-muted);">🥥 2</p>
+                            </div>
+                            <div class="card-back glass-card">
+                                <h3 class="text-lg font-semibold mb-4" style="color: var(--text-primary);">Deal Terms</h3>
+                                <div class="text-sm mb-6" style="color: var(--text-secondary);">
+                                    • $30 off group lessons<br>
+                                    • All skill levels<br>
+                                    • Equipment included
+                                </div>
+                                <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-4 py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-opacity">
+                                    Claim Deal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deal 4 -->
+                    <div class="glass-card rounded-2xl deal-card fade-in-up" data-category="food" onclick="flipCard(this)">
+                        <div class="card-flip">
+                            <div class="card-front">
+                                <div class="partner-logo rounded-xl mb-4" style="color: #67E8F9;">🍜</div>
+                                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Poke Paradise</h3>
+                                <p class="discount-badge mb-2" style="color: #67E8F9;">$5 OFF</p>
+                                <p class="text-sm mb-3" style="color: var(--text-secondary);">Large bowls</p>
+                                <p class="text-sm font-medium" style="color: var(--text-muted);">🥥 1</p>
+                            </div>
+                            <div class="card-back glass-card">
+                                <h3 class="text-lg font-semibold mb-4" style="color: var(--text-primary);">Deal Terms</h3>
+                                <div class="text-sm mb-6" style="color: var(--text-secondary);">
+                                    • $5 off large bowls<br>
+                                    • Fresh daily catch<br>
+                                    • Min $20 purchase
+                                </div>
+                                <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-4 py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-opacity">
+                                    Claim Deal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deal 5 -->
+                    <div class="glass-card rounded-2xl deal-card fade-in-up" data-category="shopping" onclick="flipCard(this)">
+                        <div class="card-flip">
+                            <div class="card-front">
+                                <div class="partner-logo rounded-xl mb-4" style="color: #FB7185;">👕</div>
+                                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Island Threads</h3>
+                                <p class="discount-badge mb-2" style="color: #FB7185;">30% OFF</p>
+                                <p class="text-sm mb-3" style="color: var(--text-secondary);">All aloha shirts</p>
+                                <p class="text-sm font-medium" style="color: var(--text-muted);">🥥 Free</p>
+                            </div>
+                            <div class="card-back glass-card">
+                                <h3 class="text-lg font-semibold mb-4" style="color: var(--text-primary);">Deal Terms</h3>
+                                <div class="text-sm mb-6" style="color: var(--text-secondary);">
+                                    • 30% off all shirts<br>
+                                    • Local designs only<br>
+                                    • This week only
+                                </div>
+                                <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-4 py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-opacity">
+                                    Claim Deal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deal 6 -->
+                    <div class="glass-card rounded-2xl deal-card fade-in-up" data-category="drinks" onclick="flipCard(this)">
+                        <div class="card-flip">
+                            <div class="card-front">
+                                <div class="partner-logo rounded-xl mb-4" style="color: #67E8F9;">🍹</div>
+                                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Tiki Bar</h3>
+                                <p class="discount-badge mb-2" style="color: #67E8F9;">Happy Hour</p>
+                                <p class="text-sm mb-3" style="color: var(--text-secondary);">$5 mai tais</p>
+                                <p class="text-sm font-medium" style="color: var(--text-muted);">🥥 Free</p>
+                            </div>
+                            <div class="card-back glass-card">
+                                <h3 class="text-lg font-semibold mb-4" style="color: var(--text-primary);">Deal Terms</h3>
+                                <div class="text-sm mb-6" style="color: var(--text-secondary);">
+                                    • $5 mai tais<br>
+                                    • 3PM - 6PM daily<br>
+                                    • Bar seating only
+                                </div>
+                                <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-4 py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-opacity">
+                                    Claim Deal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+                
+                <!-- DOT NAVIGATION -->
+                <div class="scroll-navigation">
+                    <div class="nav-dot active" onclick="scrollToSection('dealsContainer', 0)"></div>
+                    <div class="nav-dot" onclick="scrollToSection('dealsContainer', 1)"></div>
+                    <div class="nav-dot" onclick="scrollToSection('dealsContainer', 2)"></div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-16">
+                <a href="/deals" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors text-base font-medium">
+                    View All Deals
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
             </div>
         </div>
     </section>
-    
-    <!-- Audio Guides Section -->
-    <section class="py-16 px-4">
+
+    <!-- Adventures Section -->
+    <section id="adventures" class="py-24 md:py-32 px-4 bg-black relative z-10">
         <div class="max-w-7xl mx-auto">
-            <div class="mb-8">
-                <h2 class="text-3xl md:text-4xl font-bold mb-2">
-                    Audio Guides <span class="text-purple-400">Listen & Explore</span>
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="section-title text-4xl md:text-6xl mb-6">
+                    Curated
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
+                        Adventures
+                    </span>
                 </h2>
-                <p class="text-gray-400">Stories and secrets while you drive or hike</p>
+                <p class="section-subtitle text-lg md:text-xl" style="color: var(--text-secondary);">
+                    Real experiences designed by someone who actually lives here
+                </p>
             </div>
             
-            <div class="scroll-container pb-4">
-                <div class="flex gap-4" style="width: max-content;">
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-16">
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterAdventures('all', this)">All</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="surfing" onclick="filterAdventures('surfing', this)">Surfing</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="family" onclick="filterAdventures('family', this)">Family</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="sports" onclick="filterAdventures('sports', this)">Sports</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="wellness" onclick="filterAdventures('wellness', this)">Wellness</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="snorkeling" onclick="filterAdventures('snorkeling', this)">Snorkeling</span>
+            </div>
+            
+            <div class="scroll-container">
+                <div class="flex gap-6 pb-4" style="width: max-content; padding-left: 1rem; padding-right: 1rem;">
                     
-                    <!-- Audio Card 1 -->
-                    <div class="glass rounded-xl w-80 p-6 card-hover">
-                        <div class="flex items-center gap-4">
-                            <button class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center hover:scale-105 transition">
-                                <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
-                            </button>
-                            
-                            <div class="flex-1">
-                                <h4 class="font-semibold mb-1">Hanalei Bay Stories</h4>
-                                <p class="text-sm text-gray-400 mb-2">
-                                    Legends and Hollywood secrets
-                                </p>
-                                <div class="flex items-center gap-4 text-xs text-gray-500">
-                                    <span>🎧 3:45</span>
-                                    <span>⬆️ 234</span>
-                                    <span class="text-purple-400">Free preview</span>
+                    <!-- Adventure 1 -->
+                    <div class="adventure-card fade-in-up cursor-pointer" data-category="surfing,half-day" onclick="window.location.href='/adventures/hanalei-surf-adventure'">
+                        <div class="adventure-image relative">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755917646940-EZLYMMX2IE6EVGWBMNB3/unsplash-image-5ZLDGa6Acug.jpg?format=750w" alt="Hanalei Bay" class="w-full h-full object-cover">
+                        </div>
+                        <div class="adventure-content p-6">
+                            <div class="author-info mb-6">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="author-avatar">
+                                <div>
+                                    <h4 class="text-sm font-semibold" style="color: var(--text-primary);">Henry</h4>
+                                    <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);" onclick="event.stopPropagation();">AlohaHenry.com</a>
                                 </div>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Hanalei Surf Adventure</h3>
+                            <p class="text-sm mb-6 leading-relaxed" style="color: var(--text-secondary);">
+                                Breakfast, board rental, beginner-friendly waves, and post-surf lunch
+                            </p>
+                            
+                            <div class="flex gap-2 mb-6 flex-wrap">
+                                <span class="badge badge-gray">🏄‍♂️ Surf</span>
+                                <span class="badge badge-gray">⏰ Half Day</span>
+                                <span class="badge badge-gray">📍 Hanalei</span>
+                            </div>
+                            
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-6" style="color: var(--text-muted);">
+                                <span>⏱️ 5 hours</span>
+                                <span>🏃‍♂️ Easy</span>
+                                <span>👥 2-6 people</span>
+                            </div>
+                            
+                            <div class="text-center text-cyan-400 text-sm font-semibold">
+                                View Details & Tips →
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Audio Card 2 -->
-                    <div class="glass rounded-xl w-80 p-6 card-hover">
-                        <div class="flex items-center gap-4">
-                            <button class="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-full flex items-center justify-center hover:scale-105 transition">
-                                <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
-                            </button>
-                            
-                            <div class="flex-1">
-                                <h4 class="font-semibold mb-1">Road to Hana Guide</h4>
-                                <p class="text-sm text-gray-400 mb-2">
-                                    Turn-by-turn hidden spots
-                                </p>
-                                <div class="flex items-center gap-4 text-xs text-gray-500">
-                                    <span>🎧 12:30</span>
-                                    <span>⬆️ 567</span>
-                                    <span>🥥 2</span>
+
+                    <!-- Adventure 2 -->
+                    <div class="adventure-card fade-in-up cursor-pointer" data-category="family,half-day" onclick="window.location.href='/adventures/perfect-kids-beach-day'">
+                        <div class="adventure-image relative">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/9813df8b-695a-4b38-a9aa-a2536270c694/LN6.jpeg?format=750w" alt="Lae Nani Beach family day" class="w-full h-full object-cover">
+                        </div>
+                        <div class="adventure-content p-6">
+                            <div class="author-info mb-6">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="author-avatar">
+                                <div>
+                                    <h4 class="text-sm font-semibold" style="color: var(--text-primary);">Henry</h4>
+                                    <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);" onclick="event.stopPropagation();">AlohaHenry.com</a>
                                 </div>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Perfect Kids' Beach Day</h3>
+                            <p class="text-sm mb-6 leading-relaxed" style="color: var(--text-secondary);">
+                                Fresh malasadas from Passion Bakery, protected lagoon, and beachfront lunch
+                            </p>
+                            
+                            <div class="flex gap-2 mb-6 flex-wrap">
+                                <span class="badge badge-gray">👨‍👩‍👧‍👦 Family</span>
+                                <span class="badge badge-gray">🏖️ East Side</span>
+                                <span class="badge badge-gray">⏰ Half Day</span>
+                            </div>
+                            
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-6" style="color: var(--text-muted);">
+                                <span>⏱️ 4 hours</span>
+                                <span>👶 Easy</span>
+                                <span>👨‍👩‍👧‍👦 Perfect for kids</span>
+                            </div>
+                            
+                            <div class="text-center text-cyan-400 text-sm font-semibold">
+                                View Details & Tips →
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Audio Card 3 -->
-                    <div class="glass rounded-xl w-80 p-6 card-hover">
-                        <div class="flex items-center gap-4">
-                            <button class="w-16 h-16 bg-gradient-to-br from-green-500 to-cyan-500 rounded-full flex items-center justify-center hover:scale-105 transition">
-                                <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
-                            </button>
-                            
-                            <div class="flex-1">
-                                <h4 class="font-semibold mb-1">Waimea Canyon Tour</h4>
-                                <p class="text-sm text-gray-400 mb-2">
-                                    Viewpoints and geology
-                                </p>
-                                <div class="flex items-center gap-4 text-xs text-gray-500">
-                                    <span>🎧 8:15</span>
-                                    <span>⬆️ 412</span>
-                                    <span>🥥 2</span>
+
+                    <!-- Adventure 3 -->
+                    <div class="adventure-card fade-in-up cursor-pointer" data-category="sports,full-day" onclick="window.location.href='/adventures/epic-football-weekend'">
+                        <div class="adventure-image relative">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923190288-25YEVNPQSONE1LB9B4XU/unsplash-image-QrLLRsw73uA.jpg?format=750w" alt="Beachfront football watching" class="w-full h-full object-cover">
+                        </div>
+                        <div class="adventure-content p-6">
+                            <div class="author-info mb-6">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="author-avatar">
+                                <div>
+                                    <h4 class="text-sm font-semibold" style="color: var(--text-primary);">Henry</h4>
+                                    <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);" onclick="event.stopPropagation();">AlohaHenry.com</a>
                                 </div>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Epic Football Weekend</h3>
+                            <p class="text-sm mb-6 leading-relaxed" style="color: var(--text-secondary);">
+                                Sunrise beers, bourbon house, and wings - all walkable on the East Side
+                            </p>
+                            
+                            <div class="flex gap-2 mb-6 flex-wrap">
+                                <span class="badge badge-gray">🏈 Sports</span>
+                                <span class="badge badge-gray">🌅 East Side</span>
+                                <span class="badge badge-gray">🍻 All Day</span>
+                            </div>
+                            
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-6" style="color: var(--text-muted);">
+                                <span>⏱️ 12 hours</span>
+                                <span>🍺 Easy</span>
+                                <span>👥 2-8 people</span>
+                            </div>
+                            
+                            <div class="text-center text-cyan-400 text-sm font-semibold">
+                                View Details & Tips →
                             </div>
                         </div>
                     </div>
-                    
+
+                    <!-- Adventure 4 -->
+                    <div class="adventure-card fade-in-up cursor-pointer" data-category="beach,full-day" onclick="window.location.href='/adventures/poipu-beach-turtle-watch'">
+                        <div class="adventure-image relative">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923394688-SYSF41OEDI34O2ZVLVAX/unsplash-image-GqEFbD-vgBs.jpg?format=750w" alt="Poipu Beach turtles" class="w-full h-full object-cover">
+                        </div>
+                        <div class="adventure-content p-6">
+                            <div class="author-info mb-6">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="author-avatar">
+                                <div>
+                                    <h4 class="text-sm font-semibold" style="color: var(--text-primary);">Henry</h4>
+                                    <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);" onclick="event.stopPropagation();">AlohaHenry.com</a>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Poipu Beach + Turtle Watch</h3>
+                            <p class="text-sm mb-6 leading-relaxed" style="color: var(--text-secondary);">
+                                America's best beach, turtle watching at sunset, and gourmet dinner
+                            </p>
+                            
+                            <div class="flex gap-2 mb-6 flex-wrap">
+                                <span class="badge badge-gray">🐢 Turtles</span>
+                                <span class="badge badge-gray">🏖️ Poipu</span>
+                                <span class="badge badge-gray">🌅 Full Day</span>
+                            </div>
+                            
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-6" style="color: var(--text-muted);">
+                                <span>⏱️ 8 hours</span>
+                                <span>🌊 Easy</span>
+                                <span>👥 2-6 people</span>
+                            </div>
+                            
+                            <div class="text-center text-cyan-400 text-sm font-semibold">
+                                View Details & Tips →
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Adventure 5 -->
+                    <div class="adventure-card fade-in-up cursor-pointer" data-category="snorkeling,family" onclick="window.location.href='/adventures/anini-snorkel-lighthouse'">
+                        <div class="adventure-image relative">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923533561-BUQSQX02CQ7G4COH2MJQ/unsplash-image-9y7y26C-l4Y.jpg?format=750w" alt="Anini Beach snorkeling" class="w-full h-full object-cover">
+                        </div>
+                        <div class="adventure-content p-6">
+                            <div class="author-info mb-6">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="author-avatar">
+                                <div>
+                                    <h4 class="text-sm font-semibold" style="color: var(--text-primary);">Henry</h4>
+                                    <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);" onclick="event.stopPropagation();">AlohaHenry.com</a>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Anini Snorkel + Lighthouse</h3>
+                            <p class="text-sm mb-6 leading-relaxed" style="color: var(--text-secondary);">
+                                Protected reef snorkeling, epic fish tacos, and historic lighthouse visit
+                            </p>
+                            
+                            <div class="flex gap-2 mb-6 flex-wrap">
+                                <span class="badge badge-gray">🤿 Snorkel</span>
+                                <span class="badge badge-gray">🌊 North Shore</span>
+                                <span class="badge badge-gray">📸 Lighthouse</span>
+                            </div>
+                            
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-6" style="color: var(--text-muted);">
+                                <span>⏱️ 6 hours</span>
+                                <span>🐠 Easy</span>
+                                <span>👨‍👩‍👧‍👦 Family</span>
+                            </div>
+                            
+                            <div class="text-center text-cyan-400 text-sm font-semibold">
+                                View Details & Tips →
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Adventure 6 -->
+                    <div class="adventure-card fade-in-up cursor-pointer" data-category="wellness,half-day" onclick="window.location.href='/adventures/yoga-north-shore'">
+                        <div class="adventure-image relative">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755924297895-TM6E1SA0Z46H52SRKGV7/unsplash-image-n8L1VYaypcw.jpg?format=750w" alt="Sunrise yoga Hanalei Bay" class="w-full h-full object-cover">
+                        </div>
+                        <div class="adventure-content p-6">
+                            <div class="author-info mb-6">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="author-avatar">
+                                <div>
+                                    <h4 class="text-sm font-semibold" style="color: var(--text-primary);">Henry</h4>
+                                    <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);" onclick="event.stopPropagation();">AlohaHenry.com</a>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Yoga North Shore</h3>
+                            <p class="text-sm mb-6 leading-relaxed" style="color: var(--text-secondary);">
+                                Sunrise beach yoga, Hanalei town wandering, and spa or studio afternoon
+                            </p>
+                            
+                            <div class="flex gap-2 mb-6 flex-wrap">
+                                <span class="badge badge-gray">🧘‍♀️ Yoga</span>
+                                <span class="badge badge-gray">🌅 Sunrise</span>
+                                <span class="badge badge-gray">💆‍♀️ Wellness</span>
+                            </div>
+                            
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-6" style="color: var(--text-muted);">
+                                <span>⏱️ 6 hours</span>
+                                <span>🧘‍♀️ Gentle</span>
+                                <span>👥 1-4 people</span>
+                            </div>
+                            
+                            <div class="text-center text-cyan-400 text-sm font-semibold">
+                                View Details & Tips →
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+            </div>
+            
+            <div class="text-center mt-16">
+                <a href="/adventures" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors text-base font-medium">
+                    View All Adventures
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
             </div>
         </div>
     </section>
-    
+
+    <!-- Audio Section -->
+    <section id="audio" class="py-24 md:py-32 px-4 bg-black relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="section-title text-4xl md:text-6xl mb-6">
+                    Audio
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
+                        Stories
+                    </span>
+                </h2>
+                <p class="section-subtitle text-lg md:text-xl" style="color: var(--text-secondary);">
+                    Deep dives into Kauai's nature, history, and culture
+                </p>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-16">
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterAudio('all', this)">All</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="history" onclick="filterAudio('history', this)">History</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="culture" onclick="filterAudio('culture', this)">Culture</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="nature" onclick="filterAudio('nature', this)">Nature</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="legends" onclick="filterAudio('legends', this)">Legends</span>
+            </div>
+            
+            <div class="scroll-container">
+                <div class="swipe-hint visible">
+                    <span class="swipe-arrow">›</span>
+                </div>
+                <div class="flex gap-6 pb-4" style="width: max-content; padding-left: 1rem; padding-right: 1rem;">
+                    
+                    <!-- Audio 1 -->
+                    <div class="audio-card fade-in-up" data-category="nature">
+                        <div class="audio-duration">🎧 3 min</div>
+                        <div class="play-button">▶</div>
+                        <div class="relative z-2">
+                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">Why Whales Love Kauai</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Marine biology deep dive</p>
+                            <div class="flex gap-2">
+                                <span class="badge badge-gray">Marine Life</span>
+                                <span class="badge badge-gray">🥥 Free</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audio 2 -->
+                    <div class="audio-card fade-in-up" data-category="legends">
+                        <div class="audio-duration">🎧 5 min</div>
+                        <div class="play-button">▶</div>
+                        <div class="relative z-2">
+                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">Ancient Kauai Legends</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Mystical island stories</p>
+                            <div class="flex gap-2">
+                                <span class="badge badge-gray">Culture</span>
+                                <span class="badge badge-gray">🥥 Free</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audio 3 -->
+                    <div class="audio-card fade-in-up" data-category="history">
+                        <div class="audio-duration">🎧 4 min</div>
+                        <div class="play-button">▶</div>
+                        <div class="relative z-2">
+                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">The Last Kingdom</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Kauai's royal history</p>
+                            <div class="flex gap-2">
+                                <span class="badge badge-gray">History</span>
+                                <span class="badge badge-gray">🥥 Free</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audio 4 -->
+                    <div class="audio-card fade-in-up" data-category="history">
+                        <div class="audio-duration">🎧 6 min</div>
+                        <div class="play-button">▶</div>
+                        <div class="relative z-2">
+                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">Hurricane Iniki Story</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Survival and rebuilding</p>
+                            <div class="flex gap-2">
+                                <span class="badge badge-gray">History</span>
+                                <span class="badge badge-pink">🥥 1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audio 5 -->
+                    <div class="audio-card fade-in-up" data-category="nature">
+                        <div class="audio-duration">🎧 3 min</div>
+                        <div class="play-button">▶</div>
+                        <div class="relative z-2">
+                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">Secret Beach Tales</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Hidden spots revealed</p>
+                            <div class="flex gap-2">
+                                <span class="badge badge-gray">Beaches</span>
+                                <span class="badge badge-pink">🥥 1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="text-center mt-16">
+                <a href="/audio" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors text-base font-medium">
+                    View All Audio Stories
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Goods Section -->
-    <section class="py-16 px-4 bg-gradient-to-b from-transparent to-purple-500/5">
+    <section id="goods" class="py-24 md:py-32 px-4 bg-black relative z-10">
         <div class="max-w-7xl mx-auto">
-            <div class="mb-8">
-                <h2 class="text-3xl md:text-4xl font-bold mb-2">
-                    Island Goods <span class="text-yellow-400">Take Kauai Home</span>
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="section-title text-4xl md:text-6xl mb-6">
+                    Island
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
+                        Essentials
+                    </span>
                 </h2>
-                <p class="text-gray-400">Digital guides, merch, and local favorites</p>
+                <p class="section-subtitle text-lg md:text-xl" style="color: var(--text-secondary);">
+                    Curated gear & local favorites
+                </p>
             </div>
             
-            <div class="scroll-container pb-4">
-                <div class="flex gap-4" style="width: max-content;">
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-16">
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterProducts('all', this)">All</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="beach-gear" onclick="filterProducts('beach-gear', this)">Beach Gear</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="local-goods" onclick="filterProducts('local-goods', this)">Local Goods</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="essentials" onclick="filterProducts('essentials', this)">Essentials</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="apparel" onclick="filterProducts('apparel', this)">Apparel</span>
+            </div>
+            
+            <div class="scroll-container">
+                <div class="flex gap-6 pb-4" style="width: max-content; padding-left: 1rem; padding-right: 1rem;">
                     
-                    <!-- Product Card 1 -->
-                    <div class="glass rounded-xl w-64 overflow-hidden card-hover">
-                        <div class="h-40 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 flex items-center justify-center">
-                            <span class="text-5xl">📱</span>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-semibold mb-2">Complete Digital Guide</h4>
-                            <p class="text-sm text-gray-400 mb-3">
-                                Everything Kai knows in PDF
-                            </p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-semibold">
-                                    <span class="coconut-bounce">🥥</span> 5
-                                </span>
-                                <button class="text-xs text-yellow-400 hover:text-yellow-300">
-                                    Get it →
-                                </button>
+                    <!-- Product 1 -->
+                    <div class="goods-card fade-in-up" data-category="essentials,beach-gear">
+                        <div class="goods-image">🧴</div>
+                        <div class="goods-content">
+                            <h3 class="text-lg font-semibold mb-3">Reef-Safe Sunscreen</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Hawaii approved, actually works</p>
+                            <div class="flex gap-2 mb-4 flex-wrap">
+                                <span class="badge badge-gray">Essential</span>
+                                <span class="badge badge-gray">Eco-Safe</span>
                             </div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-2xl font-bold" style="color: var(--text-primary);">$24</span>
+                                <span class="badge badge-pink">🥥 10</span>
+                            </div>
+                            <span class="text-sm font-medium" style="color: var(--text-muted);">⭐ 4.8 (234 reviews)</span>
                         </div>
                     </div>
-                    
-                    <!-- Product Card 2 -->
-                    <div class="glass rounded-xl w-64 overflow-hidden card-hover">
-                        <div class="h-40 bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center">
-                            <span class="text-5xl">🧢</span>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-semibold mb-2">Kai Trucker Hat</h4>
-                            <p class="text-sm text-gray-400 mb-3">
-                                Limited edition island vibes
-                            </p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-semibold">
-                                    <span class="coconut-bounce">🥥</span> 8
-                                </span>
-                                <button class="text-xs text-yellow-400 hover:text-yellow-300">
-                                    Order →
-                                </button>
+
+                    <!-- Product 2 -->
+                    <div class="goods-card fade-in-up" data-category="local-goods">
+                        <div class="goods-image">☕</div>
+                        <div class="goods-content">
+                            <h3 class="text-lg font-semibold mb-3">Kauai Coffee Beans</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Single-origin island grown</p>
+                            <div class="flex gap-2 mb-4 flex-wrap">
+                                <span class="badge badge-gray">Local</span>
+                                <span class="badge badge-gray">Bestseller</span>
                             </div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-2xl font-bold" style="color: var(--text-primary);">$18</span>
+                                <span class="badge badge-pink">🥥 8</span>
+                            </div>
+                            <span class="text-sm font-medium" style="color: var(--text-muted);">⭐ 4.9 (567 reviews)</span>
                         </div>
                     </div>
-                    
-                    <!-- Product Card 3 -->
-                    <div class="glass rounded-xl w-64 overflow-hidden card-hover">
-                        <div class="h-40 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center">
-                            <span class="text-5xl">🌺</span>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-semibold mb-2">Sticker Pack</h4>
-                            <p class="text-sm text-gray-400 mb-3">
-                                Waterproof Kauai designs
-                            </p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-semibold">
-                                    <span class="coconut-bounce">🥥</span> 3
-                                </span>
-                                <button class="text-xs text-yellow-400 hover:text-yellow-300">
-                                    Get it →
-                                </button>
+
+                    <!-- Product 3 -->
+                    <div class="goods-card fade-in-up" data-category="beach-gear,essentials">
+                        <div class="goods-image">👟</div>
+                        <div class="goods-content">
+                            <h3 class="text-lg font-semibold mb-3">Reef Walking Shoes</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Essential for rocky beaches</p>
+                            <div class="flex gap-2 mb-4 flex-wrap">
+                                <span class="badge badge-gray">Safety</span>
+                                <span class="badge badge-gray">Essential</span>
                             </div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-2xl font-bold" style="color: var(--text-primary);">$32</span>
+                                <span class="badge badge-pink">🥥 15</span>
+                            </div>
+                            <span class="text-sm font-medium" style="color: var(--text-muted);">⭐ 4.7 (189 reviews)</span>
                         </div>
                     </div>
-                    
+
+                    <!-- Product 4 -->
+                    <div class="goods-card fade-in-up" data-category="beach-gear">
+                        <div class="goods-image">🤿</div>
+                        <div class="goods-content">
+                            <h3 class="text-lg font-semibold mb-3">Pro Snorkel Set</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Anti-fog, perfect fit guarantee</p>
+                            <div class="flex gap-2 mb-4 flex-wrap">
+                                <span class="badge badge-gray">Pro Grade</span>
+                                <span class="badge badge-gray">Popular</span>
+                            </div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-2xl font-bold" style="color: var(--text-primary);">$45</span>
+                                <span class="badge badge-pink">🥥 20</span>
+                            </div>
+                            <span class="text-sm font-medium" style="color: var(--text-muted);">⭐ 4.6 (412 reviews)</span>
+                        </div>
+                    </div>
+
+                    <!-- Product 5 -->
+                    <div class="goods-card fade-in-up" data-category="apparel,local-goods">
+                        <div class="goods-image">👕</div>
+                        <div class="goods-content">
+                            <h3 class="text-lg font-semibold mb-3">Authentic Aloha Shirt</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Made in Hawaii, vintage designs</p>
+                            <div class="flex gap-2 mb-4 flex-wrap">
+                                <span class="badge badge-gray">Authentic</span>
+                                <span class="badge badge-gray">Gift Idea</span>
+                            </div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-2xl font-bold" style="color: var(--text-primary);">$65</span>
+                                <span class="badge badge-pink">🥥 30</span>
+                            </div>
+                            <span class="text-sm font-medium" style="color: var(--text-muted);">⭐ 4.8 (298 reviews)</span>
+                        </div>
+                    </div>
+
+                    <!-- Product 6 -->
+                    <div class="goods-card fade-in-up" data-category="beach-gear,essentials">
+                        <div class="goods-image">🎒</div>
+                        <div class="goods-content">
+                            <h3 class="text-lg font-semibold mb-3">Waterproof Day Pack</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Perfect for beach & hikes</p>
+                            <div class="flex gap-2 mb-4 flex-wrap">
+                                <span class="badge badge-gray">Waterproof</span>
+                                <span class="badge badge-gray">Durable</span>
+                            </div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-2xl font-bold" style="color: var(--text-primary);">$38</span>
+                                <span class="badge badge-pink">🥥 17</span>
+                            </div>
+                            <span class="text-sm font-medium" style="color: var(--text-muted);">⭐ 4.7 (156 reviews)</span>
+                        </div>
+                    </div>
+
                 </div>
+            </div>
+            
+            <div class="text-center mt-16">
+                <a href="/shop" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors text-base font-medium">
+                    View All Products
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
             </div>
         </div>
     </section>
-    
-    <!-- Adventure Modal -->
-    <div id="adventureModal" class="modal">
-        <div class="glass rounded-2xl max-w-2xl w-full mx-4 p-8">
-            <div class="flex justify-between items-start mb-6">
-                <h3 class="text-2xl font-bold">Epic North Shore Day</h3>
-                <button onclick="closeModal('adventureModal')" class="text-gray-400 hover:text-white">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
+
+    <!-- Top 10 Trending Section - MOVED TO BOTTOM -->
+    <section id="trending" class="py-24 md:py-32 px-4 bg-black relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="section-title text-4xl md:text-6xl mb-6">
+                    Top 10
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
+                        Trending
+                    </span>
+                </h2>
+                <p class="section-subtitle text-lg md:text-xl" style="color: var(--text-secondary);">
+                    This week's most popular across all categories
+                </p>
             </div>
             
-            <div class="mb-6">
-                <h4 class="font-semibold text-green-400 mb-3">✅ Free Preview:</h4>
-                <ul class="space-y-2 text-gray-300">
-                    <li>• Start at Tunnels Beach</li>
-                    <li>• Breakfast in Hanalei</li>
-                    <li>• Secret waterfall hike</li>
-                    <li>• Sunset at the pier</li>
-                </ul>
+            <div class="scroll-container">
+                <div class="flex gap-4 pb-4 justify-center" style="width: max-content; padding-left: 1rem; padding-right: 1rem;">
+                    
+                    <!-- Trending 1 -->
+                    <div class="trending-card fade-in-up" onclick="window.location.href='/adventures/hanalei-surf-adventure'">
+                        <div class="trending-number">1</div>
+                        <div class="trending-icon">🏄‍♂️</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-cyan);">Adventure</div>
+                            <div class="trending-title">Hanalei Surf</div>
+                            <div class="trending-description">Beginner-friendly waves</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 2 -->
+                    <div class="trending-card fade-in-up" onclick="flipCard(this.parentElement)">
+                        <div class="trending-number">2</div>
+                        <div class="trending-icon">🍕</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-pink);">Deal</div>
+                            <div class="trending-title">Pizza 25% OFF</div>
+                            <div class="trending-description">Island Pizza Co</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 3 -->
+                    <div class="trending-card fade-in-up">
+                        <div class="trending-number">3</div>
+                        <div class="trending-icon">🎧</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-cyan);">Audio</div>
+                            <div class="trending-title">Whale Stories</div>
+                            <div class="trending-description">Marine biology deep dive</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 4 -->
+                    <div class="trending-card fade-in-up">
+                        <div class="trending-number">4</div>
+                        <div class="trending-icon">🧴</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-pink);">Gear</div>
+                            <div class="trending-title">Reef Sunscreen</div>
+                            <div class="trending-description">Hawaii approved</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 5 -->
+                    <div class="trending-card fade-in-up" onclick="window.location.href='/adventures/perfect-kids-beach-day'">
+                        <div class="trending-number">5</div>
+                        <div class="trending-icon">👨‍👩‍👧‍👦</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-cyan);">Adventure</div>
+                            <div class="trending-title">Kids Beach Day</div>
+                            <div class="trending-description">Family favorite</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 6 -->
+                    <div class="trending-card fade-in-up">
+                        <div class="trending-number">6</div>
+                        <div class="trending-icon">🍹</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-pink);">Deal</div>
+                            <div class="trending-title">$5 Mai Tais</div>
+                            <div class="trending-description">Happy hour special</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 7 -->
+                    <div class="trending-card fade-in-up">
+                        <div class="trending-number">7</div>
+                        <div class="trending-icon">🎧</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-cyan);">Audio</div>
+                            <div class="trending-title">Ancient Legends</div>
+                            <div class="trending-description">Island mystical stories</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 8 -->
+                    <div class="trending-card fade-in-up">
+                        <div class="trending-number">8</div>
+                        <div class="trending-icon">🤿</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-pink);">Gear</div>
+                            <div class="trending-title">Pro Snorkel Set</div>
+                            <div class="trending-description">Anti-fog guarantee</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 9 -->
+                    <div class="trending-card fade-in-up">
+                        <div class="trending-number">9</div>
+                        <div class="trending-icon">☕</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-cyan);">Deal</div>
+                            <div class="trending-title">BOGO Coffee</div>
+                            <div class="trending-description">Sunrise Coffee</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 10 -->
+                    <div class="trending-card fade-in-up">
+                        <div class="trending-number">10</div>
+                        <div class="trending-icon">🏄</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-pink);">Deal</div>
+                            <div class="trending-title">Surf Lessons</div>
+                            <div class="trending-description">$30 off group lessons</div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
             
-            <div class="mb-6 p-4 bg-black/30 rounded-xl">
-                <h4 class="font-semibold text-cyan-400 mb-3">🔒 Unlock with 3 Coconuts:</h4>
-                <ul class="space-y-2 text-gray-400">
-                    <li>• Exact timing for zero crowds</li>
-                    <li>• Secret parking spots (save $20)</li>
-                    <li>• Hidden trail to the best viewpoint</li>
-                    <li>• Local's lunch spot (not on Google)</li>
-                    <li>• Weather contingency plans</li>
-                    <li>• Photo spots locals keep secret</li>
-                </ul>
+            <div class="text-center mt-16">
+                <p class="text-base font-medium mb-4" style="color: var(--text-secondary);">
+                    Updated daily based on what visitors are loving most
+                </p>
             </div>
-            
-            <button onclick="unlockAdventure()" class="w-full bg-gradient-to-r from-cyan-500 to-pink-500 py-3 rounded-xl text-white font-medium hover:opacity-90 transition">
-                Unlock Full Details (3 🥥)
-            </button>
         </div>
-    </div>
-    
-    <!-- Deal Modal -->
-    <div id="dealModal" class="modal">
-        <div class="glass rounded-2xl max-w-md w-full mx-4 p-8">
-            <div class="flex justify-between items-start mb-6">
-                <h3 class="text-2xl font-bold">Happy Hour Special</h3>
-                <button onclick="closeModal('dealModal')" class="text-gray-400 hover:text-white">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-            
-            <div class="mb-6 text-center">
-                <p class="text-gray-400 mb-4">This exclusive deal is available for the next:</p>
-                <div class="text-3xl font-bold text-pink-400">2:34:15</div>
-            </div>
-            
-            <div class="mb-6 p-4 bg-black/30 rounded-xl text-center">
-                <p class="text-gray-400 mb-2">Unlock location and details for</p>
-                <p class="text-2xl font-bold">1 Coconut 🥥</p>
-            </div>
-            
-            <button onclick="unlockDeal()" class="w-full bg-gradient-to-r from-pink-500 to-orange-500 py-3 rounded-xl text-white font-medium hover:opacity-90 transition">
-                Reveal Deal (1 🥥)
-            </button>
-        </div>
-    </div>
-    
+    </section>
+
     <!-- Footer -->
-    <footer class="py-12 px-4 border-t border-white/10 mt-20">
-        <div class="max-w-7xl mx-auto text-center">
-            <p class="text-gray-500 mb-4">Built with 🌺 by locals who actually live here</p>
-            <div class="flex gap-6 justify-center text-sm">
-                <a href="#" class="text-gray-400 hover:text-white transition">About</a>
-                <a href="#" class="text-gray-400 hover:text-white transition">For Businesses</a>
-                <a href="#" class="text-gray-400 hover:text-white transition">Contact</a>
+    <footer class="py-20 border-t border-gray-900">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Logo & Tagline -->
+                <div class="md:col-span-1">
+                    <div class="mb-4">
+                        <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="text-2xl font-light">
+                            AlohaKai
+                        </span>
+                    </div>
+                    <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                        Your AI-powered local guide to the Garden Isle
+                    </p>
+                </div>
+
+                <!-- Company -->
+                <div>
+                    <h4 class="text-sm font-semibold mb-6" style="color: var(--text-primary);">Company</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/about" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">About Us</a></li>
+                        <li><a href="/contact" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Contact</a></li>
+                        <li><a href="/careers" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Careers</a></li>
+                        <li><a href="/blog" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Blog</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div>
+                    <h4 class="text-sm font-semibold mb-6" style="color: var(--text-primary);">Support</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/help" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Help Center</a></li>
+                        <li><a href="/faq" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">FAQ</a></li>
+                        <li><a href="/privacy" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Privacy Policy</a></li>
+                        <li><a href="/terms" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Connect -->
+                <div>
+                    <h4 class="text-sm font-semibold mb-6" style="color: var(--text-primary);">Connect</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Instagram</a></li>
+                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Twitter</a></li>
+                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">YouTube</a></li>
+                        <li><a href="/newsletter" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Newsletter</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-16 pt-8 text-center">
+                <p class="text-sm" style="color: var(--text-muted);">
+                    © 2025 AlohaKai. Made with aloha in Kauai.
+                </p>
             </div>
         </div>
     </footer>
-    
+
     <script>
-        // Coconut management
         let coconuts = 20;
+        let chatExpanded = false;
         
-        function updateCoconuts(amount) {
-            coconuts += amount;
-            document.getElementById('coconutCount').textContent = coconuts;
-        }
-        
-        // Chat functions
-        function askKai() {
-            const input = document.getElementById('chatInput');
-            const question = input.value.trim();
-            if (question && coconuts > 0) {
-                updateCoconuts(-1);
-                // Here you'd connect to your Python backend
-                console.log('Asking Kai:', question);
-                input.value = '';
-            } else if (coconuts === 0) {
-                alert('No coconuts left! Get more to continue.');
+        // FIXED CHAT FUNCTIONALITY
+        function expandChat() {
+            if (!chatExpanded) {
+                document.getElementById('chatContainer').classList.add('expanded');
+                chatExpanded = true;
+                
+                // FIXED: Auto-scroll to show the conversation
+                setTimeout(() => {
+                    const messagesContainer = document.getElementById('messagesContainer');
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    
+                    // Also scroll the page to keep chat in view
+                    const chatContainer = document.getElementById('chatContainer');
+                    chatContainer.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center'
+                    });
+                }, 300);
             }
         }
         
-        function quickAsk(question) {
+        function askQuestion(question) {
             document.getElementById('chatInput').value = question;
-            askKai();
+            expandChat();
+            document.getElementById('chatInput').focus();
         }
         
-        // Voting system
-        function vote(direction, id) {
-            const votesElement = document.getElementById(`votes-${id}`);
-            if (votesElement) {
-                let votes = parseInt(votesElement.textContent);
-                votes += direction === 'up' ? 1 : -1;
-                votesElement.textContent = votes;
-            }
-        }
-        
-        // Modal functions
-        function openAdventureModal(id) {
-            document.getElementById('adventureModal').classList.add('active');
-        }
-        
-        function openDealModal(id) {
-            document.getElementById('dealModal').classList.add('active');
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-        
-        function unlockAdventure() {
-            if (coconuts >= 3) {
-                updateCoconuts(-3);
-                alert('Adventure unlocked! Full details would appear here.');
-                closeModal('adventureModal');
+        function addMessage(message, isUser = false) {
+            const messagesContainer = document.getElementById('messagesContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'} message-animate mb-4`;
+            
+            if (isUser) {
+                messageDiv.innerHTML = `
+                    <div class="message-user max-w-xs md:max-w-md px-5 py-4 rounded-2xl">
+                        <div class="text-sm font-medium">${message}</div>
+                    </div>
+                `;
             } else {
-                alert('Not enough coconuts! You need 3.');
+                messageDiv.innerHTML = `
+                    <div class="message-kai max-w-xs md:max-w-md px-5 py-4 rounded-2xl">
+                        <div class="text-xs text-gray-400 mb-2 font-medium">Kai</div>
+                        <div class="text-sm text-gray-200 leading-relaxed">${message}</div>
+                    </div>
+                `;
+            }
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        // Add thinking indicator
+        function addThinkingMessage(id) {
+            const messagesContainer = document.getElementById('messagesContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.id = id;
+            messageDiv.className = 'flex justify-start message-animate mb-4';
+            messageDiv.innerHTML = `
+                <div class="message-kai max-w-xs md:max-w-md px-5 py-4 rounded-2xl">
+                    <div class="text-xs text-gray-400 mb-2 font-medium">Kai</div>
+                    <div class="text-sm text-gray-200 flex items-center gap-1">
+                        <span>Thinking</span>
+                        <span class="animate-pulse">.</span>
+                        <span class="animate-pulse" style="animation-delay: 0.2s">.</span>
+                        <span class="animate-pulse" style="animation-delay: 0.4s">.</span>
+                    </div>
+                </div>
+            `;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        // Remove thinking indicator
+        function removeThinkingMessage(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.remove();
             }
         }
         
-        function unlockDeal() {
-            if (coconuts >= 1) {
-                updateCoconuts(-1);
-                alert('Deal revealed! Location: Bobby V\'s Pizza, 3-6pm, mention Kai for extra discount');
-                closeModal('dealModal');
-            } else {
-                alert('Not enough coconuts!');
+        // Helper function for session tracking
+        function getOrCreateSessionId() {
+            let sessionId = sessionStorage.getItem('kai_session_id');
+            if (!sessionId) {
+                sessionId = 'web_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('kai_session_id', sessionId);
+            }
+            return sessionId;
+        }
+        
+        // FIXED SEND MESSAGE FUNCTION
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                // Add user message
+                addMessage(message, true);
+                input.value = '';
+                expandChat();
+                
+                // Show thinking indicator
+                const thinkingId = 'thinking-' + Date.now();
+                addThinkingMessage(thinkingId);
+                
+                try {
+                    const response = await fetch('https://alohakai-engine-Aloha-Henry.replit.app/api/kai-chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            session_id: getOrCreateSessionId()
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // Remove thinking message
+                    removeThinkingMessage(thinkingId);
+                    
+                    // Add Kai's response
+                    if (data.response) {
+                        addMessage(data.response);
+                    } else {
+                        addMessage("Hmm, something went wrong. Try asking again! 🌺");
+                    }
+                    
+                    // Update coconut count if needed
+                    if (coconuts > 0) {
+                        coconuts--;
+                        // You can update a UI element here if you want to show remaining questions
+                    }
+                    
+                } catch (error) {
+                    console.error('Error calling Kai:', error);
+                    removeThinkingMessage(thinkingId);
+                    
+                    // More helpful error messages
+                    if (error.message.includes('Failed to fetch')) {
+                        addMessage("Can't reach my brain right now! The server might be sleeping. Try again in a few seconds? 🌺");
+                    } else {
+                        addMessage("Shoots! Something went wrong. Try again? 🌺");
+                    }
+                }
             }
         }
         
-        // Smooth scroll for sections
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
+        function handleChatEnter(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+        
+        // Flip card functionality
+        function flipCard(card) {
+            const cardFlip = card.querySelector('.card-flip');
+            cardFlip.classList.toggle('flipped');
+        }
+        
+        // Filter functionality for Deals
+        function filterDeals(category, element) {
+            // Update active pill
+            const pills = element.parentElement.querySelectorAll('.tag-pill');
+            pills.forEach(pill => pill.classList.remove('active'));
+            element.classList.add('active');
+            
+            // Filter cards
+            const cards = document.querySelectorAll('#deals .deal-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category.includes(category)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
                 }
             });
+        }
+        
+        // Filter functionality for Adventures
+        function filterAdventures(category, element) {
+            // Update active pill
+            const pills = element.parentElement.querySelectorAll('.tag-pill');
+            pills.forEach(pill => pill.classList.remove('active'));
+            element.classList.add('active');
+            
+            // Filter cards
+            const cards = document.querySelectorAll('#adventures .adventure-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category.includes(category)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Filter functionality for Audio
+        function filterAudio(category, element) {
+            // Update active pill
+            const pills = element.parentElement.querySelectorAll('.tag-pill');
+            pills.forEach(pill => pill.classList.remove('active'));
+            element.classList.add('active');
+            
+            // Filter cards
+            const cards = document.querySelectorAll('#audio .audio-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category.includes(category)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Filter functionality for Products
+        function filterProducts(category, element) {
+            // Update active pill
+            const pills = element.parentElement.querySelectorAll('.tag-pill');
+            pills.forEach(pill => pill.classList.remove('active'));
+            element.classList.add('active');
+            
+            // Filter cards
+            const cards = document.querySelectorAll('#goods .goods-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category.includes(category)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Navigation
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+        
+        // Smooth scrolling
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('a[href^="#"]')) {
+                e.preventDefault();
+                const target = document.querySelector(e.target.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                    document.getElementById('mobileMenu').classList.remove('active');
+                }
+            }
+        });
+        
+        // DOT NAVIGATION SYSTEM - REMOVED
+        // Netflix-style natural scrolling only
+        
+        // CHAT INPUT FIX - No focus stealing
+        function askQuestion(question) {
+            document.getElementById('chatInput').value = question;
+            expandChat();
+            // Small delay to ensure expansion completes
+            setTimeout(() => {
+                document.getElementById('chatInput').focus();
+            }, 300);
+        }
+        
+        // INITIALIZATION - Simplified
+        function initializeScrollSections() {
+            // Just ensure smooth scrolling - no complex navigation
+            const scrollContainers = document.querySelectorAll('.scroll-container');
+            scrollContainers.forEach(container => {
+                container.style.scrollBehavior = 'smooth';
+            });
+        }
+        
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // INITIALIZATION
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize scroll sections with dot navigation
+            initializeScrollSections();
+            
+            // Auto-focus chat on desktop
+            if (window.innerWidth > 768) {
+                document.getElementById('chatInput').focus();
+            }
+            
+            // Add initial greeting after a delay
+            setTimeout(() => {
+                addMessage("Aloha! 🌺 I'm Kai, your local friend on Kauai. Ask me anything about the island - beaches, food, adventures, whatever you need!");
+            }, 1500);
         });
     </script>
 </body>

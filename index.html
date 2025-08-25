@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -18,9 +18,9 @@
             --bg-dark: #0a0a0a;
             --bg-card: rgba(20, 20, 20, 0.6);
             --border-subtle: rgba(255, 255, 255, 0.06);
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-muted: #94a3b8;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
         }
 
         * {
@@ -66,10 +66,10 @@
             scroll-margin-top: 80px;
         }
         
-        /* Hero Styles - Version 1 Quality */
+        /* Hero Styles - Enhanced */
         .hero-gradient {
-            background: radial-gradient(ellipse at top right, rgba(103, 232, 249, 0.03) 0%, transparent 50%),
-                        radial-gradient(ellipse at bottom left, rgba(251, 113, 133, 0.03) 0%, transparent 50%);
+            background: radial-gradient(ellipse at top right, rgba(103, 232, 249, 0.05) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom left, rgba(251, 113, 133, 0.05) 0%, transparent 50%);
         }
         
         .glass-morphism {
@@ -79,20 +79,25 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
         
+        /* FIXED CHAT CONTAINER */
         .chat-container {
-            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            max-height: 72px;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 80px;
             overflow: hidden;
+            min-height: 80px;
         }
         
         .chat-container.expanded {
-            max-height: 500px;
+            max-height: 600px;
+            min-height: 400px;
         }
         
         .chat-messages {
             opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s ease-out;
+            transform: translateY(20px);
+            transition: all 0.4s ease-out 0.2s;
+            max-height: 320px;
+            overflow-y: auto;
         }
         
         .chat-container.expanded .chat-messages {
@@ -100,39 +105,55 @@
             transform: translateY(0);
         }
         
+        /* Message animations */
+        .message-animate {
+            animation: slideInUp 0.3s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
         .tag-pill {
             background: transparent;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             color: var(--text-muted);
             cursor: pointer;
         }
         
         .tag-pill:hover {
-            border-color: rgba(103, 232, 249, 0.3);
+            border-color: rgba(103, 232, 249, 0.4);
             color: rgba(103, 232, 249, 0.9);
-            background: rgba(103, 232, 249, 0.05);
-            transform: translateY(-1px);
+            background: rgba(103, 232, 249, 0.08);
+            transform: translateY(-2px);
         }
 
         .tag-pill.active {
-            background: linear-gradient(135deg, rgba(103, 232, 249, 0.1), rgba(251, 113, 133, 0.1));
-            border-color: rgba(103, 232, 249, 0.3);
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.15), rgba(251, 113, 133, 0.15));
+            border-color: rgba(103, 232, 249, 0.4);
             color: var(--text-primary);
         }
         
         .chat-input {
             background: rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             color: var(--text-primary);
         }
         
         .chat-input:focus {
             outline: none;
-            border-color: rgba(103, 232, 249, 0.3);
+            border-color: rgba(103, 232, 249, 0.4);
             background: rgba(0, 0, 0, 0.7);
-            box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.05);
+            box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.08);
         }
         
         .chat-input::placeholder {
@@ -155,7 +176,7 @@
         
         .send-button:hover {
             opacity: 0.9;
-            transform: scale(1.02);
+            transform: scale(1.05);
         }
         
         .cta-button {
@@ -172,7 +193,7 @@
             color: var(--text-primary);
         }
         
-        /* Card System - Version 2 Quality */
+        /* RESPONSIVE CARD SYSTEM */
         .glass-card {
             background: rgba(20, 20, 20, 0.6);
             backdrop-filter: blur(10px);
@@ -186,10 +207,10 @@
         }
 
         .glass-card:hover {
-            transform: translate3d(0, -6px, 0);
-            border-color: rgba(103, 232, 249, 0.1);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
-                        0 10px 20px rgba(103, 232, 249, 0.05);
+            transform: translate3d(0, -8px, 0);
+            border-color: rgba(103, 232, 249, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4),
+                        0 15px 30px rgba(103, 232, 249, 0.08);
         }
 
         /* Card flip animation */
@@ -229,23 +250,126 @@
             border: 1px solid var(--border-subtle);
         }
 
-        /* Smooth scroll container */
-        .deals-scroll {
+        /* MOBILE RESPONSIVE SCROLL CONTAINERS */
+        .scroll-container {
             overflow-x: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
             scroll-behavior: smooth;
+            position: relative;
+            padding-bottom: 8px;
         }
 
-        .deals-scroll::-webkit-scrollbar {
+        .scroll-container::-webkit-scrollbar {
             display: none;
         }
 
-        /* Deal Cards */
+        /* REMOVE ALL DOT NAVIGATION - Netflix Style */
+        .scroll-navigation {
+            display: none;
+        }
+
+        .nav-dot {
+            display: none;
+        }
+
+        /* NETFLIX-STYLE SMOOTH SCROLLING */
+        .scroll-container {
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+            scroll-snap-type: x proximity;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Optional subtle fade hints */
+        .scroll-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1));
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        /* TRENDING CARDS - Clean Blue Numbers */
+        .trending-number {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 24px;
+            height: 24px;
+            background: #67E8F9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #000;
+            z-index: 2;
+        }
+
+        @media (min-width: 768px) {
+            .swipe-hint {
+                display: none;
+            }
+        }
+
+        /* RESPONSIVE CARD SIZES */
         .deal-card {
-            width: 260px;
-            height: 200px;
+            width: 280px;
+            height: 220px;
             flex-shrink: 0;
+        }
+
+        .adventure-card {
+            width: 320px;
+            min-height: 400px;
+            flex-shrink: 0;
+        }
+
+        .audio-card {
+            width: 280px;
+            height: 160px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .goods-card {
+            width: 260px;
+            min-height: 340px;
+            flex-shrink: 0;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 640px) {
+            .deal-card {
+                width: 240px;
+                height: 200px;
+            }
+            
+            .adventure-card {
+                width: 280px;
+                min-height: 380px;
+            }
+            
+            .audio-card {
+                width: 240px;
+                height: 140px;
+            }
+            
+            .goods-card {
+                width: 220px;
+                min-height: 320px;
+            }
         }
 
         .partner-logo {
@@ -255,35 +379,32 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             font-weight: bold;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .discount-badge {
-            font-size: 1rem;
-            font-weight: 700;
+            font-size: 1.1rem;
+            font-weight: 800;
         }
 
-        /* Adventure Cards */
+        /* Enhanced Adventure Cards */
         .adventure-card {
-            width: 360px;
-            min-height: 280px;
-            flex-shrink: 0;
             background: rgba(20, 20, 20, 0.6);
             backdrop-filter: blur(10px);
             border: 1px solid var(--border-subtle);
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .adventure-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(103, 232, 249, 0.1);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
-                        0 10px 20px rgba(103, 232, 249, 0.05);
+            transform: translateY(-6px);
+            border-color: rgba(103, 232, 249, 0.15);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4),
+                        0 15px 30px rgba(103, 232, 249, 0.08);
         }
 
         .adventure-card::before {
@@ -292,7 +413,7 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
+            height: 3px;
             background: linear-gradient(90deg, var(--gradient-cyan), var(--gradient-pink));
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -303,98 +424,105 @@
         }
 
         .adventure-image {
-            height: 140px;
-            background: linear-gradient(135deg, rgba(103, 232, 249, 0.05), rgba(251, 113, 133, 0.05));
+            height: 160px;
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
+            overflow: hidden;
         }
 
-        .adventure-content {
-            padding: 20px;
+        .adventure-image img {
+            transition: transform 0.4s ease;
+        }
+
+        .adventure-card:hover .adventure-image img {
+            transform: scale(1.05);
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .author-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #FB7185, #67E8F9);
+            width: 44px;
+            height: 44px;
             border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: white;
             overflow: hidden;
         }
-        
-        .author-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
 
-        /* Audio Cards */
+        /* Enhanced Audio Cards */
         .audio-card {
-            width: 300px;
-            height: 140px;
-            flex-shrink: 0;
             background: rgba(20, 20, 20, 0.6);
             backdrop-filter: blur(10px);
             border: 1px solid var(--border-subtle);
             border-radius: 16px;
             padding: 24px;
-            position: relative;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .audio-card:hover {
             transform: translateY(-4px);
-            border-color: rgba(103, 232, 249, 0.1);
+            border-color: rgba(103, 232, 249, 0.15);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .audio-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.03), rgba(251, 113, 133, 0.03));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .audio-card:hover::before {
+            opacity: 1;
         }
 
         .audio-duration {
             position: absolute;
             top: 16px;
             right: 16px;
-            background: rgba(103, 232, 249, 0.1);
-            padding: 4px 10px;
+            background: rgba(103, 232, 249, 0.15);
+            padding: 6px 12px;
             border-radius: 20px;
             font-size: 11px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--gradient-cyan);
+            z-index: 2;
         }
 
         .play-button {
             position: absolute;
             bottom: 16px;
             right: 16px;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, var(--gradient-cyan), var(--gradient-pink));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: all 0.3s ease;
             color: white;
+            z-index: 2;
         }
 
         .audio-card:hover .play-button {
             opacity: 1;
+            transform: scale(1.1);
         }
 
-        /* Goods Cards */
+        /* Enhanced Goods Cards */
         .goods-card {
-            width: 260px;
-            min-height: 320px;
-            flex-shrink: 0;
             background: rgba(20, 20, 20, 0.6);
             backdrop-filter: blur(10px);
             border: 1px solid var(--border-subtle);
@@ -406,43 +534,48 @@
 
         .goods-card:hover {
             transform: translateY(-4px);
-            border-color: rgba(103, 232, 249, 0.1);
+            border-color: rgba(103, 232, 249, 0.15);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
         .goods-image {
-            height: 160px;
+            height: 140px;
             background: linear-gradient(135deg, rgba(103, 232, 249, 0.03), rgba(251, 113, 133, 0.03));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
+            font-size: 3rem;
+            transition: transform 0.3s ease;
+        }
+
+        .goods-card:hover .goods-image {
+            transform: scale(1.05);
         }
 
         .goods-content {
             padding: 20px;
         }
 
-        /* Badge System - Toned Down */
+        /* Enhanced Badge System */
         .badge {
             display: inline-flex;
             align-items: center;
-            padding: 2px 8px;
+            padding: 4px 10px;
             border-radius: 12px;
             font-size: 11px;
-            font-weight: 500;
+            font-weight: 600;
             border: 1px solid;
         }
 
         .badge-cyan {
-            background: rgba(103, 232, 249, 0.08);
-            border-color: rgba(103, 232, 249, 0.15);
+            background: rgba(103, 232, 249, 0.1);
+            border-color: rgba(103, 232, 249, 0.2);
             color: var(--gradient-cyan);
         }
 
         .badge-pink {
-            background: rgba(251, 113, 133, 0.08);
-            border-color: rgba(251, 113, 133, 0.15);
+            background: rgba(251, 113, 133, 0.1);
+            border-color: rgba(251, 113, 133, 0.2);
             color: var(--gradient-pink);
         }
 
@@ -452,11 +585,11 @@
             color: var(--text-muted);
         }
 
-        /* Fade in animation */
+        /* Enhanced animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(40px);
             }
             to {
                 opacity: 1;
@@ -465,31 +598,114 @@
         }
 
         .fade-in-up {
-            animation: fadeInUp 0.6s ease-out forwards;
+            animation: fadeInUp 0.8s ease-out forwards;
         }
 
         /* Header button */
         .get-coconuts-btn {
             background: linear-gradient(135deg, #67E8F9, #FB7185);
-            padding: 8px 20px;
+            padding: 10px 24px;
             border-radius: 25px;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             color: white;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
 
         .get-coconuts-btn:hover {
             opacity: 0.9;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(103, 232, 249, 0.3);
+        }
+
+        /* COLOR HIERARCHY FOR CARD TITLES */
+        /* Adventure titles - Clean Blue */
+        #adventures .adventure-card h3 {
+            color: #67E8F9 !important;
+        }
+
+        /* Audio titles - Muted Grey */
+        #audio .audio-card h3 {
+            color: #94a3b8 !important;
+        }
+
+        /* Goods/Essentials titles - Clean Blue */
+        #goods .goods-card h3 {
+            color: #67E8F9 !important;
+        }
+
+        /* Deal titles - Muted Grey-White */
+        #deals .deal-card h3 {
+            color: #cbd5e1 !important;
+        }
+
+        /* Trending titles - Muted Grey-White */
+        #trending .trending-title {
+            color: #cbd5e1 !important;
+        }
+
+        /* TRENDING CARDS - Clean Design */
+        .trending-card {
+            width: 200px;
+            height: 240px;
+            flex-shrink: 0;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .trending-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(103, 232, 249, 0.2);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .trending-icon {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.03), rgba(251, 113, 133, 0.03));
+        }
+
+        .trending-content {
+            padding: 16px;
+            text-align: center;
+        }
+
+        .trending-type {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            opacity: 0.7;
+        }
+
+        .trending-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .trending-description {
+            font-size: 11px;
+            line-height: 1.4;
+            color: var(--text-secondary);
         }
     </style>
 </head>
 <body>
     <!-- Navigation Header -->
     <nav class="nav-header">
-        <div class="container mx-auto px-6 py-4">
+        <div class="container mx-auto px-4 md:px-6 py-4">
             <div class="flex justify-between items-center">
                 <!-- Logo -->
                 <a href="#hero" class="text-2xl font-light">
@@ -502,10 +718,10 @@
                 <div class="desktop-nav hidden md:flex items-center gap-8">
                     <!-- Section Links -->
                     <div class="flex gap-6">
-                        <a href="#deals" class="text-gray-400 hover:text-white transition-colors text-sm">Deals</a>
-                        <a href="#adventures" class="text-gray-400 hover:text-white transition-colors text-sm">Adventures</a>
-                        <a href="#audio" class="text-gray-400 hover:text-white transition-colors text-sm">Audio</a>
-                        <a href="#goods" class="text-gray-400 hover:text-white transition-colors text-sm">Shop</a>
+                        <a href="#deals" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Deals</a>
+                        <a href="#adventures" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Adventures</a>
+                        <a href="#audio" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Audio</a>
+                        <a href="#goods" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Shop</a>
                     </div>
                     
                     <!-- Divider -->
@@ -513,8 +729,8 @@
                     
                     <!-- Page Links -->
                     <div class="flex items-center gap-6">
-                        <a href="/about" class="text-gray-400 hover:text-white transition-colors text-sm">About</a>
-                        <a href="/contact" class="text-gray-400 hover:text-white transition-colors text-sm">Contact</a>
+                        <a href="/about" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">About</a>
+                        <a href="/contact" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Contact</a>
                         <a href="/signup" class="get-coconuts-btn">Get Coconuts</a>
                     </div>
                 </div>
@@ -541,129 +757,131 @@
         </div>
     </nav>
 
-<!-- Hero Section - Version 1 Quality -->
+    <!-- Hero Section - Enhanced -->
     <section id="hero" class="min-h-screen relative overflow-hidden hero-gradient" style="padding-top: 80px;">
         <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
         
-        <div class="relative z-10 min-h-screen flex flex-col justify-center px-4 pt-24 pb-16">
-            <div class="max-w-4xl mx-auto w-full">
-                <div class="text-center mb-12">
-                    <h1 class="text-5xl md:text-7xl font-extralight mb-6 tracking-tight">
+        <div class="relative z-10 min-h-screen flex flex-col justify-center px-4 md:px-6 pt-16 md:pt-24 pb-16">
+            <div class="max-w-5xl mx-auto w-full">
+                <div class="text-center mb-16">
+                    <h1 class="text-5xl md:text-8xl font-extralight mb-8 tracking-tight leading-none">
                         <span style="color: #f8fafc;" class="font-extralight">Aloha, I'm </span>
                         <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-light">
                             Kai
                         </span>
                     </h1>
-                    <p class="text-xl text-gray-400 font-light">
+                    <p class="text-xl md:text-2xl text-gray-300 font-light max-w-2xl mx-auto leading-relaxed">
                         Your AI-powered local guide to Kauai
                     </p>
                 </div>
                 
-                <div class="mb-12">
-                    <div class="flex flex-wrap justify-center gap-3">
-                        <button class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Where do locals eat?')">
+                <div class="mb-16">
+                    <div class="flex flex-wrap justify-center gap-3 md:gap-4">
+                        <button class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Where do locals eat?')">
                             Local Eats
                         </button>
-                        <button class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Best beaches for kids?')">
+                        <button class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Best beaches for kids?')">
                             Hidden Beaches
                         </button>
-                        <button class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Epic adventures on Kauai?')">
+                        <button class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Epic adventures on Kauai?')">
                             Adventures
                         </button>
-                        <button class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Secret sunset spots?')">
+                        <button class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Secret sunset spots?')">
                             Sunset Spots
                         </button>
-                        <button class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Audio guides available?')">
+                        <button class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" onclick="askQuestion('Audio guides available?')">
                             Audio Guides
                         </button>
                     </div>
                 </div>
                 
-                <div class="max-w-3xl mx-auto mb-12 px-4">
-                    <div id="chatContainer" class="chat-container glass-morphism rounded-2xl p-4 md:p-6">
-                        <div class="chat-messages mb-4">
-                            <div id="messagesContainer" class="space-y-3 max-h-72 overflow-y-auto">
+                <!-- FIXED CHAT CONTAINER -->
+                <div class="max-w-4xl mx-auto mb-16 px-4">
+                    <div id="chatContainer" class="chat-container glass-morphism rounded-3xl p-6 md:p-8">
+                        <div class="chat-messages mb-6">
+                            <div id="messagesContainer" class="space-y-4">
+                                <!-- Messages will appear here -->
                             </div>
                         </div>
                         
-                        <div class="flex gap-2 md:gap-3">
+                        <div class="flex gap-3 md:gap-4">
                             <input 
                                 type="text" 
                                 placeholder="Ask me anything about Kauai..." 
-                                class="flex-1 chat-input rounded-xl px-3 py-3 md:px-5 md:py-4 text-sm md:text-base font-light"
+                                class="flex-1 chat-input rounded-2xl px-4 py-4 md:px-6 md:py-5 text-sm md:text-base font-light"
                                 id="chatInput"
                                 onkeypress="handleChatEnter(event)"
                                 onfocus="expandChat()"
                             >
-                            <button onclick="sendMessage()" class="send-button px-4 py-3 md:px-6 md:py-4 rounded-xl text-white font-medium flex-shrink-0">
-                                <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button onclick="sendMessage()" class="send-button px-5 py-4 md:px-7 md:py-5 rounded-2xl text-white font-medium flex-shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                                 </svg>
                             </button>
                         </div>
                         
-                        <div class="mt-4 text-center">
-                            <span class="text-xs" style="color: var(--text-muted);">
+                        <div class="mt-6 text-center">
+                            <span class="text-sm font-medium" style="color: var(--text-muted);">
                                 20 free questions to start
                             </span>
                         </div>
                     </div>
                 </div>
                 
-                <div class="flex flex-col items-center gap-3">
-                    <button class="cta-button px-8 py-3 rounded-full font-medium text-sm">
+                <div class="flex flex-col items-center gap-4">
+                    <button class="cta-button px-10 py-4 rounded-full font-medium text-base">
                         Start Your Journey →
                     </button>
-                    <p class="text-xs" style="color: var(--text-muted);">No signup required</p>
+                    <p class="text-sm font-medium" style="color: var(--text-muted);">No signup required</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Deals Section -->
-    <section id="deals" class="py-20 px-4 bg-black relative z-10">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-12 fade-in-up">
-                <h2 class="text-4xl md:text-5xl font-light mb-4">
+    <section id="deals" class="py-24 md:py-32 px-4 bg-black relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="section-title text-4xl md:text-6xl mb-6">
                     Exclusive 
                     <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
                         Deals
                     </span>
                 </h2>
-                <p class="text-lg font-light" style="color: var(--text-secondary);">
+                <p class="section-subtitle text-lg md:text-xl" style="color: var(--text-secondary);">
                     Real-time offers from local partners
                 </p>
             </div>
             
-            <div class="flex flex-wrap justify-center gap-3 mb-12">
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterDeals('all', this)">All</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="food" onclick="filterDeals('food', this)">Food</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="drinks" onclick="filterDeals('drinks', this)">Drinks</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="activities" onclick="filterDeals('activities', this)">Activities</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="shopping" onclick="filterDeals('shopping', this)">Shopping</span>
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-16">
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterDeals('all', this)">All</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="food" onclick="filterDeals('food', this)">Food</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="drinks" onclick="filterDeals('drinks', this)">Drinks</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="activities" onclick="filterDeals('activities', this)">Activities</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="shopping" onclick="filterDeals('shopping', this)">Shopping</span>
             </div>
             
-            <div class="deals-scroll" id="dealsContainer">
-                <div class="flex gap-6 pb-4" style="width: max-content;">
+            <div class="scroll-container" id="dealsContainer">
+                <div class="flex gap-6 pb-4" style="width: max-content; padding-left: 1rem; padding-right: 1rem;">
                     
                     <!-- Deal 1 -->
                     <div class="glass-card rounded-2xl deal-card fade-in-up" data-category="food" onclick="flipCard(this)">
                         <div class="card-flip">
                             <div class="card-front">
-                                <div class="partner-logo rounded-xl mb-3" style="color: #FB7185;">🍕</div>
-                                <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Island Pizza Co</h3>
-                                <p class="discount-badge mb-1" style="color: #FB7185;">25% OFF</p>
-                                <p class="text-sm mb-2" style="color: var(--text-secondary);">Lunch specials only</p>
-                                <p class="text-xs" style="color: var(--text-muted);">🥥 Free</p>
+                                <div class="partner-logo rounded-xl mb-4" style="color: #FB7185;">🍕</div>
+                                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Island Pizza Co</h3>
+                                <p class="discount-badge mb-2" style="color: #FB7185;">25% OFF</p>
+                                <p class="text-sm mb-3" style="color: var(--text-secondary);">Lunch specials only</p>
+                                <p class="text-sm font-medium" style="color: var(--text-muted);">🥥 Free</p>
                             </div>
                             <div class="card-back glass-card">
-                                <h3 class="text-base font-semibold mb-3" style="color: var(--text-primary);">Deal Terms</h3>
-                                <div class="text-xs mb-3" style="color: var(--text-secondary);">
+                                <h3 class="text-lg font-semibold mb-4" style="color: var(--text-primary);">Deal Terms</h3>
+                                <div class="text-sm mb-6" style="color: var(--text-secondary);">
                                     • 25% off lunch combos<br>
                                     • Valid 11AM - 2PM<br>
                                     • Dine-in or takeout
                                 </div>
-                                <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-3 py-2 rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity">
+                                <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-4 py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-opacity">
                                     Claim Deal
                                 </button>
                             </div>
@@ -674,20 +892,20 @@
                     <div class="glass-card rounded-2xl deal-card fade-in-up" data-category="drinks" onclick="flipCard(this)">
                         <div class="card-flip">
                             <div class="card-front">
-                                <div class="partner-logo rounded-xl mb-3" style="color: #67E8F9;">☕</div>
-                                <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Sunrise Coffee</h3>
-                                <p class="discount-badge mb-1" style="color: #67E8F9;">BOGO</p>
-                                <p class="text-sm mb-2" style="color: var(--text-secondary);">Any specialty drink</p>
-                                <p class="text-xs" style="color: var(--text-muted);">🥥 1</p>
+                                <div class="partner-logo rounded-xl mb-4" style="color: #67E8F9;">☕</div>
+                                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Sunrise Coffee</h3>
+                                <p class="discount-badge mb-2" style="color: #67E8F9;">BOGO</p>
+                                <p class="text-sm mb-3" style="color: var(--text-secondary);">Any specialty drink</p>
+                                <p class="text-sm font-medium" style="color: var(--text-muted);">🥥 1</p>
                             </div>
                             <div class="card-back glass-card">
-                                <h3 class="text-base font-semibold mb-3" style="color: var(--text-primary);">Deal Terms</h3>
-                                <div class="text-xs mb-3" style="color: var(--text-secondary);">
+                                <h3 class="text-lg font-semibold mb-4" style="color: var(--text-primary);">Deal Terms</h3>
+                                <div class="text-sm mb-6" style="color: var(--text-secondary);">
                                     • Buy one get one free<br>
                                     • All specialty drinks<br>
                                     • Before 10AM daily
                                 </div>
-                                <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-3 py-2 rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity">
+                                <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-4 py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-opacity">
                                     Claim Deal
                                 </button>
                             </div>
@@ -698,20 +916,20 @@
                     <div class="glass-card rounded-2xl deal-card fade-in-up" data-category="activities" onclick="flipCard(this)">
                         <div class="card-flip">
                             <div class="card-front">
-                                <div class="partner-logo rounded-xl mb-3" style="color: #FB7185;">🏄</div>
-                                <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Wave Riders</h3>
-                                <p class="discount-badge mb-1" style="color: #FB7185;">$30 OFF</p>
-                                <p class="text-sm mb-2" style="color: var(--text-secondary);">Surf lessons</p>
-                                <p class="text-xs" style="color: var(--text-muted);">🥥 2</p>
+                                <div class="partner-logo rounded-xl mb-4" style="color: #FB7185;">🏄</div>
+                                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Wave Riders</h3>
+                                <p class="discount-badge mb-2" style="color: #FB7185;">$30 OFF</p>
+                                <p class="text-sm mb-3" style="color: var(--text-secondary);">Surf lessons</p>
+                                <p class="text-sm font-medium" style="color: var(--text-muted);">🥥 2</p>
                             </div>
                             <div class="card-back glass-card">
-                                <h3 class="text-base font-semibold mb-3" style="color: var(--text-primary);">Deal Terms</h3>
-                                <div class="text-xs mb-3" style="color: var(--text-secondary);">
+                                <h3 class="text-lg font-semibold mb-4" style="color: var(--text-primary);">Deal Terms</h3>
+                                <div class="text-sm mb-6" style="color: var(--text-secondary);">
                                     • $30 off group lessons<br>
                                     • All skill levels<br>
                                     • Equipment included
                                 </div>
-                                <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-3 py-2 rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity">
+                                <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-4 py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-opacity">
                                     Claim Deal
                                 </button>
                             </div>
@@ -722,20 +940,20 @@
                     <div class="glass-card rounded-2xl deal-card fade-in-up" data-category="food" onclick="flipCard(this)">
                         <div class="card-flip">
                             <div class="card-front">
-                                <div class="partner-logo rounded-xl mb-3" style="color: #67E8F9;">🍜</div>
-                                <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Poke Paradise</h3>
-                                <p class="discount-badge mb-1" style="color: #67E8F9;">$5 OFF</p>
-                                <p class="text-sm mb-2" style="color: var(--text-secondary);">Large bowls</p>
-                                <p class="text-xs" style="color: var(--text-muted);">🥥 1</p>
+                                <div class="partner-logo rounded-xl mb-4" style="color: #67E8F9;">🍜</div>
+                                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Poke Paradise</h3>
+                                <p class="discount-badge mb-2" style="color: #67E8F9;">$5 OFF</p>
+                                <p class="text-sm mb-3" style="color: var(--text-secondary);">Large bowls</p>
+                                <p class="text-sm font-medium" style="color: var(--text-muted);">🥥 1</p>
                             </div>
                             <div class="card-back glass-card">
-                                <h3 class="text-base font-semibold mb-3" style="color: var(--text-primary);">Deal Terms</h3>
-                                <div class="text-xs mb-3" style="color: var(--text-secondary);">
+                                <h3 class="text-lg font-semibold mb-4" style="color: var(--text-primary);">Deal Terms</h3>
+                                <div class="text-sm mb-6" style="color: var(--text-secondary);">
                                     • $5 off large bowls<br>
                                     • Fresh daily catch<br>
                                     • Min $20 purchase
                                 </div>
-                                <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-3 py-2 rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity">
+                                <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-4 py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-opacity">
                                     Claim Deal
                                 </button>
                             </div>
@@ -746,20 +964,20 @@
                     <div class="glass-card rounded-2xl deal-card fade-in-up" data-category="shopping" onclick="flipCard(this)">
                         <div class="card-flip">
                             <div class="card-front">
-                                <div class="partner-logo rounded-xl mb-3" style="color: #FB7185;">👕</div>
-                                <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Island Threads</h3>
-                                <p class="discount-badge mb-1" style="color: #FB7185;">30% OFF</p>
-                                <p class="text-sm mb-2" style="color: var(--text-secondary);">All aloha shirts</p>
-                                <p class="text-xs" style="color: var(--text-muted);">🥥 Free</p>
+                                <div class="partner-logo rounded-xl mb-4" style="color: #FB7185;">👕</div>
+                                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Island Threads</h3>
+                                <p class="discount-badge mb-2" style="color: #FB7185;">30% OFF</p>
+                                <p class="text-sm mb-3" style="color: var(--text-secondary);">All aloha shirts</p>
+                                <p class="text-sm font-medium" style="color: var(--text-muted);">🥥 Free</p>
                             </div>
                             <div class="card-back glass-card">
-                                <h3 class="text-base font-semibold mb-3" style="color: var(--text-primary);">Deal Terms</h3>
-                                <div class="text-xs mb-3" style="color: var(--text-secondary);">
+                                <h3 class="text-lg font-semibold mb-4" style="color: var(--text-primary);">Deal Terms</h3>
+                                <div class="text-sm mb-6" style="color: var(--text-secondary);">
                                     • 30% off all shirts<br>
                                     • Local designs only<br>
                                     • This week only
                                 </div>
-                                <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-3 py-2 rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity">
+                                <button class="bg-gradient-to-r from-[#FB7185] to-[#67E8F9] px-4 py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-opacity">
                                     Claim Deal
                                 </button>
                             </div>
@@ -770,20 +988,20 @@
                     <div class="glass-card rounded-2xl deal-card fade-in-up" data-category="drinks" onclick="flipCard(this)">
                         <div class="card-flip">
                             <div class="card-front">
-                                <div class="partner-logo rounded-xl mb-3" style="color: #67E8F9;">🍹</div>
-                                <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Tiki Bar</h3>
-                                <p class="discount-badge mb-1" style="color: #67E8F9;">Happy Hour</p>
-                                <p class="text-sm mb-2" style="color: var(--text-secondary);">$5 mai tais</p>
-                                <p class="text-xs" style="color: var(--text-muted);">🥥 Free</p>
+                                <div class="partner-logo rounded-xl mb-4" style="color: #67E8F9;">🍹</div>
+                                <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Tiki Bar</h3>
+                                <p class="discount-badge mb-2" style="color: #67E8F9;">Happy Hour</p>
+                                <p class="text-sm mb-3" style="color: var(--text-secondary);">$5 mai tais</p>
+                                <p class="text-sm font-medium" style="color: var(--text-muted);">🥥 Free</p>
                             </div>
                             <div class="card-back glass-card">
-                                <h3 class="text-base font-semibold mb-3" style="color: var(--text-primary);">Deal Terms</h3>
-                                <div class="text-xs mb-3" style="color: var(--text-secondary);">
+                                <h3 class="text-lg font-semibold mb-4" style="color: var(--text-primary);">Deal Terms</h3>
+                                <div class="text-sm mb-6" style="color: var(--text-secondary);">
                                     • $5 mai tais<br>
                                     • 3PM - 6PM daily<br>
                                     • Bar seating only
                                 </div>
-                                <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-3 py-2 rounded-lg text-white font-medium text-xs hover:opacity-90 transition-opacity">
+                                <button class="bg-gradient-to-r from-[#67E8F9] to-[#FB7185] px-4 py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-opacity">
                                     Claim Deal
                                 </button>
                             </div>
@@ -791,12 +1009,19 @@
                     </div>
 
                 </div>
+                
+                <!-- DOT NAVIGATION -->
+                <div class="scroll-navigation">
+                    <div class="nav-dot active" onclick="scrollToSection('dealsContainer', 0)"></div>
+                    <div class="nav-dot" onclick="scrollToSection('dealsContainer', 1)"></div>
+                    <div class="nav-dot" onclick="scrollToSection('dealsContainer', 2)"></div>
+                </div>
             </div>
             
-            <div class="text-center mt-12">
-                <a href="/deals" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium">
+            <div class="text-center mt-16">
+                <a href="/deals" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors text-base font-medium">
                     View All Deals
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </a>
@@ -804,244 +1029,244 @@
         </div>
     </section>
 
-<!-- Adventures Section -->
-    <section id="adventures" class="py-20 px-4 bg-black relative z-10">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-12 fade-in-up">
-                <h2 class="text-4xl md:text-5xl font-light mb-4">
+    <!-- Adventures Section -->
+    <section id="adventures" class="py-24 md:py-32 px-4 bg-black relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="section-title text-4xl md:text-6xl mb-6">
                     Curated
                     <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
                         Adventures
                     </span>
                 </h2>
-                <p class="text-lg font-light" style="color: var(--text-secondary);">
+                <p class="section-subtitle text-lg md:text-xl" style="color: var(--text-secondary);">
                     Real experiences designed by someone who actually lives here
                 </p>
             </div>
             
-            <div class="flex flex-wrap justify-center gap-3 mb-12">
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterAdventures('all', this)">All</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="surfing" onclick="filterAdventures('surfing', this)">Surfing</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="family" onclick="filterAdventures('family', this)">Family</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="sports" onclick="filterAdventures('sports', this)">Sports</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="wellness" onclick="filterAdventures('wellness', this)">Wellness</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="snorkeling" onclick="filterAdventures('snorkeling', this)">Snorkeling</span>
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-16">
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterAdventures('all', this)">All</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="surfing" onclick="filterAdventures('surfing', this)">Surfing</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="family" onclick="filterAdventures('family', this)">Family</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="sports" onclick="filterAdventures('sports', this)">Sports</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="wellness" onclick="filterAdventures('wellness', this)">Wellness</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="snorkeling" onclick="filterAdventures('snorkeling', this)">Snorkeling</span>
             </div>
             
-            <div class="deals-scroll">
-                <div class="flex gap-6 pb-4" style="width: max-content;">
+            <div class="scroll-container">
+                <div class="flex gap-6 pb-4" style="width: max-content; padding-left: 1rem; padding-right: 1rem;">
                     
-                    <!-- Adventure 1 - Hanalei Surf Adventure (ALREADY PERFECT) -->
-                    <div class="adventure-card fade-in-up cursor-pointer hover:scale-105 transition-all duration-300" data-category="surfing,half-day" onclick="window.location.href='/adventures/hanalei-surf-adventure'">
+                    <!-- Adventure 1 -->
+                    <div class="adventure-card fade-in-up cursor-pointer" data-category="surfing,half-day" onclick="window.location.href='/adventures/hanalei-surf-adventure'">
                         <div class="adventure-image relative">
-                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755917646940-EZLYMMX2IE6EVGWBMNB3/unsplash-image-5ZLDGa6Acug.jpg?format=750w" alt="Hanalei Bay" class="w-full h-40 object-cover rounded-t-xl">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755917646940-EZLYMMX2IE6EVGWBMNB3/unsplash-image-5ZLDGa6Acug.jpg?format=750w" alt="Hanalei Bay" class="w-full h-full object-cover">
                         </div>
                         <div class="adventure-content p-6">
-                            <div class="author-info mb-4 mt-2">
-                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="w-12 h-12 rounded-full object-cover">
+                            <div class="author-info mb-6">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="author-avatar">
                                 <div>
-                                    <h4 class="text-sm font-medium" style="color: var(--text-primary);">Henry</h4>
+                                    <h4 class="text-sm font-semibold" style="color: var(--text-primary);">Henry</h4>
                                     <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);" onclick="event.stopPropagation();">AlohaHenry.com</a>
                                 </div>
                             </div>
-                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">Hanalei Surf Adventure</h3>
-                            <p class="text-sm mb-5" style="color: var(--text-secondary);">
+                            <h3 class="text-xl font-bold mb-4">Hanalei Surf Adventure</h3>
+                            <p class="text-sm mb-6 leading-relaxed" style="color: var(--text-secondary);">
                                 Breakfast, board rental, beginner-friendly waves, and post-surf lunch
                             </p>
                             
-                            <div class="flex gap-2 mb-5">
+                            <div class="flex gap-2 mb-6 flex-wrap">
                                 <span class="badge badge-gray">🏄‍♂️ Surf</span>
                                 <span class="badge badge-gray">⏰ Half Day</span>
                                 <span class="badge badge-gray">📍 Hanalei</span>
                             </div>
                             
-                            <div class="adventure-stats flex justify-between items-center text-xs mb-5" style="color: var(--text-muted);">
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-6" style="color: var(--text-muted);">
                                 <span>⏱️ 5 hours</span>
                                 <span>🏃‍♂️ Easy</span>
                                 <span>👥 2-6 people</span>
                             </div>
                             
-                            <div class="text-center text-blue-500 text-sm font-medium">
+                            <div class="text-center text-cyan-400 text-sm font-semibold">
                                 View Details & Tips →
                             </div>
                         </div>
                     </div>
 
-                    <!-- Adventure 2 - Kids Beach Day (FIXED) -->
-                    <div class="adventure-card fade-in-up cursor-pointer hover:scale-105 transition-all duration-300" data-category="family,half-day" onclick="window.location.href='/adventures/perfect-kids-beach-day'">
+                    <!-- Adventure 2 -->
+                    <div class="adventure-card fade-in-up cursor-pointer" data-category="family,half-day" onclick="window.location.href='/adventures/perfect-kids-beach-day'">
                         <div class="adventure-image relative">
-                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/9813df8b-695a-4b38-a9aa-a2536270c694/LN6.jpeg?format=750w" alt="Lae Nani Beach family day" class="w-full h-40 object-cover rounded-t-xl">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/9813df8b-695a-4b38-a9aa-a2536270c694/LN6.jpeg?format=750w" alt="Lae Nani Beach family day" class="w-full h-full object-cover">
                         </div>
                         <div class="adventure-content p-6">
-                            <div class="author-info mb-4 mt-2">
-                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="w-12 h-12 rounded-full object-cover">
+                            <div class="author-info mb-6">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="author-avatar">
                                 <div>
-                                    <h4 class="text-sm font-medium" style="color: var(--text-primary);">Henry</h4>
+                                    <h4 class="text-sm font-semibold" style="color: var(--text-primary);">Henry</h4>
                                     <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);" onclick="event.stopPropagation();">AlohaHenry.com</a>
                                 </div>
                             </div>
-                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">Perfect Kids' Beach Day</h3>
-                            <p class="text-sm mb-5" style="color: var(--text-secondary);">
+                            <h3 class="text-xl font-bold mb-4">Perfect Kids' Beach Day</h3>
+                            <p class="text-sm mb-6 leading-relaxed" style="color: var(--text-secondary);">
                                 Fresh malasadas from Passion Bakery, protected lagoon, and beachfront lunch
                             </p>
                             
-                            <div class="flex gap-2 mb-5">
+                            <div class="flex gap-2 mb-6 flex-wrap">
                                 <span class="badge badge-gray">👨‍👩‍👧‍👦 Family</span>
                                 <span class="badge badge-gray">🏖️ East Side</span>
                                 <span class="badge badge-gray">⏰ Half Day</span>
                             </div>
                             
-                            <div class="adventure-stats flex justify-between items-center text-xs mb-5" style="color: var(--text-muted);">
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-6" style="color: var(--text-muted);">
                                 <span>⏱️ 4 hours</span>
                                 <span>👶 Easy</span>
                                 <span>👨‍👩‍👧‍👦 Perfect for kids</span>
                             </div>
                             
-                            <div class="text-center text-blue-500 text-sm font-medium">
+                            <div class="text-center text-cyan-400 text-sm font-semibold">
                                 View Details & Tips →
                             </div>
                         </div>
                     </div>
 
-                    <!-- Adventure 3 - Epic Football Weekend (FIXED) -->
-                    <div class="adventure-card fade-in-up cursor-pointer hover:scale-105 transition-all duration-300" data-category="sports,full-day" onclick="window.location.href='/adventures/epic-football-weekend'">
+                    <!-- Adventure 3 -->
+                    <div class="adventure-card fade-in-up cursor-pointer" data-category="sports,full-day" onclick="window.location.href='/adventures/epic-football-weekend'">
                         <div class="adventure-image relative">
-                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923190288-25YEVNPQSONE1LB9B4XU/unsplash-image-QrLLRsw73uA.jpg?format=750w" alt="Beachfront football watching" class="w-full h-40 object-cover rounded-t-xl">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923190288-25YEVNPQSONE1LB9B4XU/unsplash-image-QrLLRsw73uA.jpg?format=750w" alt="Beachfront football watching" class="w-full h-full object-cover">
                         </div>
                         <div class="adventure-content p-6">
-                            <div class="author-info mb-4 mt-2">
-                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="w-12 h-12 rounded-full object-cover">
+                            <div class="author-info mb-6">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="author-avatar">
                                 <div>
-                                    <h4 class="text-sm font-medium" style="color: var(--text-primary);">Henry</h4>
+                                    <h4 class="text-sm font-semibold" style="color: var(--text-primary);">Henry</h4>
                                     <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);" onclick="event.stopPropagation();">AlohaHenry.com</a>
                                 </div>
                             </div>
-                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">Epic Football Weekend</h3>
-                            <p class="text-sm mb-5" style="color: var(--text-secondary);">
+                            <h3 class="text-xl font-bold mb-4">Epic Football Weekend</h3>
+                            <p class="text-sm mb-6 leading-relaxed" style="color: var(--text-secondary);">
                                 Sunrise beers, bourbon house, and wings - all walkable on the East Side
                             </p>
                             
-                            <div class="flex gap-2 mb-5">
+                            <div class="flex gap-2 mb-6 flex-wrap">
                                 <span class="badge badge-gray">🏈 Sports</span>
                                 <span class="badge badge-gray">🌅 East Side</span>
                                 <span class="badge badge-gray">🍻 All Day</span>
                             </div>
                             
-                            <div class="adventure-stats flex justify-between items-center text-xs mb-5" style="color: var(--text-muted);">
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-6" style="color: var(--text-muted);">
                                 <span>⏱️ 12 hours</span>
                                 <span>🍺 Easy</span>
                                 <span>👥 2-8 people</span>
                             </div>
                             
-                            <div class="text-center text-blue-500 text-sm font-medium">
+                            <div class="text-center text-cyan-400 text-sm font-semibold">
                                 View Details & Tips →
                             </div>
                         </div>
                     </div>
 
-                    <!-- Adventure 4 - Poipu Beach Day (FIXED) -->
-                    <div class="adventure-card fade-in-up cursor-pointer hover:scale-105 transition-all duration-300" data-category="beach,full-day" onclick="window.location.href='/adventures/poipu-beach-turtle-watch'">
+                    <!-- Adventure 4 -->
+                    <div class="adventure-card fade-in-up cursor-pointer" data-category="beach,full-day" onclick="window.location.href='/adventures/poipu-beach-turtle-watch'">
                         <div class="adventure-image relative">
-                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923394688-SYSF41OEDI34O2ZVLVAX/unsplash-image-GqEFbD-vgBs.jpg?format=750w" alt="Poipu Beach turtles" class="w-full h-40 object-cover rounded-t-xl">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923394688-SYSF41OEDI34O2ZVLVAX/unsplash-image-GqEFbD-vgBs.jpg?format=750w" alt="Poipu Beach turtles" class="w-full h-full object-cover">
                         </div>
                         <div class="adventure-content p-6">
-                            <div class="author-info mb-4 mt-2">
-                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="w-12 h-12 rounded-full object-cover">
+                            <div class="author-info mb-6">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="author-avatar">
                                 <div>
-                                    <h4 class="text-sm font-medium" style="color: var(--text-primary);">Henry</h4>
+                                    <h4 class="text-sm font-semibold" style="color: var(--text-primary);">Henry</h4>
                                     <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);" onclick="event.stopPropagation();">AlohaHenry.com</a>
                                 </div>
                             </div>
-                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">Poipu Beach + Turtle Watch</h3>
-                            <p class="text-sm mb-5" style="color: var(--text-secondary);">
+                            <h3 class="text-xl font-bold mb-4">Poipu Beach + Turtle Watch</h3>
+                            <p class="text-sm mb-6 leading-relaxed" style="color: var(--text-secondary);">
                                 America's best beach, turtle watching at sunset, and gourmet dinner
                             </p>
                             
-                            <div class="flex gap-2 mb-5">
+                            <div class="flex gap-2 mb-6 flex-wrap">
                                 <span class="badge badge-gray">🐢 Turtles</span>
                                 <span class="badge badge-gray">🏖️ Poipu</span>
                                 <span class="badge badge-gray">🌅 Full Day</span>
                             </div>
                             
-                            <div class="adventure-stats flex justify-between items-center text-xs mb-5" style="color: var(--text-muted);">
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-6" style="color: var(--text-muted);">
                                 <span>⏱️ 8 hours</span>
                                 <span>🌊 Easy</span>
                                 <span>👥 2-6 people</span>
                             </div>
                             
-                            <div class="text-center text-blue-500 text-sm font-medium">
+                            <div class="text-center text-cyan-400 text-sm font-semibold">
                                 View Details & Tips →
                             </div>
                         </div>
                     </div>
 
-                    <!-- Adventure 5 - Anini Snorkel + Lighthouse (FIXED) -->
-                    <div class="adventure-card fade-in-up cursor-pointer hover:scale-105 transition-all duration-300" data-category="snorkeling,family" onclick="window.location.href='/adventures/anini-snorkel-lighthouse'">
+                    <!-- Adventure 5 -->
+                    <div class="adventure-card fade-in-up cursor-pointer" data-category="snorkeling,family" onclick="window.location.href='/adventures/anini-snorkel-lighthouse'">
                         <div class="adventure-image relative">
-                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923533561-BUQSQX02CQ7G4COH2MJQ/unsplash-image-9y7y26C-l4Y.jpg?format=750w" alt="Anini Beach snorkeling" class="w-full h-40 object-cover rounded-t-xl">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923533561-BUQSQX02CQ7G4COH2MJQ/unsplash-image-9y7y26C-l4Y.jpg?format=750w" alt="Anini Beach snorkeling" class="w-full h-full object-cover">
                         </div>
                         <div class="adventure-content p-6">
-                            <div class="author-info mb-4 mt-2">
-                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="w-12 h-12 rounded-full object-cover">
+                            <div class="author-info mb-6">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="author-avatar">
                                 <div>
-                                    <h4 class="text-sm font-medium" style="color: var(--text-primary);">Henry</h4>
+                                    <h4 class="text-sm font-semibold" style="color: var(--text-primary);">Henry</h4>
                                     <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);" onclick="event.stopPropagation();">AlohaHenry.com</a>
                                 </div>
                             </div>
-                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">Anini Snorkel + Lighthouse</h3>
-                            <p class="text-sm mb-5" style="color: var(--text-secondary);">
+                            <h3 class="text-xl font-bold mb-4">Anini Snorkel + Lighthouse</h3>
+                            <p class="text-sm mb-6 leading-relaxed" style="color: var(--text-secondary);">
                                 Protected reef snorkeling, epic fish tacos, and historic lighthouse visit
                             </p>
                             
-                            <div class="flex gap-2 mb-5">
+                            <div class="flex gap-2 mb-6 flex-wrap">
                                 <span class="badge badge-gray">🤿 Snorkel</span>
                                 <span class="badge badge-gray">🌊 North Shore</span>
                                 <span class="badge badge-gray">📸 Lighthouse</span>
                             </div>
                             
-                            <div class="adventure-stats flex justify-between items-center text-xs mb-5" style="color: var(--text-muted);">
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-6" style="color: var(--text-muted);">
                                 <span>⏱️ 6 hours</span>
                                 <span>🐠 Easy</span>
                                 <span>👨‍👩‍👧‍👦 Family</span>
                             </div>
                             
-                            <div class="text-center text-blue-500 text-sm font-medium">
+                            <div class="text-center text-cyan-400 text-sm font-semibold">
                                 View Details & Tips →
                             </div>
                         </div>
                     </div>
 
-                    <!-- Adventure 6 - Yoga North Shore (FIXED) -->
-                    <div class="adventure-card fade-in-up cursor-pointer hover:scale-105 transition-all duration-300" data-category="wellness,half-day" onclick="window.location.href='/adventures/yoga-north-shore'">
+                    <!-- Adventure 6 -->
+                    <div class="adventure-card fade-in-up cursor-pointer" data-category="wellness,half-day" onclick="window.location.href='/adventures/yoga-north-shore'">
                         <div class="adventure-image relative">
-                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755924297895-TM6E1SA0Z46H52SRKGV7/unsplash-image-n8L1VYaypcw.jpg?format=750w" alt="Sunrise yoga Hanalei Bay" class="w-full h-40 object-cover rounded-t-xl">
+                            <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755924297895-TM6E1SA0Z46H52SRKGV7/unsplash-image-n8L1VYaypcw.jpg?format=750w" alt="Sunrise yoga Hanalei Bay" class="w-full h-full object-cover">
                         </div>
                         <div class="adventure-content p-6">
-                            <div class="author-info mb-4 mt-2">
-                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="w-12 h-12 rounded-full object-cover">
+                            <div class="author-info mb-6">
+                                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=150w" alt="Henry" class="author-avatar">
                                 <div>
-                                    <h4 class="text-sm font-medium" style="color: var(--text-primary);">Henry</h4>
+                                    <h4 class="text-sm font-semibold" style="color: var(--text-primary);">Henry</h4>
                                     <a href="https://www.alohahenry.com" target="_blank" class="text-xs hover:text-cyan-400 transition-colors" style="color: var(--text-secondary);" onclick="event.stopPropagation();">AlohaHenry.com</a>
                                 </div>
                             </div>
-                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">Yoga North Shore</h3>
-                            <p class="text-sm mb-5" style="color: var(--text-secondary);">
+                            <h3 class="text-xl font-bold mb-4">Yoga North Shore</h3>
+                            <p class="text-sm mb-6 leading-relaxed" style="color: var(--text-secondary);">
                                 Sunrise beach yoga, Hanalei town wandering, and spa or studio afternoon
                             </p>
                             
-                            <div class="flex gap-2 mb-5">
+                            <div class="flex gap-2 mb-6 flex-wrap">
                                 <span class="badge badge-gray">🧘‍♀️ Yoga</span>
                                 <span class="badge badge-gray">🌅 Sunrise</span>
                                 <span class="badge badge-gray">💆‍♀️ Wellness</span>
                             </div>
                             
-                            <div class="adventure-stats flex justify-between items-center text-xs mb-5" style="color: var(--text-muted);">
+                            <div class="adventure-stats flex justify-between items-center text-xs mb-6" style="color: var(--text-muted);">
                                 <span>⏱️ 6 hours</span>
                                 <span>🧘‍♀️ Gentle</span>
                                 <span>👥 1-4 people</span>
                             </div>
                             
-                            <div class="text-center text-blue-500 text-sm font-medium">
+                            <div class="text-center text-cyan-400 text-sm font-semibold">
                                 View Details & Tips →
                             </div>
                         </div>
@@ -1050,10 +1275,10 @@
                 </div>
             </div>
             
-            <div class="text-center mt-12">
-                <a href="/adventures" class="inline-flex items-center gap-2 text-blue-500 hover:text-blue-400 transition-colors text-sm font-medium">
+            <div class="text-center mt-16">
+                <a href="/adventures" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors text-base font-medium">
                     View All Adventures
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </a>
@@ -1061,39 +1286,42 @@
         </div>
     </section>
 
-<!-- Audio Section -->
-    <section id="audio" class="py-20 px-4 bg-black relative z-10">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-12 fade-in-up">
-                <h2 class="text-4xl md:text-5xl font-light mb-4">
+    <!-- Audio Section -->
+    <section id="audio" class="py-24 md:py-32 px-4 bg-black relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="section-title text-4xl md:text-6xl mb-6">
                     Audio
                     <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
                         Stories
                     </span>
                 </h2>
-                <p class="text-lg font-light" style="color: var(--text-secondary);">
+                <p class="section-subtitle text-lg md:text-xl" style="color: var(--text-secondary);">
                     Deep dives into Kauai's nature, history, and culture
                 </p>
             </div>
             
-            <div class="flex flex-wrap justify-center gap-3 mb-12">
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterAudio('all', this)">All</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="history" onclick="filterAudio('history', this)">History</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="culture" onclick="filterAudio('culture', this)">Culture</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="nature" onclick="filterAudio('nature', this)">Nature</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="legends" onclick="filterAudio('legends', this)">Legends</span>
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-16">
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterAudio('all', this)">All</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="history" onclick="filterAudio('history', this)">History</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="culture" onclick="filterAudio('culture', this)">Culture</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="nature" onclick="filterAudio('nature', this)">Nature</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="legends" onclick="filterAudio('legends', this)">Legends</span>
             </div>
             
-            <div class="deals-scroll">
-                <div class="flex gap-6 pb-4" style="width: max-content;">
+            <div class="scroll-container">
+                <div class="swipe-hint visible">
+                    <span class="swipe-arrow">›</span>
+                </div>
+                <div class="flex gap-6 pb-4" style="width: max-content; padding-left: 1rem; padding-right: 1rem;">
                     
                     <!-- Audio 1 -->
                     <div class="audio-card fade-in-up" data-category="nature">
                         <div class="audio-duration">🎧 3 min</div>
                         <div class="play-button">▶</div>
-                        <div>
-                            <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Why Whales Love Kauai</h3>
-                            <p class="text-xs mb-3" style="color: var(--text-secondary);">Marine biology deep dive</p>
+                        <div class="relative z-2">
+                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">Why Whales Love Kauai</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Marine biology deep dive</p>
                             <div class="flex gap-2">
                                 <span class="badge badge-gray">Marine Life</span>
                                 <span class="badge badge-gray">🥥 Free</span>
@@ -1105,9 +1333,9 @@
                     <div class="audio-card fade-in-up" data-category="legends">
                         <div class="audio-duration">🎧 5 min</div>
                         <div class="play-button">▶</div>
-                        <div>
-                            <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Ancient Kauai Legends</h3>
-                            <p class="text-xs mb-3" style="color: var(--text-secondary);">Mystical island stories</p>
+                        <div class="relative z-2">
+                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">Ancient Kauai Legends</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Mystical island stories</p>
                             <div class="flex gap-2">
                                 <span class="badge badge-gray">Culture</span>
                                 <span class="badge badge-gray">🥥 Free</span>
@@ -1119,9 +1347,9 @@
                     <div class="audio-card fade-in-up" data-category="history">
                         <div class="audio-duration">🎧 4 min</div>
                         <div class="play-button">▶</div>
-                        <div>
-                            <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">The Last Kingdom</h3>
-                            <p class="text-xs mb-3" style="color: var(--text-secondary);">Kauai's royal history</p>
+                        <div class="relative z-2">
+                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">The Last Kingdom</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Kauai's royal history</p>
                             <div class="flex gap-2">
                                 <span class="badge badge-gray">History</span>
                                 <span class="badge badge-gray">🥥 Free</span>
@@ -1133,9 +1361,9 @@
                     <div class="audio-card fade-in-up" data-category="history">
                         <div class="audio-duration">🎧 6 min</div>
                         <div class="play-button">▶</div>
-                        <div>
-                            <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Hurricane Iniki Story</h3>
-                            <p class="text-xs mb-3" style="color: var(--text-secondary);">Survival and rebuilding</p>
+                        <div class="relative z-2">
+                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">Hurricane Iniki Story</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Survival and rebuilding</p>
                             <div class="flex gap-2">
                                 <span class="badge badge-gray">History</span>
                                 <span class="badge badge-pink">🥥 1</span>
@@ -1147,9 +1375,9 @@
                     <div class="audio-card fade-in-up" data-category="nature">
                         <div class="audio-duration">🎧 3 min</div>
                         <div class="play-button">▶</div>
-                        <div>
-                            <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Secret Beach Tales</h3>
-                            <p class="text-xs mb-3" style="color: var(--text-secondary);">Hidden spots revealed</p>
+                        <div class="relative z-2">
+                            <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">Secret Beach Tales</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Hidden spots revealed</p>
                             <div class="flex gap-2">
                                 <span class="badge badge-gray">Beaches</span>
                                 <span class="badge badge-pink">🥥 1</span>
@@ -1160,10 +1388,10 @@
                 </div>
             </div>
             
-            <div class="text-center mt-12">
-                <a href="/audio" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium">
+            <div class="text-center mt-16">
+                <a href="/audio" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors text-base font-medium">
                     View All Audio Stories
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </a>
@@ -1172,46 +1400,46 @@
     </section>
 
     <!-- Goods Section -->
-    <section id="goods" class="py-20 px-4 bg-black relative z-10">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-12 fade-in-up">
-                <h2 class="text-4xl md:text-5xl font-light mb-4">
+    <section id="goods" class="py-24 md:py-32 px-4 bg-black relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="section-title text-4xl md:text-6xl mb-6">
                     Island
                     <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
                         Essentials
                     </span>
                 </h2>
-                <p class="text-lg font-light" style="color: var(--text-secondary);">
+                <p class="section-subtitle text-lg md:text-xl" style="color: var(--text-secondary);">
                     Curated gear & local favorites
                 </p>
             </div>
             
-            <div class="flex flex-wrap justify-center gap-3 mb-12">
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterProducts('all', this)">All</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="beach-gear" onclick="filterProducts('beach-gear', this)">Beach Gear</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="local-goods" onclick="filterProducts('local-goods', this)">Local Goods</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="essentials" onclick="filterProducts('essentials', this)">Essentials</span>
-                <span class="tag-pill px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer" data-filter="apparel" onclick="filterProducts('apparel', this)">Apparel</span>
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-16">
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer active" data-filter="all" onclick="filterProducts('all', this)">All</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="beach-gear" onclick="filterProducts('beach-gear', this)">Beach Gear</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="local-goods" onclick="filterProducts('local-goods', this)">Local Goods</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="essentials" onclick="filterProducts('essentials', this)">Essentials</span>
+                <span class="tag-pill px-6 py-3 rounded-full text-sm font-medium cursor-pointer" data-filter="apparel" onclick="filterProducts('apparel', this)">Apparel</span>
             </div>
             
-            <div class="deals-scroll">
-                <div class="flex gap-6 pb-4" style="width: max-content;">
+            <div class="scroll-container">
+                <div class="flex gap-6 pb-4" style="width: max-content; padding-left: 1rem; padding-right: 1rem;">
                     
                     <!-- Product 1 -->
                     <div class="goods-card fade-in-up" data-category="essentials,beach-gear">
                         <div class="goods-image">🧴</div>
                         <div class="goods-content">
-                            <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Reef-Safe Sunscreen</h3>
-                            <p class="text-xs mb-3" style="color: var(--text-secondary);">Hawaii approved, actually works</p>
-                            <div class="flex gap-2 mb-3">
+                            <h3 class="text-lg font-semibold mb-3">Reef-Safe Sunscreen</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Hawaii approved, actually works</p>
+                            <div class="flex gap-2 mb-4 flex-wrap">
                                 <span class="badge badge-gray">Essential</span>
                                 <span class="badge badge-gray">Eco-Safe</span>
                             </div>
                             <div class="flex items-center gap-2 mb-2">
-                                <span class="text-xl font-bold" style="color: var(--text-primary);">$24</span>
+                                <span class="text-2xl font-bold" style="color: var(--text-primary);">$24</span>
                                 <span class="badge badge-pink">🥥 10</span>
                             </div>
-                            <span class="text-xs" style="color: var(--text-muted);">⭐ 4.8 (234 reviews)</span>
+                            <span class="text-sm font-medium" style="color: var(--text-muted);">⭐ 4.8 (234 reviews)</span>
                         </div>
                     </div>
 
@@ -1219,17 +1447,17 @@
                     <div class="goods-card fade-in-up" data-category="local-goods">
                         <div class="goods-image">☕</div>
                         <div class="goods-content">
-                            <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Kauai Coffee Beans</h3>
-                            <p class="text-xs mb-3" style="color: var(--text-secondary);">Single-origin island grown</p>
-                            <div class="flex gap-2 mb-3">
+                            <h3 class="text-lg font-semibold mb-3">Kauai Coffee Beans</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Single-origin island grown</p>
+                            <div class="flex gap-2 mb-4 flex-wrap">
                                 <span class="badge badge-gray">Local</span>
                                 <span class="badge badge-gray">Bestseller</span>
                             </div>
                             <div class="flex items-center gap-2 mb-2">
-                                <span class="text-xl font-bold" style="color: var(--text-primary);">$18</span>
+                                <span class="text-2xl font-bold" style="color: var(--text-primary);">$18</span>
                                 <span class="badge badge-pink">🥥 8</span>
                             </div>
-                            <span class="text-xs" style="color: var(--text-muted);">⭐ 4.9 (567 reviews)</span>
+                            <span class="text-sm font-medium" style="color: var(--text-muted);">⭐ 4.9 (567 reviews)</span>
                         </div>
                     </div>
 
@@ -1237,17 +1465,17 @@
                     <div class="goods-card fade-in-up" data-category="beach-gear,essentials">
                         <div class="goods-image">👟</div>
                         <div class="goods-content">
-                            <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Reef Walking Shoes</h3>
-                            <p class="text-xs mb-3" style="color: var(--text-secondary);">Essential for rocky beaches</p>
-                            <div class="flex gap-2 mb-3">
+                            <h3 class="text-lg font-semibold mb-3">Reef Walking Shoes</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Essential for rocky beaches</p>
+                            <div class="flex gap-2 mb-4 flex-wrap">
                                 <span class="badge badge-gray">Safety</span>
                                 <span class="badge badge-gray">Essential</span>
                             </div>
                             <div class="flex items-center gap-2 mb-2">
-                                <span class="text-xl font-bold" style="color: var(--text-primary);">$32</span>
+                                <span class="text-2xl font-bold" style="color: var(--text-primary);">$32</span>
                                 <span class="badge badge-pink">🥥 15</span>
                             </div>
-                            <span class="text-xs" style="color: var(--text-muted);">⭐ 4.7 (189 reviews)</span>
+                            <span class="text-sm font-medium" style="color: var(--text-muted);">⭐ 4.7 (189 reviews)</span>
                         </div>
                     </div>
 
@@ -1255,17 +1483,17 @@
                     <div class="goods-card fade-in-up" data-category="beach-gear">
                         <div class="goods-image">🤿</div>
                         <div class="goods-content">
-                            <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Pro Snorkel Set</h3>
-                            <p class="text-xs mb-3" style="color: var(--text-secondary);">Anti-fog, perfect fit guarantee</p>
-                            <div class="flex gap-2 mb-3">
+                            <h3 class="text-lg font-semibold mb-3">Pro Snorkel Set</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Anti-fog, perfect fit guarantee</p>
+                            <div class="flex gap-2 mb-4 flex-wrap">
                                 <span class="badge badge-gray">Pro Grade</span>
                                 <span class="badge badge-gray">Popular</span>
                             </div>
                             <div class="flex items-center gap-2 mb-2">
-                                <span class="text-xl font-bold" style="color: var(--text-primary);">$45</span>
+                                <span class="text-2xl font-bold" style="color: var(--text-primary);">$45</span>
                                 <span class="badge badge-pink">🥥 20</span>
                             </div>
-                            <span class="text-xs" style="color: var(--text-muted);">⭐ 4.6 (412 reviews)</span>
+                            <span class="text-sm font-medium" style="color: var(--text-muted);">⭐ 4.6 (412 reviews)</span>
                         </div>
                     </div>
 
@@ -1273,17 +1501,17 @@
                     <div class="goods-card fade-in-up" data-category="apparel,local-goods">
                         <div class="goods-image">👕</div>
                         <div class="goods-content">
-                            <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Authentic Aloha Shirt</h3>
-                            <p class="text-xs mb-3" style="color: var(--text-secondary);">Made in Hawaii, vintage designs</p>
-                            <div class="flex gap-2 mb-3">
+                            <h3 class="text-lg font-semibold mb-3">Authentic Aloha Shirt</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Made in Hawaii, vintage designs</p>
+                            <div class="flex gap-2 mb-4 flex-wrap">
                                 <span class="badge badge-gray">Authentic</span>
                                 <span class="badge badge-gray">Gift Idea</span>
                             </div>
                             <div class="flex items-center gap-2 mb-2">
-                                <span class="text-xl font-bold" style="color: var(--text-primary);">$65</span>
+                                <span class="text-2xl font-bold" style="color: var(--text-primary);">$65</span>
                                 <span class="badge badge-pink">🥥 30</span>
                             </div>
-                            <span class="text-xs" style="color: var(--text-muted);">⭐ 4.8 (298 reviews)</span>
+                            <span class="text-sm font-medium" style="color: var(--text-muted);">⭐ 4.8 (298 reviews)</span>
                         </div>
                     </div>
 
@@ -1291,27 +1519,27 @@
                     <div class="goods-card fade-in-up" data-category="beach-gear,essentials">
                         <div class="goods-image">🎒</div>
                         <div class="goods-content">
-                            <h3 class="text-base font-semibold mb-2" style="color: var(--text-primary);">Waterproof Day Pack</h3>
-                            <p class="text-xs mb-3" style="color: var(--text-secondary);">Perfect for beach & hikes</p>
-                            <div class="flex gap-2 mb-3">
+                            <h3 class="text-lg font-semibold mb-3">Waterproof Day Pack</h3>
+                            <p class="text-sm mb-4" style="color: var(--text-secondary);">Perfect for beach & hikes</p>
+                            <div class="flex gap-2 mb-4 flex-wrap">
                                 <span class="badge badge-gray">Waterproof</span>
                                 <span class="badge badge-gray">Durable</span>
                             </div>
                             <div class="flex items-center gap-2 mb-2">
-                                <span class="text-xl font-bold" style="color: var(--text-primary);">$38</span>
+                                <span class="text-2xl font-bold" style="color: var(--text-primary);">$38</span>
                                 <span class="badge badge-pink">🥥 17</span>
                             </div>
-                            <span class="text-xs" style="color: var(--text-muted);">⭐ 4.7 (156 reviews)</span>
+                            <span class="text-sm font-medium" style="color: var(--text-muted);">⭐ 4.7 (156 reviews)</span>
                         </div>
                     </div>
 
                 </div>
             </div>
             
-            <div class="text-center mt-12">
-                <a href="/shop" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium">
+            <div class="text-center mt-16">
+                <a href="/shop" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors text-base font-medium">
                     View All Products
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </a>
@@ -1319,8 +1547,147 @@
         </div>
     </section>
 
+    <!-- Top 10 Trending Section - MOVED TO BOTTOM -->
+    <section id="trending" class="py-24 md:py-32 px-4 bg-black relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="section-title text-4xl md:text-6xl mb-6">
+                    Top 10
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">
+                        Trending
+                    </span>
+                </h2>
+                <p class="section-subtitle text-lg md:text-xl" style="color: var(--text-secondary);">
+                    This week's most popular across all categories
+                </p>
+            </div>
+            
+            <div class="scroll-container">
+                <div class="flex gap-4 pb-4 justify-center" style="width: max-content; padding-left: 1rem; padding-right: 1rem;">
+                    
+                    <!-- Trending 1 -->
+                    <div class="trending-card fade-in-up" onclick="window.location.href='/adventures/hanalei-surf-adventure'">
+                        <div class="trending-number">1</div>
+                        <div class="trending-icon">🏄‍♂️</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-cyan);">Adventure</div>
+                            <div class="trending-title">Hanalei Surf</div>
+                            <div class="trending-description">Beginner-friendly waves</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 2 -->
+                    <div class="trending-card fade-in-up" onclick="flipCard(this.parentElement)">
+                        <div class="trending-number">2</div>
+                        <div class="trending-icon">🍕</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-pink);">Deal</div>
+                            <div class="trending-title">Pizza 25% OFF</div>
+                            <div class="trending-description">Island Pizza Co</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 3 -->
+                    <div class="trending-card fade-in-up">
+                        <div class="trending-number">3</div>
+                        <div class="trending-icon">🎧</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-cyan);">Audio</div>
+                            <div class="trending-title">Whale Stories</div>
+                            <div class="trending-description">Marine biology deep dive</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 4 -->
+                    <div class="trending-card fade-in-up">
+                        <div class="trending-number">4</div>
+                        <div class="trending-icon">🧴</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-pink);">Gear</div>
+                            <div class="trending-title">Reef Sunscreen</div>
+                            <div class="trending-description">Hawaii approved</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 5 -->
+                    <div class="trending-card fade-in-up" onclick="window.location.href='/adventures/perfect-kids-beach-day'">
+                        <div class="trending-number">5</div>
+                        <div class="trending-icon">👨‍👩‍👧‍👦</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-cyan);">Adventure</div>
+                            <div class="trending-title">Kids Beach Day</div>
+                            <div class="trending-description">Family favorite</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 6 -->
+                    <div class="trending-card fade-in-up">
+                        <div class="trending-number">6</div>
+                        <div class="trending-icon">🍹</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-pink);">Deal</div>
+                            <div class="trending-title">$5 Mai Tais</div>
+                            <div class="trending-description">Happy hour special</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 7 -->
+                    <div class="trending-card fade-in-up">
+                        <div class="trending-number">7</div>
+                        <div class="trending-icon">🎧</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-cyan);">Audio</div>
+                            <div class="trending-title">Ancient Legends</div>
+                            <div class="trending-description">Island mystical stories</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 8 -->
+                    <div class="trending-card fade-in-up">
+                        <div class="trending-number">8</div>
+                        <div class="trending-icon">🤿</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-pink);">Gear</div>
+                            <div class="trending-title">Pro Snorkel Set</div>
+                            <div class="trending-description">Anti-fog guarantee</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 9 -->
+                    <div class="trending-card fade-in-up">
+                        <div class="trending-number">9</div>
+                        <div class="trending-icon">☕</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-cyan);">Deal</div>
+                            <div class="trending-title">BOGO Coffee</div>
+                            <div class="trending-description">Sunrise Coffee</div>
+                        </div>
+                    </div>
+
+                    <!-- Trending 10 -->
+                    <div class="trending-card fade-in-up">
+                        <div class="trending-number">10</div>
+                        <div class="trending-icon">🏄</div>
+                        <div class="trending-content">
+                            <div class="trending-type" style="color: var(--gradient-pink);">Deal</div>
+                            <div class="trending-title">Surf Lessons</div>
+                            <div class="trending-description">$30 off group lessons</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="text-center mt-16">
+                <p class="text-base font-medium mb-4" style="color: var(--text-secondary);">
+                    Updated daily based on what visitors are loving most
+                </p>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="py-16 border-t border-gray-900">
+    <footer class="py-20 border-t border-gray-900">
         <div class="max-w-6xl mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <!-- Logo & Tagline -->
@@ -1330,15 +1697,15 @@
                             AlohaKai
                         </span>
                     </div>
-                    <p class="text-sm" style="color: var(--text-muted);">
+                    <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
                         Your AI-powered local guide to the Garden Isle
                     </p>
                 </div>
 
                 <!-- Company -->
                 <div>
-                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Company</h4>
-                    <ul class="space-y-2">
+                    <h4 class="text-sm font-semibold mb-6" style="color: var(--text-primary);">Company</h4>
+                    <ul class="space-y-3">
                         <li><a href="/about" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">About Us</a></li>
                         <li><a href="/contact" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Contact</a></li>
                         <li><a href="/careers" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Careers</a></li>
@@ -1348,8 +1715,8 @@
 
                 <!-- Support -->
                 <div>
-                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Support</h4>
-                    <ul class="space-y-2">
+                    <h4 class="text-sm font-semibold mb-6" style="color: var(--text-primary);">Support</h4>
+                    <ul class="space-y-3">
                         <li><a href="/help" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Help Center</a></li>
                         <li><a href="/faq" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">FAQ</a></li>
                         <li><a href="/privacy" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Privacy Policy</a></li>
@@ -1359,8 +1726,8 @@
 
                 <!-- Connect -->
                 <div>
-                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Connect</h4>
-                    <ul class="space-y-2">
+                    <h4 class="text-sm font-semibold mb-6" style="color: var(--text-primary);">Connect</h4>
+                    <ul class="space-y-3">
                         <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Instagram</a></li>
                         <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Twitter</a></li>
                         <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">YouTube</a></li>
@@ -1369,7 +1736,7 @@
                 </div>
             </div>
 
-            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+            <div class="border-t border-gray-800 mt-16 pt-8 text-center">
                 <p class="text-sm" style="color: var(--text-muted);">
                     © 2025 AlohaKai. Made with aloha in Kauai.
                 </p>
@@ -1381,11 +1748,24 @@
         let coconuts = 20;
         let chatExpanded = false;
         
-        // Hero chat functionality
+        // FIXED CHAT FUNCTIONALITY
         function expandChat() {
             if (!chatExpanded) {
                 document.getElementById('chatContainer').classList.add('expanded');
                 chatExpanded = true;
+                
+                // FIXED: Auto-scroll to show the conversation
+                setTimeout(() => {
+                    const messagesContainer = document.getElementById('messagesContainer');
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    
+                    // Also scroll the page to keep chat in view
+                    const chatContainer = document.getElementById('chatContainer');
+                    chatContainer.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center'
+                    });
+                }, 300);
             }
         }
         
@@ -1398,37 +1778,78 @@
         function addMessage(message, isUser = false) {
             const messagesContainer = document.getElementById('messagesContainer');
             const messageDiv = document.createElement('div');
-            messageDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'} message-animate`;
+            messageDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'} message-animate mb-4`;
             
             if (isUser) {
                 messageDiv.innerHTML = `
-                    <div class="message-user max-w-xs md:max-w-md px-4 py-3 rounded-2xl">
-                        <div class="text-sm">${message}</div>
+                    <div class="message-user max-w-xs md:max-w-md px-5 py-4 rounded-2xl">
+                        <div class="text-sm font-medium">${message}</div>
                     </div>
                 `;
             } else {
                 messageDiv.innerHTML = `
-                    <div class="message-kai max-w-xs md:max-w-md px-4 py-3 rounded-2xl">
-                        <div class="text-xs text-gray-400 mb-1">Kai</div>
-                        <div class="text-sm text-gray-200">${message}</div>
+                    <div class="message-kai max-w-xs md:max-w-md px-5 py-4 rounded-2xl">
+                        <div class="text-xs text-gray-400 mb-2 font-medium">Kai</div>
+                        <div class="text-sm text-gray-200 leading-relaxed">${message}</div>
                     </div>
                 `;
             }
             
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
         
+        // Add thinking indicator
+        function addThinkingMessage(id) {
+            const messagesContainer = document.getElementById('messagesContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.id = id;
+            messageDiv.className = 'flex justify-start message-animate mb-4';
+            messageDiv.innerHTML = `
+                <div class="message-kai max-w-xs md:max-w-md px-5 py-4 rounded-2xl">
+                    <div class="text-xs text-gray-400 mb-2 font-medium">Kai</div>
+                    <div class="text-sm text-gray-200 flex items-center gap-1">
+                        <span>Thinking</span>
+                        <span class="animate-pulse">.</span>
+                        <span class="animate-pulse" style="animation-delay: 0.2s">.</span>
+                        <span class="animate-pulse" style="animation-delay: 0.4s">.</span>
+                    </div>
+                </div>
+            `;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
         
-            async function sendMessage() {
+        // Remove thinking indicator
+        function removeThinkingMessage(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.remove();
+            }
+        }
+        
+        // Helper function for session tracking
+        function getOrCreateSessionId() {
+            let sessionId = sessionStorage.getItem('kai_session_id');
+            if (!sessionId) {
+                sessionId = 'web_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('kai_session_id', sessionId);
+            }
+            return sessionId;
+        }
+        
+        // FIXED SEND MESSAGE FUNCTION
+        async function sendMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
             
             if (message) {
+                // Add user message
                 addMessage(message, true);
                 input.value = '';
                 expandChat();
                 
-                // Show "Kai is thinking..."
+                // Show thinking indicator
                 const thinkingId = 'thinking-' + Date.now();
                 addThinkingMessage(thinkingId);
                 
@@ -1444,57 +1865,45 @@
                         })
                     });
                     
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
                     const data = await response.json();
                     
                     // Remove thinking message
                     removeThinkingMessage(thinkingId);
                     
                     // Add Kai's response
-                    addMessage(data.response);
+                    if (data.response) {
+                        addMessage(data.response);
+                    } else {
+                        addMessage("Hmm, something went wrong. Try asking again! 🌺");
+                    }
+                    
+                    // Update coconut count if needed
+                    if (coconuts > 0) {
+                        coconuts--;
+                        // You can update a UI element here if you want to show remaining questions
+                    }
                     
                 } catch (error) {
                     console.error('Error calling Kai:', error);
                     removeThinkingMessage(thinkingId);
-                    addMessage("Shoots! Can't reach my brain right now. Try again? 🌺");
+                    
+                    // More helpful error messages
+                    if (error.message.includes('Failed to fetch')) {
+                        addMessage("Can't reach my brain right now! The server might be sleeping. Try again in a few seconds? 🌺");
+                    } else {
+                        addMessage("Shoots! Something went wrong. Try again? 🌺");
+                    }
                 }
             }
         }
         
-        // Helper function for session tracking
-        function getOrCreateSessionId() {
-            let sessionId = sessionStorage.getItem('kai_session_id');
-            if (!sessionId) {
-                sessionId = 'web_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                sessionStorage.setItem('kai_session_id', sessionId);
-            }
-            return sessionId;
-        }
-        
-        // Add thinking indicator
-        function addThinkingMessage(id) {
-            const messagesContainer = document.getElementById('messagesContainer');
-            const messageDiv = document.createElement('div');
-            messageDiv.id = id;
-            messageDiv.className = 'flex justify-start message-animate';
-            messageDiv.innerHTML = `
-                <div class="message-kai max-w-xs md:max-w-md px-4 py-3 rounded-2xl">
-                    <div class="text-xs text-gray-400 mb-1">Kai</div>
-                    <div class="text-sm text-gray-200">Thinking...</div>
-                </div>
-            `;
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-        
-        // Remove thinking indicator
-        function removeThinkingMessage(id) {
-            const element = document.getElementById(id);
-            if (element) {
-                element.remove();
-            }
-        }
         function handleChatEnter(event) {
-            if (event.key === 'Enter') {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
                 sendMessage();
             }
         }
@@ -1595,6 +2004,28 @@
             }
         });
         
+        // DOT NAVIGATION SYSTEM - REMOVED
+        // Netflix-style natural scrolling only
+        
+        // CHAT INPUT FIX - No focus stealing
+        function askQuestion(question) {
+            document.getElementById('chatInput').value = question;
+            expandChat();
+            // Small delay to ensure expansion completes
+            setTimeout(() => {
+                document.getElementById('chatInput').focus();
+            }, 300);
+        }
+        
+        // INITIALIZATION - Simplified
+        function initializeScrollSections() {
+            // Just ensure smooth scrolling - no complex navigation
+            const scrollContainers = document.querySelectorAll('.scroll-container');
+            scrollContainers.forEach(container => {
+                container.style.scrollBehavior = 'smooth';
+            });
+        }
+        
         // Intersection Observer for fade-in animations
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -1608,11 +2039,20 @@
             observer.observe(el);
         });
         
-        // Auto-focus chat on desktop
-        window.addEventListener('load', () => {
+        // INITIALIZATION
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize scroll sections with dot navigation
+            initializeScrollSections();
+            
+            // Auto-focus chat on desktop
             if (window.innerWidth > 768) {
                 document.getElementById('chatInput').focus();
             }
+            
+            // Add initial greeting after a delay
+            setTimeout(() => {
+                addMessage("Aloha! 🌺 I'm Kai, your local friend on Kauai. Ask me anything about the island - beaches, food, adventures, whatever you need!");
+            }, 1500);
         });
     </script>
 </body>
