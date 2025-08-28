@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yoga North Shore | Sunrise Flow + Hanalei Town + Wellness Finale | Aloha Kai</title>
-    <meta name="description" content="Perfect wellness day: Pre-sunrise yoga at Hanalei Bay, explore charming Hanalei town, then choose between Black Coral Yoga studio or Bamford Wellness Spa. Designed by local Henry.">
+    <title>Yoga North Shore - AlohaKai</title>
+    <meta name="description" content="Perfect wellness day: sunrise yoga at Hanalei Bay, explore charming Hanalei town, then choose between studio class or luxury spa session.">
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -15,13 +19,9 @@
             --bg-dark: #0a0a0a;
             --bg-card: rgba(20, 20, 20, 0.6);
             --border-subtle: rgba(255, 255, 255, 0.06);
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-muted: #94a3b8;
-            --accent-cyan: #67E8F9;
-            --accent-pink: #FB7185;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
         }
 
         * {
@@ -31,7 +31,7 @@
         }
         
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
             background: #000;
             color: var(--text-primary);
             overflow-x: hidden;
@@ -67,157 +67,117 @@
             scroll-margin-top: 80px;
         }
         
-        /* Hero Styles */
+        /* Hero gradient matching homepage */
         .hero-gradient {
-            background: radial-gradient(ellipse at top right, rgba(103, 232, 249, 0.03) 0%, transparent 50%),
-                        radial-gradient(ellipse at bottom left, rgba(251, 113, 133, 0.03) 0%, transparent 50%);
+            background: radial-gradient(ellipse at top right, rgba(103, 232, 249, 0.05) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom left, rgba(251, 113, 133, 0.05) 0%, transparent 50%);
         }
-        
+
+        /* Glass morphism */
         .glass-morphism {
-            background: var(--glass-bg);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* Badge System */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 500;
-            border: 1px solid;
+        /* Similar adventures card matching homepage */
+        .adventure-card-small {
+            width: 240px;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
         }
 
-        .badge-cyan {
-            background: rgba(103, 232, 249, 0.08);
-            border-color: rgba(103, 232, 249, 0.15);
-            color: var(--gradient-cyan);
+        .adventure-card-small:hover {
+            transform: translateY(-4px);
+            border-color: rgba(103, 232, 249, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
-        .badge-pink {
-            background: rgba(251, 113, 133, 0.08);
-            border-color: rgba(251, 113, 133, 0.15);
-            color: var(--gradient-pink);
-        }
-
-        .badge-gray {
-            background: rgba(148, 163, 184, 0.08);
-            border-color: rgba(148, 163, 184, 0.15);
-            color: var(--text-muted);
-        }
-
-        /* Buttons */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+        /* Buttons matching homepage */
+        .get-coconuts-btn {
+            background: linear-gradient(135deg, #67E8F9, #FB7185);
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
             color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            border: none;
-            cursor: pointer;
             text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 25px rgba(103, 232, 249, 0.2);
-        }
-
-        .btn-outline {
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--text-primary);
-            background: transparent;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .btn-outline:hover {
-            border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
-            background: rgba(103, 232, 249, 0.05);
-        }
-
-        /* Timeline styles */
-        .timeline-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
             transition: all 0.3s ease;
         }
 
-        .timeline-item:hover {
+        .get-coconuts-btn:hover {
+            opacity: 0.9;
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 25px rgba(103, 232, 249, 0.3);
         }
 
-        .timeline-time {
+        /* Tag pills */
+        .tag-pill {
             background: transparent;
-            border: 1px solid;
-            border-image: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink)) 1;
-            color: var(--text-primary);
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
             font-weight: 500;
-            font-size: 0.875rem;
-            min-width: 80px;
+            display: inline-block;
+        }
+
+        /* Stat cards */
+        .stat-card {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 20px;
             text-align: center;
+            transition: all 0.3s ease;
         }
 
-        .epic-callout {
-            background: linear-gradient(135deg, rgba(103, 232, 249, 0.1), rgba(251, 113, 133, 0.1));
-            border: 1px solid rgba(103, 232, 249, 0.3);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin: 2rem 0;
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(103, 232, 249, 0.2);
         }
 
+        .stat-number {
+            font-size: 28px;
+            font-weight: 300;
+            background: linear-gradient(135deg, #67E8F9, #FB7185);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+        }
+
+        /* Special wellness options highlight */
         .wellness-options {
             background: linear-gradient(135deg, rgba(251, 113, 133, 0.05), rgba(103, 232, 249, 0.05));
             border: 1px solid rgba(251, 113, 133, 0.2);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin: 2rem 0;
+            border-radius: 24px;
+            padding: 32px;
+            margin: 48px 0;
+            text-align: center;
         }
 
-        .similar-card {
-            min-width: 280px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 1rem;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
-
-        .similar-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent-cyan);
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease-out;
-        }
-
+        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(40px);
             }
             to {
                 opacity: 1;
@@ -225,30 +185,27 @@
             }
         }
 
-        /* Header button */
-        .get-coconuts-btn {
-            background: linear-gradient(135deg, #67E8F9, #FB7185);
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: 500;
-            color: white;
-            text-decoration: none;
-            transition: all 0.2s ease;
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
         }
 
-        .get-coconuts-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
+        /* Scroll container */
+        .scroll-container {
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none;
         }
     </style>
 </head>
-
-<body class="bg-black text-white">
-
+<body>
     <!-- Navigation Header -->
     <nav class="nav-header">
-        <div class="container mx-auto px-6 py-4">
+        <div class="container mx-auto px-4 md:px-6 py-4">
             <div class="flex justify-between items-center">
                 <!-- Logo -->
                 <a href="/" class="text-2xl font-light">
@@ -261,10 +218,10 @@
                 <div class="desktop-nav hidden md:flex items-center gap-8">
                     <!-- Section Links -->
                     <div class="flex gap-6">
-                        <a href="/deals" class="text-gray-400 hover:text-white transition-colors text-sm">Deals</a>
-                        <a href="/adventures" class="text-gray-400 hover:text-white transition-colors text-sm">Adventures</a>
-                        <a href="/audio" class="text-gray-400 hover:text-white transition-colors text-sm">Audio</a>
-                        <a href="/shop" class="text-gray-400 hover:text-white transition-colors text-sm">Shop</a>
+                        <a href="/#deals" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Deals</a>
+                        <a href="/adventures" class="text-cyan-400 font-semibold text-sm">Adventures</a>
+                        <a href="/#audio" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Audio</a>
+                        <a href="/#goods" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Shop</a>
                     </div>
                     
                     <!-- Divider -->
@@ -272,10 +229,9 @@
                     
                     <!-- Page Links -->
                     <div class="flex items-center gap-6">
-                        <a href="/about" class="text-gray-400 hover:text-white transition-colors text-sm">About</a>
-                        <a href="/contact" class="text-gray-400 hover:text-white transition-colors text-sm">Contact</a>
-                        <span class="badge badge-gray">🥥 20</span>
-                        <a href="/signup" class="get-coconuts-btn">Get Started</a>
+                        <a href="/about" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">About</a>
+                        <a href="/contact" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Contact</a>
+                        <a href="/signup" class="get-coconuts-btn">Get Coconuts</a>
                     </div>
                 </div>
 
@@ -289,235 +245,281 @@
 
             <!-- Mobile menu -->
             <div id="mobileMenu" class="mobile-menu mt-4">
-                <a href="/deals" class="block py-2 text-gray-400 hover:text-white transition-colors">Deals</a>
-                <a href="/adventures" class="block py-2 text-gray-400 hover:text-white transition-colors">Adventures</a>
-                <a href="/audio" class="block py-2 text-gray-400 hover:text-white transition-colors">Audio</a>
-                <a href="/shop" class="block py-2 text-gray-400 hover:text-white transition-colors">Shop</a>
+                <a href="/#deals" class="block py-2 text-gray-400 hover:text-white transition-colors">Deals</a>
+                <a href="/adventures" class="block py-2 text-cyan-400 font-medium">Adventures</a>
+                <a href="/#audio" class="block py-2 text-gray-400 hover:text-white transition-colors">Audio</a>
+                <a href="/#goods" class="block py-2 text-gray-400 hover:text-white transition-colors">Shop</a>
                 <div class="border-t border-gray-700 my-3"></div>
                 <a href="/about" class="block py-2 text-gray-400 hover:text-white transition-colors">About</a>
                 <a href="/contact" class="block py-2 text-gray-400 hover:text-white transition-colors">Contact</a>
-                <a href="/signup" class="block py-2 text-cyan-400 hover:text-cyan-300 transition-colors font-medium">Get Started</a>
+                <a href="/signup" class="block py-2 text-cyan-400 hover:text-cyan-300 transition-colors font-medium">Get Coconuts</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-gradient pt-24 pb-8">
-        <div class="max-w-4xl mx-auto px-4">
-
-            <!-- Hero Content -->
-            <div class="fade-in-up">
-                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755924297895-TM6E1SA0Z46H52SRKGV7/unsplash-image-n8L1VYaypcw.jpg?format=750w" 
-                     alt="Yoga North Shore - Sunrise wellness experience" 
-                     class="w-full h-64 md:h-80 object-cover rounded-2xl mb-8">
+    <section class="min-h-[50vh] relative overflow-hidden hero-gradient" style="padding-top: 80px;">
+        <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+        
+        <div class="relative z-10 flex flex-col justify-center px-4 md:px-6 pt-16 md:pt-24 pb-16 min-h-[50vh]">
+            <div class="max-w-5xl mx-auto w-full">
+                <!-- Back link -->
+                <a href="/adventures" class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-cyan-400 transition-colors mb-8">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    All Adventures
+                </a>
                 
-                <div class="flex items-start gap-8 mb-8">
-                    <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w" 
-                         alt="Henry - Local Expert" 
-                         class="w-24 h-24 rounded-full object-cover">
-                    <div class="flex-1">
-                        <h1 class="text-4xl md:text-5xl font-light mb-4">
-                            <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                                Yoga North Shore
-                            </span>
-                        </h1>
-                        <p class="text-xl font-light mb-6" style="color: var(--text-secondary);">
-                            Pre-sunrise yoga at Hanalei Bay → explore charming Hanalei town → choose between studio class or luxury spa session
-                        </p>
-                        
-                        <!-- Business Listing Style -->
-                        <div class="glass-morphism rounded-lg p-4">
-                            <div class="flex items-start justify-between">
-                                <div>
-                                    <h3 class="text-lg font-medium mb-1" style="color: var(--text-primary);">By Henry</h3>
-                                    <p class="text-sm mb-2" style="color: var(--text-secondary);">Kauai Real Estate Agent & Local Expert</p>
-                                    <a href="https://www.alohahenry.com" target="_blank" class="text-cyan-400 hover:text-cyan-300 transition-colors text-sm">
-                                        www.alohahenry.com
-                                    </a>
-                                </div>
-                                <div class="flex gap-2">
-                                    <span class="badge badge-gray">🧘‍♀️ Yoga</span>
-                                    <span class="badge badge-gray">📍 North Shore</span>
-                                    <span class="badge badge-gray">⏰ Full Day</span>
-                                    <span class="badge badge-gray">💆‍♀️ Wellness</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <h1 class="text-5xl md:text-7xl font-extralight mb-6 tracking-tight leading-none">
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-light">
+                        Yoga North Shore
+                    </span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-300 font-light max-w-3xl leading-relaxed mb-8">
+                    Sunrise yoga at Hanalei Bay, explore charming town, then choose studio class or luxury spa finale
+                </p>
+                
+                <!-- Quick stats -->
+                <div class="flex flex-wrap gap-4">
+                    <span class="tag-pill">🧘‍♀️ Yoga & Wellness</span>
+                    <span class="tag-pill">📍 North Shore</span>
+                    <span class="tag-pill">🌅 Sunrise Flow</span>
+                    <span class="tag-pill">⏱️ Full Day</span>
+                    <span class="tag-pill">🔥 Pure Zen</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Stats -->
+    <section class="py-12 px-4 -mt-20 relative z-20">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Wellness Stops</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Max</div>
+                    <div class="stat-label">Zen Factor</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Epic</div>
+                    <div class="stat-label">Sunrise Views</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Choice</div>
+                    <div class="stat-label">Your Way</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Main Content -->
-    <section class="py-16 px-4">
-        <div class="max-w-4xl mx-auto">
+    <section class="py-24 px-4">
+        <div class="max-w-5xl mx-auto">
             
-            <!-- Why This Is Awesome -->
-            <div class="epic-callout fade-in-up">
-                <h2 class="text-2xl font-semibold mb-4" style="color: var(--accent-cyan);">🧘‍♀️ Why This Adventure Rocks</h2>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Timing & Calm</h3>
-                        <p class="text-sm" style="color: var(--text-muted);">Sunrise yoga syncs exactly with early light and minimal crowd, setting a slow, spiritually-rooted pace for the day.</p>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Connection</h3>
-                        <p class="text-sm" style="color: var(--text-muted);">The Andy Irons mural and Hanalei environment unify movement with local culture and nature.</p>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Flexible Extension</h3>
-                        <p class="text-sm" style="color: var(--text-muted);">Choose between energetic studio rejuvenation or calm spa reset, both reinforcing wellness throughout your day.</p>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Local Immersion</h3>
-                        <p class="text-sm" style="color: var(--text-muted);">Hanalei town offers intimate, artisanal vibe for coffee, shopping, or reflection before or after practice.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Detailed Timeline -->
-            <div class="mb-16 fade-in-up">
-                <h2 class="text-3xl font-light mb-8">Your Perfect Wellness Flow</h2>
-                
-                <div class="timeline-item">
-                    <div class="timeline-time">Pre-Dawn</div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Sunrise Yoga at Pine Trees, Hanalei Bay</h3>
-                        <p class="text-sm mb-3" style="color: var(--text-secondary);">Start before dawn with an almost-empty beach fronting Hanalei Bay - a bow-shaped stretch surrounded by lush mountains with placid mornings in summer before trade winds pick up. Park in the Pine Trees lot on Ama Ama Road, where you'll find a mural honoring surfing legend Andy Irons decorating the restrooms and shower area.</p>
-                        <div class="flex gap-2">
-                            <span class="badge badge-cyan">🌅 Sunrise Timing</span>
-                            <span class="badge badge-gray">🏄‍♂️ Andy Irons Memorial</span>
-                            <span class="badge badge-gray">🏔️ Mountain Views</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-time">Morning</div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Chill Time in Hanalei Town</h3>
-                        <p class="text-sm mb-3" style="color: var(--text-secondary);">After your practice, drift into town for some grounded community time. Sip locally roasted coffee, browse hand-crafted art, or wander into botanical gardens or the Wai'oli Mission District for peaceful reflection. It's the perfect low-key transition from movement to mindful warmth.</p>
-                        <div class="flex gap-2">
-                            <span class="badge badge-pink">☕ Local Coffee</span>
-                            <span class="badge badge-gray">🎨 Hand-crafted Art</span>
-                            <span class="badge badge-gray">🌺 Botanical Gardens</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Afternoon Wellness Options -->
-            <div class="wellness-options fade-in-up">
-                <h2 class="text-2xl font-semibold mb-6" style="color: var(--accent-pink);">🌸 Choose Your Afternoon Wellness</h2>
-                <p class="text-sm mb-6" style="color: var(--text-secondary);">
-                    To extend your wellness journey, choose from two standout options based on your vibe:
+            <!-- Why This Rocks -->
+            <div class="mb-24 text-center">
+                <h2 class="text-4xl md:text-5xl font-extralight mb-8">
+                    <span style="color: #f8fafc;">Why This </span>
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-light">
+                        rocks
+                    </span>
+                </h2>
+                <p class="text-xl text-gray-300 font-light max-w-3xl mx-auto mb-12">
+                    The perfect blend of sunrise serenity, cultural exploration, and wellness luxury
                 </p>
                 
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="glass-morphism rounded-xl p-6">
-                        <h3 class="text-xl font-semibold mb-4" style="color: var(--text-primary);">Black Coral Yoga Studio</h3>
-                        <p class="text-sm mb-4" style="color: var(--text-secondary);">Nestled in town, it's a serene studio offering classes like Heated Vinyasa, Vinyasa, Hatha with Sound Healing, and Sculpt. The heated classes (around 88–92°F via infrared) deepen muscle release, while the meditative Hatha with sound healing and Vinyasa offerings provide restorative flow.</p>
-                        <div class="flex gap-2">
-                            <span class="badge badge-cyan">🔥 Heated Classes</span>
-                            <span class="badge badge-gray">🎵 Sound Healing</span>
-                            <span class="badge badge-gray">💪 Sculpt Classes</span>
-                        </div>
-                    </div>
-                    
-                    <div class="glass-morphism rounded-xl p-6">
-                        <h3 class="text-xl font-semibold mb-4" style="color: var(--text-primary);">Bamford Wellness Spa at 1 Hotel</h3>
-                        <p class="text-sm mb-4" style="color: var(--text-secondary);">If you lean spa-style recovery, this luxury wellness sanctuary blends ancient Hawaiian techniques with holistic therapies, offering treatments that soothe the body and ground the spirit. It's a peaceful follow-up to your beach-side awakening, all set within rich, sustainable design.</p>
-                        <div class="flex gap-2">
-                            <span class="badge badge-pink">🌺 Hawaiian Techniques</span>
-                            <span class="badge badge-gray">💆‍♀️ Holistic Therapies</span>
-                            <span class="badge badge-gray">🌿 Sustainable Design</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Henry's Insider Knowledge -->
-            <div class="glass-morphism rounded-2xl p-8 mb-16 fade-in-up">
-                <div class="flex items-center gap-4 mb-6">
-                    <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=200w" 
-                         alt="Henry" 
-                         class="w-16 h-16 rounded-full object-cover">
-                    <div>
-                        <h2 class="text-2xl font-semibold" style="color: var(--accent-cyan);">Henry's Insider Tips</h2>
-                        <p class="text-sm" style="color: var(--text-secondary);">Local knowledge you won't find in guidebooks</p>
-                    </div>
-                </div>
-                
-                <div class="grid gap-4">
-                    <div class="border-l-4 border-cyan-400 pl-4">
-                        <h4 class="font-semibold mb-1" style="color: var(--text-primary);">Perfect Pre-Dawn Timing</h4>
-                        <p class="text-sm" style="color: var(--text-muted);">This promises a gentle, meditative flow as the sun rises over tranquil waters - perfect setting for chaturanga and mindful movement before the world wakes up.</p>
-                    </div>
-                    
-                    <div class="border-l-4 border-pink-400 pl-4">
-                        <h4 class="font-semibold mb-1" style="color: var(--text-primary);">Andy Irons Memorial</h4>
-                        <p class="text-sm" style="color: var(--text-muted);">The Pine Trees lot features a mural honoring surfing legend Andy Irons - a quiet homage to local heritage that connects your practice with island culture.</p>
-                    </div>
-                    
-                    <div class="border-l-4 border-cyan-400 pl-4">
-                        <h4 class="font-semibold mb-1" style="color: var(--text-primary);">Town Exploration Flow</h4>
-                        <p class="text-sm" style="color: var(--text-muted);">The transition from beach yoga to town wandering creates perfect rhythm - physical practice to cultural immersion to wellness finale.</p>
-                    </div>
-                    
-                    <div class="border-l-4 border-pink-400 pl-4">
-                        <h4 class="font-semibold mb-1" style="color: var(--text-primary);">Studio vs Spa Choice</h4>
-                        <p class="text-sm" style="color: var(--text-muted);">Black Coral for active recovery and heated flow, Bamford for luxury relaxation and Hawaiian healing techniques. Both extend the wellness journey beautifully.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- What to Bring -->
-            <div class="mb-16 fade-in-up">
-                <h2 class="text-3xl font-light mb-8">What to Bring</h2>
                 <div class="grid md:grid-cols-3 gap-6">
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <div class="mb-4">
+                            <svg class="w-10 h-10 text-cyan-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-medium mb-2 text-white">Perfect Timing</h3>
+                        <p class="text-sm text-gray-400">Sunrise yoga syncs with early light and minimal crowds, setting a spiritually-rooted pace for the day</p>
+                    </div>
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <div class="mb-4">
+                            <svg class="w-10 h-10 text-cyan-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-medium mb-2 text-white">Cultural Connection</h3>
+                        <p class="text-sm text-gray-400">Andy Irons mural and Hanalei environment unify movement with local culture and nature</p>
+                    </div>
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <div class="mb-4">
+                            <svg class="w-10 h-10 text-cyan-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-medium mb-2 text-white">Flexible Finish</h3>
+                        <p class="text-sm text-gray-400">Choose energetic studio rejuvenation or calm spa reset - both reinforce wellness throughout your day</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wellness Circuit -->
+            <div class="mb-24">
+                <h2 class="text-4xl md:text-5xl font-extralight mb-12 text-center">
+                    <span style="color: #f8fafc;">Your Wellness </span>
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-light">
+                        Circuit
+                    </span>
+                </h2>
+                
+                <div class="space-y-8">
+                    
+                    <div class="glass-morphism rounded-2xl p-8 fade-in-up">
+                        <h3 class="text-xl font-medium mb-4" style="color: #67E8F9;">Start: Sunrise Yoga at Pine Trees, Hanalei Bay</h3>
+                        <p class="text-gray-400 mb-4">Begin before dawn with an almost-empty beach fronting Hanalei Bay - a bow-shaped stretch surrounded by lush mountains. Park in the Pine Trees lot on Ama Ama Road, where you'll find a mural honoring surfing legend Andy Irons.</p>
+                        <div class="border-l-2 border-cyan-400/30 pl-4 mt-4">
+                            <p class="text-sm text-gray-300"><strong>Sunrise magic:</strong> Perfect meditative flow as sun rises over tranquil waters - ideal setting for chaturanga and mindful movement before the world wakes up.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-morphism rounded-2xl p-8 fade-in-up" style="animation-delay: 0.1s;">
+                        <h3 class="text-xl font-medium mb-4" style="color: #FB7185;">Next: Chill Time in Hanalei Town</h3>
+                        <p class="text-gray-400 mb-4">After your practice, drift into town for grounded community time. Sip locally roasted coffee, browse hand-crafted art, or wander botanical gardens for peaceful reflection - perfect low-key transition.</p>
+                        <div class="border-l-2 border-pink-400/30 pl-4 mt-4">
+                            <p class="text-sm text-gray-300"><strong>Cultural flow:</strong> The transition from beach yoga to town wandering creates perfect rhythm - physical practice to cultural immersion to wellness finale.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Special Wellness Options Section -->
+            <div class="wellness-options fade-in-up">
+                <h2 class="text-3xl md:text-4xl font-light mb-6">
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        Choose Your Afternoon Wellness
+                    </span>
+                </h2>
+                <p class="text-lg text-gray-300 mb-8">
+                    To extend your wellness journey, choose from two standout options based on your vibe
+                </p>
+                
+                <div class="grid md:grid-cols-2 gap-8 text-left">
                     <div class="glass-morphism rounded-xl p-6">
-                        <h3 class="text-lg font-semibold mb-3" style="color: var(--accent-cyan);">🧘‍♀️ Yoga Essentials</h3>
-                        <ul class="space-y-2 text-sm" style="color: var(--text-muted);">
-                            <li>• Yoga mat (or towel)</li>
-                            <li>• Comfortable layers</li>
-                            <li>• Water bottle</li>
-                            <li>• Light blanket for savasana</li>
+                        <h3 class="text-xl font-medium mb-4" style="color: #67E8F9;">Black Coral Yoga Studio</h3>
+                        <p class="text-sm mb-4 text-gray-300">Serene studio offering Heated Vinyasa, Hatha with Sound Healing, and Sculpt. The heated classes (88-92°F via infrared) deepen muscle release, while meditative offerings provide restorative flow.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-pill text-xs">Heated Classes</span>
+                            <span class="tag-pill text-xs">Sound Healing</span>
+                            <span class="tag-pill text-xs">Sculpt Classes</span>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-morphism rounded-xl p-6">
+                        <h3 class="text-xl font-medium mb-4" style="color: #FB7185;">Bamford Wellness Spa at 1 Hotel</h3>
+                        <p class="text-sm mb-4 text-gray-300">Luxury wellness sanctuary blending ancient Hawaiian techniques with holistic therapies. Peaceful follow-up to your beach-side awakening, set within rich, sustainable design.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-pill text-xs">Hawaiian Techniques</span>
+                            <span class="tag-pill text-xs">Holistic Therapies</span>
+                            <span class="tag-pill text-xs">Sustainable Design</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What to Know -->
+            <div class="mb-24">
+                <h2 class="text-4xl md:text-5xl font-extralight mb-12 text-center">
+                    <span style="color: #f8fafc;">Wellness Day </span>
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-light">
+                        Essentials
+                    </span>
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <h3 class="text-xl font-medium mb-6" style="color: #67E8F9;">Yoga Essentials</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3">
+                                <span class="text-cyan-400 mt-1">→</span>
+                                <span class="text-gray-300">Yoga mat or beach towel</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-cyan-400 mt-1">→</span>
+                                <span class="text-gray-300">Comfortable layers for early morning</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-cyan-400 mt-1">→</span>
+                                <span class="text-gray-300">Water bottle for hydration</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-cyan-400 mt-1">→</span>
+                                <span class="text-gray-300">Light blanket for savasana</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-cyan-400 mt-1">→</span>
+                                <span class="text-gray-300">Cash for local coffee shops</span>
+                            </li>
                         </ul>
                     </div>
-                    <div class="glass-morphism rounded-xl p-6">
-                        <h3 class="text-lg font-semibold mb-3" style="color: var(--accent-pink);">💰 Budget Planning</h3>
-                        <ul class="space-y-2 text-sm" style="color: var(--text-muted);">
-                            <li>• Coffee & breakfast: ~$15</li>
-                            <li>• Studio class: ~$25-35</li>
-                            <li>• Spa treatment: ~$150+</li>
-                            <li>• Total: ~$40-200/person</li>
-                        </ul>
-                    </div>
-                    <div class="glass-morphism rounded-xl p-6">
-                        <h3 class="text-lg font-semibold mb-3" style="color: var(--accent-cyan);">📋 Pro Tips</h3>
-                        <ul class="space-y-2 text-sm" style="color: var(--text-muted);">
-                            <li>• Check studio schedule ahead</li>
-                            <li>• Book spa treatments in advance</li>
-                            <li>• Bring layers for early morning</li>
-                            <li>• Cash for local coffee shops</li>
+                    
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <h3 class="text-xl font-medium mb-6" style="color: #FB7185;">Henry's Wellness Wisdom</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-400 mt-1">→</span>
+                                <span class="text-gray-300">Check studio schedule ahead of time</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-400 mt-1">→</span>
+                                <span class="text-gray-300">Book spa treatments in advance</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-400 mt-1">→</span>
+                                <span class="text-gray-300">Andy Irons mural connects practice to culture</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-400 mt-1">→</span>
+                                <span class="text-gray-300">Studio for active recovery, spa for luxury</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-400 mt-1">→</span>
+                                <span class="text-gray-300">Town wandering creates perfect rhythm</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- Call to Action -->
-            <div class="text-center mb-16 fade-in-up">
-                <div class="glass-morphism rounded-2xl p-8">
-                    <h2 class="text-2xl font-semibold mb-4">Ready for Your Wellness Day?</h2>
-                    <p class="text-lg mb-6" style="color: var(--text-secondary);">
-                        Experience the perfect blend of sunrise yoga, cultural exploration, and wellness luxury
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button class="btn-outline px-8 py-3" style="border-color: rgba(103, 232, 249, 0.3); color: var(--accent-cyan);">
-                            Chat with Kai About This Adventure
-                        </button>
+            <!-- Author Card -->
+            <div class="glass-morphism rounded-2xl p-8 mb-24">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w" 
+                         alt="Henry" 
+                         class="w-32 h-32 rounded-full object-cover">
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="text-2xl font-light mb-2">Adventure by <span style="color: #67E8F9;">Henry</span></h3>
+                        <p class="text-gray-400 mb-4">Kauai real estate agent and North Shore wellness enthusiast. This is my perfect wellness flow - sunrise yoga at the most peaceful spot, cultural connection through Hanalei town, then your choice of studio energy or spa luxury. The timing, locations, and flexible finish create the ultimate rejuvenation day.</p>
+                        <a href="https://www.alohahenry.com" target="_blank" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors">
+                            Visit AlohaHenry.com
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                        </a>
                     </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="text-center mb-24">
+                <div class="glass-morphism rounded-3xl p-12 inline-block">
+                    <h2 class="text-3xl font-light mb-4">Ready for Your Wellness Day?</h2>
+                    <p class="text-xl text-gray-300 mb-8 max-w-2xl">
+                        Ask Kai about sunrise timing, studio schedules, or help planning your perfect zen experience
+                    </p>
+                    <a href="/#hero" class="get-coconuts-btn inline-block text-lg px-8 py-4">
+                        Chat with Kai →
+                    </a>
                 </div>
             </div>
 
@@ -525,112 +527,153 @@
     </section>
 
     <!-- Similar Adventures -->
-    <section class="py-16 px-4 bg-black">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-3xl font-light mb-8 text-center">More Epic Adventures</h2>
+    <section class="py-24 px-4 bg-black">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-extralight mb-12 text-center">
+                <span style="color: #f8fafc;">Similar </span>
+                <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-light">
+                    Adventures
+                </span>
+            </h2>
             
-            <div class="flex gap-6 overflow-x-auto pb-4">
-                
-                <!-- Similar Adventure 1 -->
-                <div class="similar-card">
-                    <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755917646940-EZLYMMX2IE6EVGWBMNB3/unsplash-image-5ZLDGa6Acug.jpg?format=400w" 
-                         alt="Hanalei surf adventure" 
-                         class="w-full h-32 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-semibold mb-2" style="color: var(--text-primary);">Hanalei Surf Adventure</h3>
-                        <p class="text-xs mb-3" style="color: var(--text-muted);">Breakfast, board rental, beginner waves, legendary lunch</p>
-                        <a href="/adventures/hanalei-surf" class="text-cyan-400 text-xs hover:text-cyan-300">
-                            View Adventure →
-                        </a>
+            <div class="scroll-container">
+                <div class="flex gap-6 pb-4 justify-center" style="width: max-content; margin: 0 auto;">
+                    
+                    <!-- Adventure 1 -->
+                    <div class="adventure-card-small" onclick="window.location.href='/adventures/hanalei-surf-adventure'">
+                        <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755917646940-EZLYMMX2IE6EVGWBMNB3/unsplash-image-5ZLDGa6Acug.jpg?format=500w" 
+                             alt="Hanalei Surf" 
+                             class="w-full h-32 object-cover">
+                        <div class="p-5">
+                            <h3 class="font-medium text-base mb-2" style="color: #67E8F9;">Hanalei Surf Adventure</h3>
+                            <p class="text-xs text-gray-400 mb-3">Beginner waves, breakfast, legendary lunch</p>
+                            <span class="tag-pill text-xs">View →</span>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Similar Adventure 2 -->
-                <div class="similar-card">
-                    <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923533561-BUQSQX02CQ7G4COH2MJQ/unsplash-image-9y7y26C-l4Y.jpg?format=400w" 
-                         alt="Anini snorkel adventure" 
-                         class="w-full h-32 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-semibold mb-2" style="color: var(--text-primary);">Anini Snorkel + Lighthouse</h3>
-                        <p class="text-xs mb-3" style="color: var(--text-muted);">Protected reef, fresh fish tacos, historic lighthouse visit</p>
-                        <a href="/adventures/anini-snorkel-lighthouse" class="text-cyan-400 text-xs hover:text-cyan-300">
-                            View Adventure →
-                        </a>
+                    <!-- Adventure 2 -->
+                    <div class="adventure-card-small" onclick="window.location.href='/adventures/perfect-kids-beach-day'">
+                        <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/9813df8b-695a-4b38-a9aa-a2536270c694/LN6.jpeg?format=500w" 
+                             alt="Kids Beach Day" 
+                             class="w-full h-32 object-cover">
+                        <div class="p-5">
+                            <h3 class="font-medium text-base mb-2" style="color: #67E8F9;">Perfect Kids Beach Day</h3>
+                            <p class="text-xs text-gray-400 mb-3">Malasadas, protected lagoon, family fun</p>
+                            <span class="tag-pill text-xs">View →</span>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Similar Adventure 3 -->
-                <div class="similar-card">
-                    <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923394688-SYSF41OEDI34O2ZVLVAX/unsplash-image-GqEFbD-vgBs.jpg?format=400w" 
-                         alt="Epic football weekend" 
-                         class="w-full h-32 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-semibold mb-2" style="color: var(--text-primary);">Epic Football Weekend</h3>
-                        <p class="text-xs mb-3" style="color: var(--text-muted);">Sunrise beers, bourbon house, wings finale</p>
-                        <a href="/adventures/epic-football-weekend" class="text-cyan-400 text-xs hover:text-cyan-300">
-                            View Adventure →
-                        </a>
+                    <!-- Adventure 3 -->
+                    <div class="adventure-card-small" onclick="window.location.href='/adventures/perfect-poipu-beach-pizza-night'">
+                        <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923394688-SYSF41OEDI34O2ZVLVAX/unsplash-image-GqEFbD-vgBs.jpg?format=500w" 
+                             alt="Poipu Beach Pizza" 
+                             class="w-full h-32 object-cover">
+                        <div class="p-5">
+                            <h3 class="font-medium text-base mb-2" style="color: #67E8F9;">Perfect Poipu Beach + Pizza Night</h3>
+                            <p class="text-xs text-gray-400 mb-3">America's best beach, turtle watch, epic pizza</p>
+                            <span class="tag-pill text-xs">View →</span>
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-16 border-t border-gray-900">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <!-- Logo & Tagline -->
-                <div class="md:col-span-1">
-                    <div class="mb-4">
-                        <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="text-2xl font-light">
-                            AlohaKai
-                        </span>
+    <footer class="relative bg-black border-t border-gray-800/50">
+        <!-- Gradient accent line -->
+        <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 md:px-6 pt-20 pb-12">
+            <!-- Main footer content -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-12 mb-16">
+                
+                <!-- Brand column - wider -->
+                <div class="lg:col-span-2">
+                    <div class="mb-6">
+                        <h3 class="text-3xl font-light mb-4">
+                            <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                                AlohaKai
+                            </span>
+                        </h3>
+                        <p class="text-gray-400 text-sm leading-relaxed max-w-sm">
+                            Your AI-powered local friend on Kauai. Real advice, real experiences, real time.
+                        </p>
                     </div>
-                    <p class="text-sm" style="color: var(--text-muted);">
-                        Your AI-powered local guide to the Garden Isle
-                    </p>
+                    
+                    <!-- Quick SMS signup -->
+                    <div class="mb-6">
+                        <p class="text-xs uppercase tracking-wider text-gray-500 mb-3">Text Kai Directly</p>
+                        <div class="flex items-center gap-2">
+                            <a href="sms:+18082723456" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/10 to-pink-500/10 border border-gray-700/50 hover:border-gray-600 transition-all">
+                                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                                </svg>
+                                <span class="text-sm text-gray-300">+1 (808) 272-3456</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Trust badges -->
+                    <div class="flex gap-4">
+                        <span class="text-xs text-gray-500">🌺 100% Local</span>
+                        <span class="text-xs text-gray-500">🛡️ Safe Travel First</span>
+                        <span class="text-xs text-gray-500">🤙 Real Advice</span>
+                    </div>
                 </div>
-
-                <!-- Company -->
+                
+                <!-- Explore column -->
                 <div>
-                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Company</h4>
-                    <ul class="space-y-2">
-                        <li><a href="/about" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">About Us</a></li>
-                        <li><a href="/contact" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Contact</a></li>
-                        <li><a href="/careers" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Careers</a></li>
-                        <li><a href="/blog" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Blog</a></li>
+                    <h4 class="text-xs uppercase tracking-wider text-gray-400 mb-4 font-semibold">Explore</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/adventures" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Adventures</a></li>
+                        <li><a href="/deals" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Local Deals</a></li>
+                        <li><a href="/audio" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Audio Guides</a></li>
+                        <li><a href="/shop" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Island Gear</a></li>
+                        <li><a href="/beaches" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Secret Beaches</a></li>
                     </ul>
                 </div>
-
-                <!-- Support -->
+                
+                <!-- Popular column -->
                 <div>
-                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Support</h4>
-                    <ul class="space-y-2">
-                        <li><a href="/help" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Help Center</a></li>
-                        <li><a href="/faq" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">FAQ</a></li>
-                        <li><a href="/privacy" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Privacy Policy</a></li>
-                        <li><a href="/terms" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Terms of Service</a></li>
+                    <h4 class="text-xs uppercase tracking-wider text-gray-400 mb-4 font-semibold">Popular</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/adventures/hanalei-surf" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Hanalei Surf</a></li>
+                        <li><a href="/adventures/kids-beach" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Kids Beach Day</a></li>
+                        <li><a href="/adventures/poipu-turtles" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Turtle Watching</a></li>
+                        <li><a href="/deals/happy-hour" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Happy Hours</a></li>
+                        <li><a href="/audio/whale-stories" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Whale Stories</a></li>
                     </ul>
                 </div>
-
-                <!-- Connect -->
+                
+                <!-- Connect column -->
                 <div>
-                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Connect</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Instagram</a></li>
-                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Twitter</a></li>
-                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">YouTube</a></li>
-                        <li><a href="/newsletter" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Newsletter</a></li>
+                    <h4 class="text-xs uppercase tracking-wider text-gray-400 mb-4 font-semibold">Connect</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/about" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">About Kai</a></li>
+                        <li><a href="/contact" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Contact</a></li>
+                        <li><a href="/partner" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Partner With Us</a></li>
+                        <li><a href="/safety" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Safety Guide</a></li>
                     </ul>
                 </div>
             </div>
-
-            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
-                <p class="text-sm" style="color: var(--text-muted);">
-                    © 2025 AlohaKai. Made with aloha in Kauai.
-                </p>
+            
+            <!-- Bottom bar -->
+            <div class="pt-8 border-t border-gray-800/50">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="flex flex-wrap gap-4 text-xs text-gray-500">
+                        <span>© 2024 AlohaKai</span>
+                        <a href="/privacy" class="hover:text-cyan-400 transition-colors">Privacy</a>
+                        <a href="/terms" class="hover:text-cyan-400 transition-colors">Terms</a>
+                        <a href="/safety" class="hover:text-cyan-400 transition-colors">Safety First</a>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-gray-500">Made with</span>
+                        <span class="text-xs text-pink-400">♥</span>
+                        <span class="text-xs text-gray-500">on Kauai</span>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
@@ -640,19 +683,6 @@
             const menu = document.getElementById('mobileMenu');
             menu.classList.toggle('active');
         }
-
-        // Smooth scrolling for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
     </script>
 </body>
 </html>

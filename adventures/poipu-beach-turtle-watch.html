@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfect Poipu Beach Day + Epic Pizza Night | Ultimate South Shore Experience | Aloha Kai</title>
-    <meta name="description" content="Ultimate beach day: Lifeguarded Poipu Beach with turtle sightings, Puka Dog lunch, sunset turtle watch, then best pizza on South Shore at Koloa Pizza Kitchen. Designed by local Henry.">
+    <title>Perfect Poipu Beach Day + Epic Pizza Night - AlohaKai</title>
+    <meta name="description" content="Ultimate beach day: lifeguarded Poipu Beach with turtle sightings, Puka Dog lunch, sunset turtle watch, then best pizza on South Shore.">
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -15,13 +19,9 @@
             --bg-dark: #0a0a0a;
             --bg-card: rgba(20, 20, 20, 0.6);
             --border-subtle: rgba(255, 255, 255, 0.06);
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-muted: #94a3b8;
-            --accent-cyan: #67E8F9;
-            --accent-pink: #FB7185;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
         }
 
         * {
@@ -31,7 +31,7 @@
         }
         
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
             background: #000;
             color: var(--text-primary);
             overflow-x: hidden;
@@ -67,157 +67,117 @@
             scroll-margin-top: 80px;
         }
         
-        /* Hero Styles */
+        /* Hero gradient matching homepage */
         .hero-gradient {
-            background: radial-gradient(ellipse at top right, rgba(103, 232, 249, 0.03) 0%, transparent 50%),
-                        radial-gradient(ellipse at bottom left, rgba(251, 113, 133, 0.03) 0%, transparent 50%);
+            background: radial-gradient(ellipse at top right, rgba(103, 232, 249, 0.05) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom left, rgba(251, 113, 133, 0.05) 0%, transparent 50%);
         }
-        
+
+        /* Glass morphism */
         .glass-morphism {
-            background: var(--glass-bg);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* Badge System */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 500;
-            border: 1px solid;
+        /* Similar adventures card matching homepage */
+        .adventure-card-small {
+            width: 240px;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
         }
 
-        .badge-cyan {
-            background: rgba(103, 232, 249, 0.08);
-            border-color: rgba(103, 232, 249, 0.15);
-            color: var(--gradient-cyan);
+        .adventure-card-small:hover {
+            transform: translateY(-4px);
+            border-color: rgba(103, 232, 249, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
-        .badge-pink {
-            background: rgba(251, 113, 133, 0.08);
-            border-color: rgba(251, 113, 133, 0.15);
-            color: var(--gradient-pink);
-        }
-
-        .badge-gray {
-            background: rgba(148, 163, 184, 0.08);
-            border-color: rgba(148, 163, 184, 0.15);
-            color: var(--text-muted);
-        }
-
-        /* Buttons */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+        /* Buttons matching homepage */
+        .get-coconuts-btn {
+            background: linear-gradient(135deg, #67E8F9, #FB7185);
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
             color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            border: none;
-            cursor: pointer;
             text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 25px rgba(103, 232, 249, 0.2);
-        }
-
-        .btn-outline {
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--text-primary);
-            background: transparent;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .btn-outline:hover {
-            border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
-            background: rgba(103, 232, 249, 0.05);
-        }
-
-        /* Timeline styles */
-        .timeline-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
             transition: all 0.3s ease;
         }
 
-        .timeline-item:hover {
+        .get-coconuts-btn:hover {
+            opacity: 0.9;
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 25px rgba(103, 232, 249, 0.3);
         }
 
-        .timeline-time {
+        /* Tag pills */
+        .tag-pill {
             background: transparent;
-            border: 1px solid;
-            border-image: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink)) 1;
-            color: var(--text-primary);
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
             font-weight: 500;
-            font-size: 0.875rem;
-            min-width: 80px;
+            display: inline-block;
+        }
+
+        /* Stat cards */
+        .stat-card {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 20px;
             text-align: center;
+            transition: all 0.3s ease;
         }
 
-        .epic-callout {
-            background: linear-gradient(135deg, rgba(103, 232, 249, 0.1), rgba(251, 113, 133, 0.1));
-            border: 1px solid rgba(103, 232, 249, 0.3);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin: 2rem 0;
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(103, 232, 249, 0.2);
         }
 
+        .stat-number {
+            font-size: 28px;
+            font-weight: 300;
+            background: linear-gradient(135deg, #67E8F9, #FB7185);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+        }
+
+        /* Special turtle highlight */
         .turtle-highlight {
             background: linear-gradient(135deg, rgba(251, 113, 133, 0.08), rgba(103, 232, 249, 0.08));
             border: 1px solid rgba(251, 113, 133, 0.2);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin: 2rem 0;
+            border-radius: 24px;
+            padding: 32px;
+            margin: 48px 0;
+            text-align: center;
         }
 
-        .similar-card {
-            min-width: 280px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 1rem;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
-
-        .similar-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent-cyan);
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease-out;
-        }
-
+        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(40px);
             }
             to {
                 opacity: 1;
@@ -225,30 +185,27 @@
             }
         }
 
-        /* Header button */
-        .get-coconuts-btn {
-            background: linear-gradient(135deg, #67E8F9, #FB7185);
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: 500;
-            color: white;
-            text-decoration: none;
-            transition: all 0.2s ease;
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
         }
 
-        .get-coconuts-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
+        /* Scroll container */
+        .scroll-container {
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none;
         }
     </style>
 </head>
-
-<body class="bg-black text-white">
-
+<body>
     <!-- Navigation Header -->
     <nav class="nav-header">
-        <div class="container mx-auto px-6 py-4">
+        <div class="container mx-auto px-4 md:px-6 py-4">
             <div class="flex justify-between items-center">
                 <!-- Logo -->
                 <a href="/" class="text-2xl font-light">
@@ -261,10 +218,10 @@
                 <div class="desktop-nav hidden md:flex items-center gap-8">
                     <!-- Section Links -->
                     <div class="flex gap-6">
-                        <a href="/deals" class="text-gray-400 hover:text-white transition-colors text-sm">Deals</a>
-                        <a href="/adventures" class="text-gray-400 hover:text-white transition-colors text-sm">Adventures</a>
-                        <a href="/audio" class="text-gray-400 hover:text-white transition-colors text-sm">Audio</a>
-                        <a href="/shop" class="text-gray-400 hover:text-white transition-colors text-sm">Shop</a>
+                        <a href="/#deals" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Deals</a>
+                        <a href="/adventures" class="text-cyan-400 font-semibold text-sm">Adventures</a>
+                        <a href="/#audio" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Audio</a>
+                        <a href="/#goods" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Shop</a>
                     </div>
                     
                     <!-- Divider -->
@@ -272,10 +229,9 @@
                     
                     <!-- Page Links -->
                     <div class="flex items-center gap-6">
-                        <a href="/about" class="text-gray-400 hover:text-white transition-colors text-sm">About</a>
-                        <a href="/contact" class="text-gray-400 hover:text-white transition-colors text-sm">Contact</a>
-                        <span class="badge badge-gray">🥥 20</span>
-                        <a href="/signup" class="get-coconuts-btn">Get Started</a>
+                        <a href="/about" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">About</a>
+                        <a href="/contact" class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Contact</a>
+                        <a href="/signup" class="get-coconuts-btn">Get Coconuts</a>
                     </div>
                 </div>
 
@@ -289,232 +245,275 @@
 
             <!-- Mobile menu -->
             <div id="mobileMenu" class="mobile-menu mt-4">
-                <a href="/deals" class="block py-2 text-gray-400 hover:text-white transition-colors">Deals</a>
-                <a href="/adventures" class="block py-2 text-gray-400 hover:text-white transition-colors">Adventures</a>
-                <a href="/audio" class="block py-2 text-gray-400 hover:text-white transition-colors">Audio</a>
-                <a href="/shop" class="block py-2 text-gray-400 hover:text-white transition-colors">Shop</a>
+                <a href="/#deals" class="block py-2 text-gray-400 hover:text-white transition-colors">Deals</a>
+                <a href="/adventures" class="block py-2 text-cyan-400 font-medium">Adventures</a>
+                <a href="/#audio" class="block py-2 text-gray-400 hover:text-white transition-colors">Audio</a>
+                <a href="/#goods" class="block py-2 text-gray-400 hover:text-white transition-colors">Shop</a>
                 <div class="border-t border-gray-700 my-3"></div>
                 <a href="/about" class="block py-2 text-gray-400 hover:text-white transition-colors">About</a>
                 <a href="/contact" class="block py-2 text-gray-400 hover:text-white transition-colors">Contact</a>
-                <a href="/signup" class="block py-2 text-cyan-400 hover:text-cyan-300 transition-colors font-medium">Get Started</a>
+                <a href="/signup" class="block py-2 text-cyan-400 hover:text-cyan-300 transition-colors font-medium">Get Coconuts</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-gradient pt-24 pb-8">
-        <div class="max-w-4xl mx-auto px-4">
-
-            <!-- Hero Content -->
-            <div class="fade-in-up">
-                <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923394688-SYSF41OEDI34O2ZVLVAX/unsplash-image-GqEFbD-vgBs.jpg?format=750w" 
-                     alt="Perfect Poipu Beach Day + Epic Pizza Night" 
-                     class="w-full h-64 md:h-80 object-cover rounded-2xl mb-8">
+    <section class="min-h-[50vh] relative overflow-hidden hero-gradient" style="padding-top: 80px;">
+        <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+        
+        <div class="relative z-10 flex flex-col justify-center px-4 md:px-6 pt-16 md:pt-24 pb-16 min-h-[50vh]">
+            <div class="max-w-5xl mx-auto w-full">
+                <!-- Back link -->
+                <a href="/adventures" class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-cyan-400 transition-colors mb-8">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    All Adventures
+                </a>
                 
-                <div class="flex items-start gap-8 mb-8">
-                    <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w" 
-                         alt="Henry - Local Expert" 
-                         class="w-24 h-24 rounded-full object-cover">
-                    <div class="flex-1">
-                        <h1 class="text-4xl md:text-5xl font-light mb-4">
-                            <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                                Perfect Poipu Beach Day + Epic Pizza Night
-                            </span>
-                        </h1>
-                        <p class="text-xl font-light mb-6" style="color: var(--text-secondary);">
-                            Beach time at lifeguarded Poipu → Puka Dog lunch → sunset turtle watch → best pizza on South Shore at Koloa Pizza Kitchen
-                        </p>
-                        
-                        <!-- Business Listing Style -->
-                        <div class="glass-morphism rounded-lg p-4">
-                            <div class="flex items-start justify-between">
-                                <div>
-                                    <h3 class="text-lg font-medium mb-1" style="color: var(--text-primary);">By Henry</h3>
-                                    <p class="text-sm mb-2" style="color: var(--text-secondary);">Kauai Real Estate Agent & Local Expert</p>
-                                    <a href="https://www.alohahenry.com" target="_blank" class="text-cyan-400 hover:text-cyan-300 transition-colors text-sm">
-                                        www.alohahenry.com
-                                    </a>
-                                </div>
-                                <div class="flex gap-2">
-                                    <span class="badge badge-gray">🏖️ Beach</span>
-                                    <span class="badge badge-gray">📍 South Shore</span>
-                                    <span class="badge badge-gray">⏰ Full Day</span>
-                                    <span class="badge badge-gray">🐢 Turtle Watch</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <h1 class="text-5xl md:text-7xl font-extralight mb-6 tracking-tight leading-none">
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-light">
+                        Perfect Poipu Beach Day + Epic Pizza Night
+                    </span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-300 font-light max-w-3xl leading-relaxed mb-8">
+                    Lifeguarded beach paradise, Puka Dog lunch, sunset turtle watch, then South Shore's best pizza
+                </p>
+                
+                <!-- Quick stats -->
+                <div class="flex flex-wrap gap-4">
+                    <span class="tag-pill">🏖️ America's Best Beach</span>
+                    <span class="tag-pill">📍 South Shore</span>
+                    <span class="tag-pill">🐢 Turtle Watch</span>
+                    <span class="tag-pill">⏱️ Full Day</span>
+                    <span class="tag-pill">🔥 Ultimate Stoke</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Stats -->
+    <section class="py-12 px-4 -mt-20 relative z-20">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="stat-card">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Epic Stops</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Max</div>
+                    <div class="stat-label">Beach Stoke</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Safe</div>
+                    <div class="stat-label">Lifeguarded</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Magic</div>
+                    <div class="stat-label">Turtle Hour</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Main Content -->
-    <section class="py-16 px-4">
-        <div class="max-w-4xl mx-auto">
+    <section class="py-24 px-4">
+        <div class="max-w-5xl mx-auto">
             
-            <!-- Why This Is Awesome -->
-            <div class="epic-callout fade-in-up">
-                <h2 class="text-2xl font-semibold mb-4" style="color: var(--accent-cyan);">🏖️ Why This Adventure Rocks</h2>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Seamless Sand-to-Sushi Flow</h3>
-                        <p class="text-sm" style="color: var(--text-muted);">Great daylight beach session, satisfying lunch, sunset show, then clean up for a savory evening.</p>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Wildlife & Comfort</h3>
-                        <p class="text-sm" style="color: var(--text-muted);">Turtles, safe lifeguarded waters, and shower facilities - check, check, and check.</p>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Casual and Flexible</h3>
-                        <p class="text-sm" style="color: var(--text-muted);">Pizza-style dinner is easy and adaptable for eating out or taking back to your rental.</p>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">America's Best Beach</h3>
-                        <p class="text-sm" style="color: var(--text-muted);">Poipu was voted America's best beach in 2001 - a celebrated spot with both calm and adventure areas.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Detailed Timeline -->
-            <div class="mb-16 fade-in-up">
-                <h2 class="text-3xl font-light mb-8">Your Perfect Beach-to-Dinner Flow</h2>
-                
-                <div class="timeline-item">
-                    <div class="timeline-time">All Day</div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Poipu Beach Park</h3>
-                        <p class="text-sm mb-3" style="color: var(--text-secondary);">Spend your day at Poipu Beach - a celebrated, lifeguarded beach (voted America's best in 2001) where sea turtles lounge on the shore and monk seals sometimes appear, especially in the evenings. Its combination of calm snorkeling areas and reef breaks make it perfect for families and sun seekers alike.</p>
-                        <div class="flex gap-2">
-                            <span class="badge badge-cyan">🏆 America's Best 2001</span>
-                            <span class="badge badge-gray">🏊‍♀️ Lifeguarded</span>
-                            <span class="badge badge-gray">🐢 Turtle Sightings</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-time">Lunch</div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Puka Dog</h3>
-                        <p class="text-sm mb-3" style="color: var(--text-secondary);">When lunchtime hits, swing by Puka Dog near Poipu Beach (open daily 10 am–7 pm), and grab a unique, savory treat to fuel you for more beach time.</p>
-                        <div class="flex gap-2">
-                            <span class="badge badge-pink">🌭 Unique Savory Treat</span>
-                            <span class="badge badge-gray">🕐 Daily 10am-7pm</span>
-                            <span class="badge badge-gray">📍 Near Beach</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Turtle Hour Highlight -->
-            <div class="turtle-highlight fade-in-up">
-                <h2 class="text-2xl font-semibold mb-4" style="color: var(--accent-pink);">🐢 The Iconic Turtle Hour</h2>
-                <p class="text-lg mb-4" style="color: var(--text-secondary);">
-                    Head back to the beach for that iconic Turtle Hour - when green sea turtles come ashore during sunset. This is the magic moment everyone talks about.
+            <!-- Why This Rocks -->
+            <div class="mb-24 text-center">
+                <h2 class="text-4xl md:text-5xl font-extralight mb-8">
+                    <span style="color: #f8fafc;">Why This </span>
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-light">
+                        Rocks
+                    </span>
+                </h2>
+                <p class="text-xl text-gray-300 font-light max-w-3xl mx-auto mb-12">
+                    From America's best beach to magical turtle encounters and perfect pizza finish
                 </p>
-                <p class="text-sm" style="color: var(--text-muted);">
-                    Shower facilities at Poipu Beach let you rinse off the salt before dinner, making the transition from beach day to evening dining seamless and comfortable.
-                </p>
-            </div>
-
-            <!-- Timeline Continued -->
-            <div class="mb-16 fade-in-up">
-                <div class="timeline-item">
-                    <div class="timeline-time">Evening</div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">Koloa Pizza Kitchen</h3>
-                        <p class="text-sm mb-3" style="color: var(--text-secondary);">Wrap the day with the best pizza on the South Shore. Koloa Pizza Kitchen serves exceptional pies with an expansive menu that satisfies everyone, open until 9pm every night. Perfect whether you dine out or grab takeout for a cozy night back at your rental.</p>
-                        <div class="flex gap-2">
-                            <span class="badge badge-cyan">🍕 Best South Shore Pizza</span>
-                            <span class="badge badge-gray">🕘 Open Until 9pm</span>
-                            <span class="badge badge-gray">📦 Takeout Available</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Henry's Insider Knowledge -->
-            <div class="glass-morphism rounded-2xl p-8 mb-16 fade-in-up">
-                <div class="flex items-center gap-4 mb-6">
-                    <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=200w" 
-                         alt="Henry" 
-                         class="w-16 h-16 rounded-full object-cover">
-                    <div>
-                        <h2 class="text-2xl font-semibold" style="color: var(--accent-cyan);">Henry's Insider Tips</h2>
-                        <p class="text-sm" style="color: var(--text-secondary);">Local knowledge you won't find in guidebooks</p>
-                    </div>
-                </div>
                 
-                <div class="grid gap-4">
-                    <div class="border-l-4 border-cyan-400 pl-4">
-                        <h4 class="font-semibold mb-1" style="color: var(--text-primary);">America's Best Beach Legacy</h4>
-                        <p class="text-sm" style="color: var(--text-muted);">There's a reason Poipu won that title - perfect balance of calm family areas and more adventurous reef breaks. It really does have something for everyone.</p>
-                    </div>
-                    
-                    <div class="border-l-4 border-pink-400 pl-4">
-                        <h4 class="font-semibold mb-1" style="color: var(--text-primary);">Turtle Hour Timing</h4>
-                        <p class="text-sm" style="color: var(--text-muted);">The turtles really do show up most evenings around sunset. It's not guaranteed, but the odds are very good - especially if you're patient and quiet.</p>
-                    </div>
-                    
-                    <div class="border-l-4 border-cyan-400 pl-4">
-                        <h4 class="font-semibold mb-1" style="color: var(--text-primary);">Shower Strategy</h4>
-                        <p class="text-sm" style="color: var(--text-muted);">Those beach showers are a game-changer for transitioning from beach day to dinner. Rinse off the salt, feel refreshed, and you're ready for evening dining.</p>
-                    </div>
-                    
-                    <div class="border-l-4 border-pink-400 pl-4">
-                        <h4 class="font-semibold mb-1" style="color: var(--text-primary);">Flexible Dinner Options</h4>
-                        <p class="text-sm" style="color: var(--text-muted);">Koloa Pizza Kitchen works great whether you want to dine out and extend the social experience, or grab takeout and enjoy a quiet night back at your place.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- What to Bring -->
-            <div class="mb-16 fade-in-up">
-                <h2 class="text-3xl font-light mb-8">What to Bring</h2>
                 <div class="grid md:grid-cols-3 gap-6">
-                    <div class="glass-morphism rounded-xl p-6">
-                        <h3 class="text-lg font-semibold mb-3" style="color: var(--accent-cyan);">🏖️ Beach Essentials</h3>
-                        <ul class="space-y-2 text-sm" style="color: var(--text-muted);">
-                            <li>• Sunscreen (reef-safe)</li>
-                            <li>• Beach towel</li>
-                            <li>• Snorkel gear (optional)</li>
-                            <li>• Water and snacks</li>
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <div class="mb-4">
+                            <svg class="w-10 h-10 text-cyan-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-medium mb-2 text-white">America's Best Beach</h3>
+                        <p class="text-sm text-gray-400">Voted America's best beach in 2001 - perfect balance of calm family areas and adventurous reef breaks</p>
+                    </div>
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <div class="mb-4">
+                            <svg class="w-10 h-10 text-cyan-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-medium mb-2 text-white">Seamless Flow</h3>
+                        <p class="text-sm text-gray-400">Beach session to satisfying lunch to sunset show, then clean up for perfect evening dining</p>
+                    </div>
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <div class="mb-4">
+                            <svg class="w-10 h-10 text-cyan-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-medium mb-2 text-white">Wildlife & Comfort</h3>
+                        <p class="text-sm text-gray-400">Turtle encounters, monk seal sightings, safe lifeguarded waters, and shower facilities</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Beach to Dinner Circuit -->
+            <div class="mb-24">
+                <h2 class="text-4xl md:text-5xl font-extralight mb-12 text-center">
+                    <span style="color: #f8fafc;">Your Beach to </span>
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-light">
+                        Dinner Circuit
+                    </span>
+                </h2>
+                
+                <div class="space-y-8">
+                    
+                    <div class="glass-morphism rounded-2xl p-8 fade-in-up">
+                        <h3 class="text-xl font-medium mb-4" style="color: #67E8F9;">Main: All Day at Poipu Beach Park</h3>
+                        <p class="text-gray-400 mb-4">Spend your day at America's best beach (2001 winner) where green sea turtles lounge on shore and monk seals sometimes appear. Perfect combo of calm snorkeling areas and reef breaks, plus lifeguards for safety.</p>
+                        <div class="border-l-2 border-cyan-400/30 pl-4 mt-4">
+                            <p class="text-sm text-gray-300"><strong>Award-winning magic:</strong> There's a real reason it won that title - something for everyone from families to adventure seekers, plus the wildlife encounters are legendary.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-morphism rounded-2xl p-8 fade-in-up" style="animation-delay: 0.1s;">
+                        <h3 class="text-xl font-medium mb-4" style="color: #FB7185;">Fuel: Puka Dog</h3>
+                        <p class="text-gray-400 mb-4">When hunger hits, grab a unique savory treat at nearby Puka Dog (open daily 10am-7pm). These aren't your average hot dogs - they're a local island twist that'll keep you fueled for more beach time.</p>
+                        <div class="border-l-2 border-pink-400/30 pl-4 mt-4">
+                            <p class="text-sm text-gray-300"><strong>Local twist:</strong> Perfect beach food - portable, satisfying, and totally unique to Hawaii. Right near the beach so you don't lose your perfect spot.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Special Turtle Hour Section -->
+            <div class="turtle-highlight fade-in-up">
+                <h2 class="text-3xl md:text-4xl font-light mb-6">
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        The Iconic Turtle Hour
+                    </span>
+                </h2>
+                <p class="text-xl text-gray-300 mb-6">
+                    Head back to the beach for that magical moment when green sea turtles come ashore during sunset. This is the moment everyone talks about.
+                </p>
+                <p class="text-gray-400">
+                    The shower facilities at Poipu Beach let you rinse off the salt before dinner - perfect transition from beach day to evening dining.
+                </p>
+            </div>
+
+            <!-- Continue Circuit -->
+            <div class="mb-24">
+                <div class="space-y-8">
+                    <div class="glass-morphism rounded-2xl p-8 fade-in-up">
+                        <h3 class="text-xl font-medium mb-4" style="color: #67E8F9;">End: Koloa Pizza Kitchen</h3>
+                        <p class="text-gray-400 mb-4">Cap the perfect day with South Shore's best pizza. Exceptional pies with expansive menu, open until 9pm every night. Perfect whether you dine out and extend the social experience or grab takeout for cozy night back at your place.</p>
+                        <div class="border-l-2 border-cyan-400/30 pl-4 mt-4">
+                            <p class="text-sm text-gray-300"><strong>Flexible finish:</strong> After a full beach day, you can choose your vibe - social dining out or relaxed takeout. Either way, you're getting the island's best pizza.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What to Know -->
+            <div class="mb-24">
+                <h2 class="text-4xl md:text-5xl font-extralight mb-12 text-center">
+                    <span style="color: #f8fafc;">Beach Day </span>
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-light">
+                        Essentials
+                    </span>
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <h3 class="text-xl font-medium mb-6" style="color: #67E8F9;">Beach Essentials</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3">
+                                <span class="text-cyan-400 mt-1">→</span>
+                                <span class="text-gray-300">Reef-safe sunscreen (protect da reef!)</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-cyan-400 mt-1">→</span>
+                                <span class="text-gray-300">Beach towel and comfy chair</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-cyan-400 mt-1">→</span>
+                                <span class="text-gray-300">Snorkel gear for turtle watching</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-cyan-400 mt-1">→</span>
+                                <span class="text-gray-300">Waterproof phone case for epic shots</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-cyan-400 mt-1">→</span>
+                                <span class="text-gray-300">Water and snacks for all-day energy</span>
+                            </li>
                         </ul>
                     </div>
-                    <div class="glass-morphism rounded-xl p-6">
-                        <h3 class="text-lg font-semibold mb-3" style="color: var(--accent-pink);">💰 Budget Planning</h3>
-                        <ul class="space-y-2 text-sm" style="color: var(--text-muted);">
-                            <li>• Puka Dog lunch: ~$12-15</li>
-                            <li>• Beach parking: Free</li>
-                            <li>• Dinner: ~$25-35</li>
-                            <li>• Total: ~$37-50/person</li>
-                        </ul>
-                    </div>
-                    <div class="glass-morphism rounded-xl p-6">
-                        <h3 class="text-lg font-semibold mb-3" style="color: var(--accent-cyan);">📸 Capture the Magic</h3>
-                        <ul class="space-y-2 text-sm" style="color: var(--text-muted);">
-                            <li>• Waterproof phone case</li>
-                            <li>• Camera for turtle shots</li>
-                            <li>• Sunset timing apps</li>
-                            <li>• Respect wildlife distance</li>
+                    
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <h3 class="text-xl font-medium mb-6" style="color: #FB7185;">Henry's Beach Wisdom</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-400 mt-1">→</span>
+                                <span class="text-gray-300">Free parking - arrive early for best spots</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-400 mt-1">→</span>
+                                <span class="text-gray-300">Turtle hour really happens most evenings</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-400 mt-1">→</span>
+                                <span class="text-gray-300">Shower facilities are a game-changer</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-400 mt-1">→</span>
+                                <span class="text-gray-300">Respect wildlife - keep your distance</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-400 mt-1">→</span>
+                                <span class="text-gray-300">Pizza works for dining in or takeout</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- Call to Action -->
-            <div class="text-center mb-16 fade-in-up">
-                <div class="glass-morphism rounded-2xl p-8">
-                    <h2 class="text-2xl font-semibold mb-4">Ready for Your Perfect Beach Day?</h2>
-                    <p class="text-lg mb-6" style="color: var(--text-secondary);">
-                        Experience America's best beach, magical turtle encounters, and the perfect evening finish
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button class="btn-outline px-8 py-3" style="border-color: rgba(103, 232, 249, 0.3); color: var(--accent-cyan);">
-                            Chat with Kai About This Adventure
-                        </button>
+            <!-- Author Card -->
+            <div class="glass-morphism rounded-2xl p-8 mb-24">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/6e7701d3-366d-4c11-bfae-42fe82deaab3/Untitled%2B%28600%2Bx%2B600%2Bpx%29.jpg?format=300w" 
+                         alt="Henry" 
+                         class="w-32 h-32 rounded-full object-cover">
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="text-2xl font-light mb-2">Adventure by <span style="color: #67E8F9;">Henry</span></h3>
+                        <p class="text-gray-400 mb-4">Kauai real estate agent and South Shore expert. This is my go-to beach-to-dinner circuit - perfect flow from America's best beach to magical turtle encounters to island's best pizza. The shower facilities, timing, and flexible dinner options make it work perfectly.</p>
+                        <a href="https://www.alohahenry.com" target="_blank" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors">
+                            Visit AlohaHenry.com
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                        </a>
                     </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="text-center mb-24">
+                <div class="glass-morphism rounded-3xl p-12 inline-block">
+                    <h2 class="text-3xl font-light mb-4">Ready for Your Perfect Beach Day?</h2>
+                    <p class="text-xl text-gray-300 mb-8 max-w-2xl">
+                        Ask Kai about turtle timing, best beach spots, or help planning your perfect South Shore day
+                    </p>
+                    <a href="/#hero" class="get-coconuts-btn inline-block text-lg px-8 py-4">
+                        Chat with Kai →
+                    </a>
                 </div>
             </div>
 
@@ -522,112 +521,153 @@
     </section>
 
     <!-- Similar Adventures -->
-    <section class="py-16 px-4 bg-black">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-3xl font-light mb-8 text-center">More Epic Adventures</h2>
+    <section class="py-24 px-4 bg-black">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-extralight mb-12 text-center">
+                <span style="color: #f8fafc;">Similar </span>
+                <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="font-light">
+                    Adventures
+                </span>
+            </h2>
             
-            <div class="flex gap-6 overflow-x-auto pb-4">
-                
-                <!-- Similar Adventure 1 -->
-                <div class="similar-card">
-                    <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755917646940-EZLYMMX2IE6EVGWBMNB3/unsplash-image-5ZLDGa6Acug.jpg?format=400w" 
-                         alt="Hanalei surf adventure" 
-                         class="w-full h-32 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-semibold mb-2" style="color: var(--text-primary);">Hanalei Surf Adventure</h3>
-                        <p class="text-xs mb-3" style="color: var(--text-muted);">Breakfast, board rental, beginner waves, legendary lunch</p>
-                        <a href="/adventures/hanalei-surf" class="text-cyan-400 text-xs hover:text-cyan-300">
-                            View Adventure →
-                        </a>
+            <div class="scroll-container">
+                <div class="flex gap-6 pb-4 justify-center" style="width: max-content; margin: 0 auto;">
+                    
+                    <!-- Adventure 1 -->
+                    <div class="adventure-card-small" onclick="window.location.href='/adventures/hanalei-surf-adventure'">
+                        <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755917646940-EZLYMMX2IE6EVGWBMNB3/unsplash-image-5ZLDGa6Acug.jpg?format=500w" 
+                             alt="Hanalei Surf" 
+                             class="w-full h-32 object-cover">
+                        <div class="p-5">
+                            <h3 class="font-medium text-base mb-2" style="color: #67E8F9;">Hanalei Surf Adventure</h3>
+                            <p class="text-xs text-gray-400 mb-3">Beginner waves, breakfast, legendary lunch</p>
+                            <span class="tag-pill text-xs">View →</span>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Similar Adventure 2 -->
-                <div class="similar-card">
-                    <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923533561-BUQSQX02CQ7G4COH2MJQ/unsplash-image-9y7y26C-l4Y.jpg?format=400w" 
-                         alt="Anini snorkel adventure" 
-                         class="w-full h-32 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-semibold mb-2" style="color: var(--text-primary);">Anini Snorkel + Lighthouse</h3>
-                        <p class="text-xs mb-3" style="color: var(--text-muted);">Protected reef, fresh fish tacos, historic lighthouse visit</p>
-                        <a href="/adventures/anini-snorkel-lighthouse" class="text-cyan-400 text-xs hover:text-cyan-300">
-                            View Adventure →
-                        </a>
+                    <!-- Adventure 2 -->
+                    <div class="adventure-card-small" onclick="window.location.href='/adventures/perfect-kids-beach-day'">
+                        <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/9813df8b-695a-4b38-a9aa-a2536270c694/LN6.jpeg?format=500w" 
+                             alt="Kids Beach Day" 
+                             class="w-full h-32 object-cover">
+                        <div class="p-5">
+                            <h3 class="font-medium text-base mb-2" style="color: #67E8F9;">Perfect Kids Beach Day</h3>
+                            <p class="text-xs text-gray-400 mb-3">Malasadas, protected lagoon, family fun</p>
+                            <span class="tag-pill text-xs">View →</span>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Similar Adventure 3 -->
-                <div class="similar-card">
-                    <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755924297895-TM6E1SA0Z46H52SRKGV7/unsplash-image-n8L1VYaypcw.jpg?format=400w" 
-                         alt="Yoga north shore wellness" 
-                         class="w-full h-32 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-semibold mb-2" style="color: var(--text-primary);">Yoga North Shore</h3>
-                        <p class="text-xs mb-3" style="color: var(--text-muted);">Sunrise flow, Hanalei town wandering, spa finale</p>
-                        <a href="/adventures/yoga-north-shore" class="text-cyan-400 text-xs hover:text-cyan-300">
-                            View Adventure →
-                        </a>
+                    <!-- Adventure 3 -->
+                    <div class="adventure-card-small" onclick="window.location.href='/adventures/anini-snorkel-lighthouse'">
+                        <img src="https://images.squarespace-cdn.com/content/v1/671373103353703365f2042a/1755923533561-BUQSQX02CQ7G4COH2MJQ/unsplash-image-9y7y26C-l4Y.jpg?format=500w" 
+                             alt="Anini Snorkel" 
+                             class="w-full h-32 object-cover">
+                        <div class="p-5">
+                            <h3 class="font-medium text-base mb-2" style="color: #67E8F9;">Anini Snorkel + Lighthouse</h3>
+                            <p class="text-xs text-gray-400 mb-3">Protected reef, epic tacos, historic views</p>
+                            <span class="tag-pill text-xs">View →</span>
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-16 border-t border-gray-900">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <!-- Logo & Tagline -->
-                <div class="md:col-span-1">
-                    <div class="mb-4">
-                        <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" class="text-2xl font-light">
-                            AlohaKai
-                        </span>
+    <footer class="relative bg-black border-t border-gray-800/50">
+        <!-- Gradient accent line -->
+        <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 md:px-6 pt-20 pb-12">
+            <!-- Main footer content -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-12 mb-16">
+                
+                <!-- Brand column - wider -->
+                <div class="lg:col-span-2">
+                    <div class="mb-6">
+                        <h3 class="text-3xl font-light mb-4">
+                            <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                                AlohaKai
+                            </span>
+                        </h3>
+                        <p class="text-gray-400 text-sm leading-relaxed max-w-sm">
+                            Your AI-powered local friend on Kauai. Real advice, real experiences, real time.
+                        </p>
                     </div>
-                    <p class="text-sm" style="color: var(--text-muted);">
-                        Your AI-powered local guide to the Garden Isle
-                    </p>
+                    
+                    <!-- Quick SMS signup -->
+                    <div class="mb-6">
+                        <p class="text-xs uppercase tracking-wider text-gray-500 mb-3">Text Kai Directly</p>
+                        <div class="flex items-center gap-2">
+                            <a href="sms:+18082723456" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/10 to-pink-500/10 border border-gray-700/50 hover:border-gray-600 transition-all">
+                                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                                </svg>
+                                <span class="text-sm text-gray-300">+1 (808) 272-3456</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Trust badges -->
+                    <div class="flex gap-4">
+                        <span class="text-xs text-gray-500">🌺 100% Local</span>
+                        <span class="text-xs text-gray-500">🛡️ Safe Travel First</span>
+                        <span class="text-xs text-gray-500">🤙 Real Advice</span>
+                    </div>
                 </div>
-
-                <!-- Company -->
+                
+                <!-- Explore column -->
                 <div>
-                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Company</h4>
-                    <ul class="space-y-2">
-                        <li><a href="/about" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">About Us</a></li>
-                        <li><a href="/contact" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Contact</a></li>
-                        <li><a href="/careers" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Careers</a></li>
-                        <li><a href="/blog" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Blog</a></li>
+                    <h4 class="text-xs uppercase tracking-wider text-gray-400 mb-4 font-semibold">Explore</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/adventures" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Adventures</a></li>
+                        <li><a href="/deals" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Local Deals</a></li>
+                        <li><a href="/audio" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Audio Guides</a></li>
+                        <li><a href="/shop" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Island Gear</a></li>
+                        <li><a href="/beaches" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Secret Beaches</a></li>
                     </ul>
                 </div>
-
-                <!-- Support -->
+                
+                <!-- Popular column -->
                 <div>
-                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Support</h4>
-                    <ul class="space-y-2">
-                        <li><a href="/help" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Help Center</a></li>
-                        <li><a href="/faq" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">FAQ</a></li>
-                        <li><a href="/privacy" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Privacy Policy</a></li>
-                        <li><a href="/terms" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Terms of Service</a></li>
+                    <h4 class="text-xs uppercase tracking-wider text-gray-400 mb-4 font-semibold">Popular</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/adventures/hanalei-surf" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Hanalei Surf</a></li>
+                        <li><a href="/adventures/kids-beach" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Kids Beach Day</a></li>
+                        <li><a href="/adventures/poipu-turtles" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Turtle Watching</a></li>
+                        <li><a href="/deals/happy-hour" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Happy Hours</a></li>
+                        <li><a href="/audio/whale-stories" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Whale Stories</a></li>
                     </ul>
                 </div>
-
-                <!-- Connect -->
+                
+                <!-- Connect column -->
                 <div>
-                    <h4 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">Connect</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Instagram</a></li>
-                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Twitter</a></li>
-                        <li><a href="#" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">YouTube</a></li>
-                        <li><a href="/newsletter" class="text-sm hover:text-white transition-colors" style="color: var(--text-muted);">Newsletter</a></li>
+                    <h4 class="text-xs uppercase tracking-wider text-gray-400 mb-4 font-semibold">Connect</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/about" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">About Kai</a></li>
+                        <li><a href="/contact" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Contact</a></li>
+                        <li><a href="/partner" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Partner With Us</a></li>
+                        <li><a href="/safety" class="text-sm text-gray-500 hover:text-cyan-400 transition-colors">Safety Guide</a></li>
                     </ul>
                 </div>
             </div>
-
-            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
-                <p class="text-sm" style="color: var(--text-muted);">
-                    © 2025 AlohaKai. Made with aloha in Kauai.
-                </p>
+            
+            <!-- Bottom bar -->
+            <div class="pt-8 border-t border-gray-800/50">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="flex flex-wrap gap-4 text-xs text-gray-500">
+                        <span>© 2024 AlohaKai</span>
+                        <a href="/privacy" class="hover:text-cyan-400 transition-colors">Privacy</a>
+                        <a href="/terms" class="hover:text-cyan-400 transition-colors">Terms</a>
+                        <a href="/safety" class="hover:text-cyan-400 transition-colors">Safety First</a>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-gray-500">Made with</span>
+                        <span class="text-xs text-pink-400">♥</span>
+                        <span class="text-xs text-gray-500">on Kauai</span>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
@@ -637,19 +677,6 @@
             const menu = document.getElementById('mobileMenu');
             menu.classList.toggle('active');
         }
-
-        // Smooth scrolling for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
     </script>
 </body>
 </html>
