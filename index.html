@@ -1812,51 +1812,98 @@
         }
     }
 
-    function sendMessage() {
-        const input = document.getElementById('chatInput');
-        const message = input.value.trim();
+    // Replace the existing sendMessage() function with this one:
+
+function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // Ensure chat is expanded
+    expandChatSmooth();
+    
+    const messagesContainer = document.getElementById('messagesContainer');
+    
+    // Clear intro message if it exists
+    const intro = messagesContainer.querySelector('.intro-message');
+    if (intro) intro.remove();
+    
+    // Add user message
+    const userMessage = document.createElement('div');
+    userMessage.className = 'message-bubble message-user';
+    userMessage.textContent = message;
+    messagesContainer.appendChild(userMessage);
+    
+    // Clear input
+    input.value = '';
+    
+    // Add typing indicator
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'typing-indicator';
+    typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+    messagesContainer.appendChild(typingIndicator);
+    
+    // Scroll to bottom
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    // Generate or retrieve session ID
+    let sessionId = localStorage.getItem('kai_session_id');
+    if (!sessionId) {
+        sessionId = 'web_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('kai_session_id', sessionId);
+    }
+    
+    // Call the real Kai API
+    fetch('https://kai-sms-server.henryjames2.repl.co/api/kai-chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            message: message,
+            session_id: sessionId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Remove typing indicator
+        typingIndicator.remove();
         
-        if (!message) return;
-        
-        // Ensure chat is expanded
-        expandChatSmooth();
-        
-        const messagesContainer = document.getElementById('messagesContainer');
-        
-        // Clear intro message if it exists
-        const intro = messagesContainer.querySelector('.intro-message');
-        if (intro) intro.remove();
-        
-        // Add user message
-        const userMessage = document.createElement('div');
-        userMessage.className = 'message-bubble message-user';
-        userMessage.textContent = message;
-        messagesContainer.appendChild(userMessage);
-        
-        // Clear input
-        input.value = '';
-        
-        // Add typing indicator
-        const typingIndicator = document.createElement('div');
-        typingIndicator.className = 'typing-indicator';
-        typingIndicator.innerHTML = '<span></span><span></span><span></span>';
-        messagesContainer.appendChild(typingIndicator);
+        // Add Kai's response
+        const kaiMessage = document.createElement('div');
+        kaiMessage.className = 'message-bubble message-kai';
+        kaiMessage.textContent = data.response || "Shoots! Something went wrong. Try again?";
+        messagesContainer.appendChild(kaiMessage);
         
         // Scroll to bottom
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    })
+    .catch(error => {
+        console.error('Error calling Kai API:', error);
         
-        // Simulate response
-        setTimeout(() => {
-            typingIndicator.remove();
-            
-            const kaiMessage = document.createElement('div');
-            kaiMessage.className = 'message-bubble message-kai';
-            kaiMessage.textContent = getKaiResponse(message);
-            messagesContainer.appendChild(kaiMessage);
-            
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }, 1000 + Math.random() * 1000);
-    }
+        // Remove typing indicator
+        typingIndicator.remove();
+        
+        // Show error message
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'message-bubble message-kai';
+        errorMessage.textContent = "Shoots! Can't connect right now. Try again in a sec? 🌺";
+        messagesContainer.appendChild(errorMessage);
+        
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    });
+}
+
+// You can keep the dummy getKaiResponse() function as a fallback,
+// but it won't be used anymore since we're calling the real API
+
+// Also update askQuestion to use the same flow:
+function askQuestion(question) {
+    document.getElementById('chatInput').value = question;
+    expandChatSmooth();
+    sendMessage();
+}
 
     function askQuestion(question) {
         document.getElementById('chatInput').value = question;
