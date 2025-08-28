@@ -1,0 +1,3980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Places Directory | AlohaKai</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* MATCHING YOUR HOMEPAGE STYLE GUIDE EXACTLY */
+        :root {
+            --gradient-cyan: #67E8F9;
+            --gradient-pink: #FB7185;
+            --bg-dark: #0a0a0a;
+            --bg-card: rgba(20, 20, 20, 0.6);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Hero gradient matching homepage */
+        .hero-gradient {
+            background: radial-gradient(ellipse at top right, rgba(103, 232, 249, 0.05) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom left, rgba(251, 113, 133, 0.05) 0%, transparent 50%);
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Glass morphism from homepage */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        /* Navigation matching homepage */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .get-coconuts-btn {
+            background: linear-gradient(135deg, #67E8F9, #FB7185);
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .get-coconuts-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(103, 232, 249, 0.3);
+        }
+
+        /* NETFLIX-STYLE CONTAINER FOR CATEGORIES */
+        .category-section {
+            margin-bottom: 48px;
+            position: relative;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .category-title {
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--text-primary);
+        }
+
+        .view-all {
+            font-size: 12px;
+            color: var(--gradient-cyan);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .view-all:hover {
+            opacity: 0.7;
+        }
+
+        /* NETFLIX-STYLE SCROLLING CONTAINER */
+        .scroll-container {
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+            scroll-snap-type: x proximity;
+            padding-bottom: 8px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Fade hint on right */
+        .scroll-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.8));
+            pointer-events: none;
+            opacity: 0.5;
+            z-index: 2;
+        }
+
+        /* PLACE CARDS - MATCHING YOUR STYLE */
+        .place-card {
+            width: 320px;
+            height: 400px;
+            flex-shrink: 0;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            transform: translate3d(0, 0, 0);
+            scroll-snap-align: start;
+        }
+
+        .place-card:hover {
+            transform: translate3d(0, -8px, 0);
+            border-color: rgba(103, 232, 249, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4),
+                        0 15px 30px rgba(103, 232, 249, 0.08);
+        }
+
+        /* Card flip animation */
+        .card-flip {
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .place-card.flipped .card-flip {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        /* MATCHING BADGE SYSTEM */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .badge-cyan {
+            background: rgba(103, 232, 249, 0.1);
+            border-color: rgba(103, 232, 249, 0.2);
+            color: var(--gradient-cyan);
+        }
+
+        .badge-pink {
+            background: rgba(251, 113, 133, 0.1);
+            border-color: rgba(251, 113, 133, 0.2);
+            color: var(--gradient-pink);
+        }
+
+        .badge-gray {
+            background: rgba(148, 163, 184, 0.08);
+            border-color: rgba(148, 163, 184, 0.15);
+            color: var(--text-muted);
+        }
+
+        /* KAI 100 SPECIAL BADGE */
+        .kai100-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        /* Hide badge when card is flipped */
+        .place-card.flipped .kai100-badge {
+            display: none;
+        }
+
+        /* Visual category header */
+        .place-visual {
+            height: 140px;
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.03), rgba(251, 113, 133, 0.03));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            position: relative;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        /* Add to itinerary button */
+        .add-button {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 10;
+        }
+
+        .place-card:hover .add-button {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .add-button:hover {
+            background: linear-gradient(135deg, var(--gradient-cyan), var(--gradient-pink));
+            color: white;
+            border-color: transparent;
+        }
+
+        .place-card.selected .add-button {
+            opacity: 1;
+            background: var(--gradient-cyan);
+            color: #000;
+            transform: scale(1) rotate(45deg);
+        }
+
+        /* Card content */
+        .place-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding-top: 16px;
+        }
+
+        /* COLOR HIERARCHY MATCHING HOMEPAGE */
+        .place-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #67E8F9 !important; /* Clean blue for places */
+        }
+
+        .place-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        /* Tag system */
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 12px 0;
+        }
+
+        /* Quick stats grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: auto 0 16px 0;
+            padding-top: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .stat-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 2px;
+        }
+
+        /* Actions row */
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-primary);
+        }
+
+        /* Back card - Kai's voice - CENTERED */
+        .kai-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center vertically */
+            align-items: center; /* Center horizontally */
+            overflow: hidden;
+            padding: 10px 0;
+        }
+
+        .kai-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .kai-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--gradient-cyan), var(--gradient-pink));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .kai-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gradient-cyan);
+        }
+
+        .kai-says {
+            background: rgba(103, 232, 249, 0.03);
+            border: 1px solid rgba(103, 232, 249, 0.08);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-primary);
+            max-height: 100px;
+            overflow-y: auto;
+            width: 100%;
+            text-align: center; /* Center text */
+        }
+
+        .insider-tips {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+            max-height: 120px;
+            width: 100%;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 6px 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+
+        .tip-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.1), rgba(251, 113, 133, 0.1));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+
+        /* Itinerary Builder - Clean Sidebar */
+        .itinerary-builder {
+            position: fixed;
+            right: -400px;
+            top: 80px;
+            bottom: 20px;
+            width: 380px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 24px;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 90;
+            overflow-y: auto;
+        }
+
+        .itinerary-builder.open {
+            right: 20px;
+        }
+
+        /* Mobile itinerary - bottom sheet instead of sidebar */
+        @media (max-width: 768px) {
+            .itinerary-builder {
+                position: fixed;
+                right: 0;
+                left: 0;
+                bottom: -100%;
+                top: auto;
+                width: 100%;
+                max-height: 60vh;
+                border-radius: 20px 20px 0 0;
+                transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .itinerary-builder.open {
+                bottom: 0;
+                right: 0;
+            }
+
+            /* Add drag handle for mobile */
+            .itinerary-builder::before {
+                content: '';
+                position: absolute;
+                top: 8px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 40px;
+                height: 4px;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 2px;
+            }
+            
+            .itinerary-header {
+                padding-top: 8px;
+            }
+        }
+
+        .itinerary-header {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .itinerary-title {
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .itinerary-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 8px;
+            bottom: 8px;
+            width: 1px;
+            background: linear-gradient(180deg, var(--gradient-cyan), var(--gradient-pink));
+            opacity: 0.2;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(103, 232, 249, 0.1);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 20px;
+            width: 8px;
+            height: 8px;
+            background: var(--gradient-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(103, 232, 249, 0.3);
+        }
+
+        .timeline-time {
+            font-size: 10px;
+            color: var(--gradient-cyan);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .timeline-place {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .timeline-location {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Optimize button */
+        .optimize-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 24px;
+            background: linear-gradient(135deg, var(--gradient-cyan), var(--gradient-pink));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .optimize-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(103, 232, 249, 0.3);
+        }
+
+        /* Filter pills matching homepage */
+        .filter-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+
+        .filter-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Search Section */
+        .search-section {
+            margin-bottom: 24px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 50px 16px 50px;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(103, 232, 249, 0.3);
+            background: rgba(20, 20, 20, 0.8);
+            box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.08);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: all 0.2s ease;
+        }
+
+        .clear-search:hover {
+            color: var(--text-primary);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .search-results-count {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--gradient-cyan);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .search-results-count.visible {
+            opacity: 1;
+        }
+
+        /* Search highlighting */
+        .place-card.search-match {
+            border-color: rgba(103, 232, 249, 0.2);
+            box-shadow: 0 0 20px rgba(103, 232, 249, 0.1);
+        }
+
+        .filter-pill {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .filter-pill:hover {
+            border-color: rgba(103, 232, 249, 0.4);
+            color: rgba(103, 232, 249, 0.9);
+            background: rgba(103, 232, 249, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .filter-pill.active {
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.15), rgba(251, 113, 133, 0.15));
+            border-color: rgba(103, 232, 249, 0.4);
+            color: var(--text-primary);
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 640px) {
+            .place-card {
+                width: 280px;
+                height: 380px;
+            }
+
+            .scroll-container {
+                gap: 12px;
+            }
+            
+            .all-cards-grid {
+                grid-template-columns: 1fr;
+                padding: 12px;
+            }
+            
+            /* Mobile-friendly navigation */
+            .get-coconuts-btn {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 80;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        /* Grid layout for all cards */
+        .all-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            padding: 20px 0;
+        }
+
+        .all-cards-grid .place-card {
+            width: 100%;
+            height: 400px;
+            flex-shrink: initial;
+        }
+
+        /* Show/hide based on filters */
+        .place-card.hidden {
+            display: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* Typography Cards - Add this block */
+.place-card {
+    width: 240px !important;
+    height: 260px !important;
+    padding: 18px !important;
+    flex-shrink: 0;
+}
+
+.visual-header {
+    height: 70px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: transparent; /* No gradient pill */
+}
+
+.category-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    opacity: 0.3;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4); /* Subtle grey */
+}
+
+.city-label {
+    font-size: 22px; /* Slightly larger */
+    font-weight: 300;
+    background: linear-gradient(135deg, #67E8F9, #FB7185);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+}
+
+.kai100-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.kai-text {
+    font-size: 8px;
+    letter-spacing: 1px;
+    opacity: 0.5;
+    display: block;
+    color: #67E8F9;
+}
+
+.kai-number {
+    font-size: 20px;
+    font-weight: 100;
+    background: linear-gradient(135deg, #67E8F9, #FB7185);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+}
+
+.place-title {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 4px;
+    line-height: 1.3;
+    text-align: center;
+    letter-spacing: 0.2px;
+}
+
+.place-subtitle {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.3);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.tag-row {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.tag {
+    padding: 3px 7px;
+    font-size: 9px;
+    border-radius: 10px;
+    background: rgba(103, 232, 249, 0.1);
+    color: #67E8F9;
+    border: 1px solid rgba(103, 232, 249, 0.2);
+    white-space: nowrap;
+}
+
+.tag.hot {
+    background: rgba(251, 113, 133, 0.1);
+    color: #FB7185;
+    border-color: rgba(251, 113, 133, 0.2);
+}
+
+.card-actions {
+    display: flex;
+    gap: 1px;
+    margin-top: auto;
+    opacity: 0.7;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 8px;
+    font-size: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.4);
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}        
+    </style>
+</head>
+<body>
+    <div class="hero-gradient"></div>
+    
+    <!-- Navigation -->
+    <nav class="nav-header">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="/" class="text-2xl font-light">
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        AlohaKai
+                    </span>
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <div class="text-sm text-gray-400">
+                        <span id="placeCount">0</span> places selected
+                    </div>
+                    <a href="#" class="get-coconuts-btn" onclick="toggleItinerary()">
+                        Build Itinerary
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-24 pb-12 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <!-- Header -->
+            <div class="text-center mb-12 fade-in-up">
+                <h1 class="text-5xl md:text-6xl font-light mb-6">
+                    <span style="color: var(--gradient-cyan);">Discover</span>
+                    <span style="color: var(--text-primary);"> Kauai</span>
+                </h1>
+                <p class="text-lg" style="color: var(--text-secondary);">
+                    Build your perfect adventure • Click to explore • Add to your day
+                </p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-section">
+                <div class="search-wrapper">
+                    <input 
+                        type="text" 
+                        id="searchInput"
+                        class="search-input" 
+                        placeholder="Search anything... 'fish tacos', 'sunset dinner', 'kid friendly beach', 'north shore adventure'"
+                        autocomplete="off"
+                    >
+                    <div class="search-icon">🔍</div>
+                    <button id="clearSearch" class="clear-search" style="display: none;">✕</button>
+                </div>
+                <div id="searchResults" class="search-results-count"></div>
+            </div>
+
+            <!-- Filter Pills -->
+            <div class="filter-container">
+                <div class="filter-pill active" onclick="filterCategory('all')">All Places</div>
+                <div class="filter-pill" onclick="filterCategory('kai100')">Kai 100</div>
+                <div class="filter-pill" onclick="filterCategory('food')">Food & Drinks</div>
+                <div class="filter-pill" onclick="filterCategory('beach')">Beaches</div>
+                <div class="filter-pill" onclick="filterCategory('activity')">Adventures</div>
+                <div class="filter-pill" onclick="filterCategory('local')">Local Favorites</div>
+                <div class="filter-pill" onclick="filterCategory('north-shore')">North Shore</div>
+                <div class="filter-pill" onclick="filterCategory('east-side')">East Side</div>
+                <div class="filter-pill" onclick="filterCategory('south-shore')">South Shore</div>
+                <div class="filter-pill" onclick="filterCategory('budget')">$ Budget</div>
+                <div class="filter-pill" onclick="filterCategory('moderate')">$ Moderate</div>
+            </div>
+
+            <!-- Category Sections with Netflix-style scrolling -->
+            
+            <!-- Kai 100 Section -->
+            <div class="category-section" id="kai100-section">
+                <div class="category-header">
+                    <h2 class="category-title">Kai's Top Picks 🔥</h2>
+                    <span class="view-all">The best of the best</span>
+                </div>
+                
+                <div class="scroll-container" id="kai100-container">
+                    <!-- KAI 100 CARDS WILL BE INSERTED HERE -->
+                    <!-- Sleeping Giant Grill -->
+                    <div class="place-card" data-id="sleeping-giant-grill">
+                        <div class="kai100-badge">KAI 100</div>
+                        <div class="add-button" onclick="toggleSelection(event, 'sleeping-giant-grill')">
+                            <span>+</span>
+                        </div>
+                        <div class="card-flip">
+                            <!-- Front -->
+                            <div class="card-front">
+                                <div class="place-visual">🌮</div>
+                                <div class="place-content">
+                                    <h3 class="place-title">Sleeping Giant Grill</h3>
+                                    <p class="place-subtitle">Mexican Fusion • Kapaa</p>
+                                    
+                                    <div class="tag-row">
+                                        <span class="badge badge-cyan">LOCAL LOVE</span>
+                                        <span class="badge badge-pink">EPIC TACOS</span>
+                                        <span class="badge badge-gray">$$</span>
+                                    </div>
+                                    
+                                    <div class="stats-grid">
+                                        <div class="stat-item">
+                                            <div class="stat-label">Wait</div>
+                                            <div class="stat-value">5-10m</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label">Best Time</div>
+                                            <div class="stat-value">11am</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label">Vibe</div>
+                                            <div class="stat-value">Chill</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-actions">
+                                    <button class="action-btn" onclick="openMap(event, 'sleeping-giant-grill')">📍 Directions</button>
+                                    <button class="action-btn" onclick="openWebsite(event, 'sleeping-giant-grill')">🌐 Website</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Back -->
+                            <div class="card-back">
+                                <div class="kai-section">
+                                    <div class="kai-header">
+                                        <div class="kai-avatar">🤙</div>
+                                        <div>
+                                            <div class="kai-name">Kai says</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="kai-says">
+                                        "Epic spot! Personal favorite - their fish tacos are 🔥 and the Al Pastor is legit. Perfect fuel-up before hitting the beaches!"
+                                    </div>
+                                    
+                                    <div class="insider-tips">
+                                        <div class="tip-item">
+                                            <div class="tip-icon">⏰</div>
+                                            <div>Hit it before 11:30 to avoid lunch rush</div>
+                                        </div>
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🌶️</div>
+                                            <div>Ask for the secret hot sauce - game changer!</div>
+                                        </div>
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🏖️</div>
+                                            <div>Lydgate Beach is 5 mins away - perfect combo</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-actions">
+                                    <button class="action-btn action-primary" onclick="toggleSelection(event, 'sleeping-giant-grill')">Add to Day</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bobby V's -->
+                    <div class="place-card" data-id="bobby-vs">
+                        <div class="kai100-badge">KAI 100</div>
+                        <div class="add-button" onclick="toggleSelection(event, 'bobby-vs')">
+                            <span>+</span>
+                        </div>
+                        <div class="card-flip">
+                            <!-- Front -->
+                            <div class="card-front">
+                                <div class="place-visual">🍕</div>
+                                <div class="place-content">
+                                    <h3 class="place-title">Bobby V's</h3>
+                                    <p class="place-subtitle">Pizza & Sports Bar • Kapaa</p>
+                                    
+                                    <div class="tag-row">
+                                        <span class="badge badge-cyan">THE SPOT</span>
+                                        <span class="badge badge-pink">GARDEN PATIO</span>
+                                        <span class="badge badge-gray">$$</span>
+                                    </div>
+                                    
+                                    <div class="stats-grid">
+                                        <div class="stat-item">
+                                            <div class="stat-label">Wait</div>
+                                            <div class="stat-value">15-20m</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label">Happy Hour</div>
+                                            <div class="stat-value">3-6pm</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label">Vibe</div>
+                                            <div class="stat-value">Lively</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-actions">
+                                    <button class="action-btn" onclick="openMap(event, 'bobby-vs')">📍 Directions</button>
+                                    <button class="action-btn" onclick="openWebsite(event, 'bobby-vs')">🌐 Website</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Back -->
+                            <div class="card-back">
+                                <div class="kai-section">
+                                    <div class="kai-header">
+                                        <div class="kai-avatar">🤙</div>
+                                        <div>
+                                            <div class="kai-name">Kai says</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="kai-says">
+                                        "THE spot for pizza! Garden patio is where it's at. Garlic knots are unreal and the bourbon selection is 👌"
+                                    </div>
+                                    
+                                    <div class="insider-tips">
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🍻</div>
+                                            <div>Happy hour 3-6pm - killer deals on drinks</div>
+                                        </div>
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🏈</div>
+                                            <div>Great for game day - multiple screens</div>
+                                        </div>
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🌿</div>
+                                            <div>Request the garden patio - best vibes</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-actions">
+                                    <button class="action-btn action-primary" onclick="toggleSelection(event, 'bobby-vs')">Add to Day</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- More Kai 100 cards... -->
+                    
+            <div class="place-card kai100" data-id="bobb01">
+                <div class="visual-header">
+                    <div class="category-label">ITALIAN</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">01</span>
+                    </div>
+                </div>
+                <div class="place-title">Bobby V's Italian Restaurant & Pizzeria</div>
+                <div class="place-subtitle">Italian</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">THIN-CRUST</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'bobb01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'bobb01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="bvsb01">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">02</span>
+                    </div>
+                </div>
+                <div class="place-title">BV’s Bourbon & Ale House</div>
+                <div class="place-subtitle">American</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">BLACKENED</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'bvsb01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'bvsb01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="bigm02">
+                <div class="visual-header">
+                    <div class="category-label">JAPANESE</div>
+                    <div class="city-label">LIHUE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">03</span>
+                    </div>
+                </div>
+                <div class="place-title">Big Monster Sushi & Thai- LIHUE</div>
+                <div class="place-subtitle">Japanese</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">ANGRY</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'bigm02')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'bigm02')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="bigw01">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">04</span>
+                    </div>
+                </div>
+                <div class="place-title">Big Wave Dave's Bar & Grill</div>
+                <div class="place-subtitle">American</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'bigw01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'bigw01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="coll01">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">05</span>
+                    </div>
+                </div>
+                <div class="place-title">Collab Cafe</div>
+                <div class="place-subtitle">American</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'coll01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'coll01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="duke02">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN</div>
+                    <div class="city-label">LIHUE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">06</span>
+                    </div>
+                </div>
+                <div class="place-title">Duke's Canoe Club Barefoot Bar and Restaurant</div>
+                <div class="place-subtitle">American</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'duke02')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'duke02')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="fish01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">07</span>
+                    </div>
+                </div>
+                <div class="place-title">Fish Bar Deli</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">FRESH</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'fish01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'fish01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="huki01">
+                <div class="visual-header">
+                    <div class="category-label">FINE DINING</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">09</span>
+                    </div>
+                </div>
+                <div class="place-title">Hukilau Lanai</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$$$</span>
+                    <span class="tag">ROMANTIC</span>
+                    <span class="tag hot">FISH</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'huki01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'huki01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="isla01">
+                <div class="visual-header">
+                    <div class="category-label">BREAKFAST/CAFE</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">10</span>
+                    </div>
+                </div>
+                <div class="place-title">Island Craves</div>
+                <div class="place-subtitle">Breakfast/Cafe</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">MALASADAS</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'isla01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'isla01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="jona01">
+                <div class="visual-header">
+                    <div class="category-label">FINE DINING</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">11</span>
+                    </div>
+                </div>
+                <div class="place-title">JO2 Natural Cuisine</div>
+                <div class="place-subtitle">Asian Fusion</div>
+                <div class="tag-row">
+                    <span class="tag">$$$</span>
+                    <span class="tag">ROMANTIC</span>
+                    <span class="tag hot">SCALLOP</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'jona01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'jona01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="java01">
+                <div class="visual-header">
+                    <div class="category-label">CAFE</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">12</span>
+                    </div>
+                </div>
+                <div class="place-title">Java Kai Kapaa</div>
+                <div class="place-subtitle">Cafe</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">TROPICAL</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'java01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'java01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="john01">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">13</span>
+                    </div>
+                </div>
+                <div class="place-title">Johnny's Wingz N Tingz</div>
+                <div class="place-subtitle">American</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">WINGS</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'john01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'john01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kaua04">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN</div>
+                    <div class="city-label">LIHUE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">14</span>
+                    </div>
+                </div>
+                <div class="place-title">Kauai Beer Company</div>
+                <div class="place-subtitle">American</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">PARMESAN</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kaua04')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kaua04')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kenj01">
+                <div class="visual-header">
+                    <div class="category-label">JAPANESE</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">15</span>
+                    </div>
+                </div>
+                <div class="place-title">Kenji Burger Kapaa</div>
+                <div class="place-subtitle">Japanese</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">FURIKAKE</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kenj01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kenj01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kint01">
+                <div class="visual-header">
+                    <div class="category-label">JAPANESE</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">16</span>
+                    </div>
+                </div>
+                <div class="place-title">Kintaro Japanese Restaurant</div>
+                <div class="place-subtitle">Japanese</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">GREEN</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kint01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kint01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="koun01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">17</span>
+                    </div>
+                </div>
+                <div class="place-title">Kountry Kitchen</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">WATERMELON</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'koun01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'koun01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="lava01">
+                <div class="visual-header">
+                    <div class="category-label">NEW AMERICAN</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">18</span>
+                    </div>
+                </div>
+                <div class="place-title">Lava Lava Beach Club</div>
+                <div class="place-subtitle">New American</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">HUGGO'S</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'lava01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'lava01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="lawa01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">LIHUE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">19</span>
+                    </div>
+                </div>
+                <div class="place-title">Lawai'a Fish Co.</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">POKE</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'lawa01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'lawa01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="litt01">
+                <div class="visual-header">
+                    <div class="category-label">TACOS</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">20</span>
+                    </div>
+                </div>
+                <div class="place-title">Little Fatties</div>
+                <div class="place-subtitle">Mexican</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">KABOCHA</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'litt01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'litt01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="mari01">
+                <div class="visual-header">
+                    <div class="category-label">TACOS</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">21</span>
+                    </div>
+                </div>
+                <div class="place-title">Mariachi's Mexican Cuisine</div>
+                <div class="place-subtitle">Mexican</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">MAHI-MAHI</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'mari01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'mari01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="moni01">
+                <div class="visual-header">
+                    <div class="category-label">TACOS</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">22</span>
+                    </div>
+                </div>
+                <div class="place-title">Monico's Taqueria</div>
+                <div class="place-subtitle">Mexican</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">FISH</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'moni01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'moni01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="pani01">
+                <div class="visual-header">
+                    <div class="category-label">BBQ</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">23</span>
+                    </div>
+                </div>
+                <div class="place-title">Paniolo Santa Maria Style BBQ</div>
+                <div class="place-subtitle">Bbq</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">TRI-TIP</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'pani01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'pani01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="pass01">
+                <div class="visual-header">
+                    <div class="category-label">BAKERY-CAFE</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">24</span>
+                    </div>
+                </div>
+                <div class="place-title">Passion Bakery Cafe</div>
+                <div class="place-subtitle">Bakery-Cafe</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">MALASADAS</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'pass01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'pass01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="pono01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">25</span>
+                    </div>
+                </div>
+                <div class="place-title">Pono Market</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">SPICY</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'pono01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'pono01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="slee01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">26</span>
+                    </div>
+                </div>
+                <div class="place-title">Sleeping Giant Grill</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">AHI</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'slee01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'slee01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="supe01">
+                <div class="visual-header">
+                    <div class="category-label">JAPANESE</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">27</span>
+                    </div>
+                </div>
+                <div class="place-title">Superhero Sushi And Thai</div>
+                <div class="place-subtitle">Japanese</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">GARLIC</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'supe01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'supe01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="thef01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">LIHUE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">28</span>
+                    </div>
+                </div>
+                <div class="place-title">The Fish Express</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">SPICY</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'thef01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'thef01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="them01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">29</span>
+                    </div>
+                </div>
+                <div class="place-title">The Musubi Truck Kapaa</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">SPAM</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'them01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'them01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="tony01">
+                <div class="visual-header">
+                    <div class="category-label">SEAFOOD</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">30</span>
+                    </div>
+                </div>
+                <div class="place-title">Tony's Catch</div>
+                <div class="place-subtitle">Seafood</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">FISH</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'tony01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'tony01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="troy01">
+                <div class="visual-header">
+                    <div class="category-label">BAR SNACKS</div>
+                    <div class="city-label">LIHUE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">31</span>
+                    </div>
+                </div>
+                <div class="place-title">Troy's</div>
+                <div class="place-subtitle">Bar Snacks</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'troy01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'troy01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="wail06">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN DELI/CAFE</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">32</span>
+                    </div>
+                </div>
+                <div class="place-title">Wailua Country Store</div>
+                <div class="place-subtitle">American Deli/Cafe</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">TURKEY</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'wail06')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'wail06')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="wail04">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">KAPAA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">33</span>
+                    </div>
+                </div>
+                <div class="place-title">Wailua Drive In</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">HAWAIIAN</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'wail04')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'wail04')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="aval01">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN</div>
+                    <div class="city-label">KILAUEA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">34</span>
+                    </div>
+                </div>
+                <div class="place-title">Avalon Gastropub</div>
+                <div class="place-subtitle">American</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'aval01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'aval01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="java02">
+                <div class="visual-header">
+                    <div class="category-label">COFFEE SHOP & CAFE</div>
+                    <div class="city-label">KILAUEA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">35</span>
+                    </div>
+                </div>
+                <div class="place-title">Java Kai Bar Coffee Roasters</div>
+                <div class="place-subtitle">Coffee Shop & Cafe</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">BREAKFAST</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'java02')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'java02')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kaua03">
+                <div class="visual-header">
+                    <div class="category-label">JUICE BAR & HEALTH FOOD</div>
+                    <div class="city-label">KILAUEA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">36</span>
+                    </div>
+                </div>
+                <div class="place-title">Kauai Juice Co Kilauea</div>
+                <div class="place-subtitle">Juice Bar & Health Food</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">BLUE</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kaua03')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kaua03')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kila02">
+                <div class="visual-header">
+                    <div class="category-label">PIZZA</div>
+                    <div class="city-label">KILAUEA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">37</span>
+                    </div>
+                </div>
+                <div class="place-title">Kilauea Bakery & Pizzeria</div>
+                <div class="place-subtitle">Pizza</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">SWEET</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kila02')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kila02')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kila01">
+                <div class="visual-header">
+                    <div class="category-label">SEAFOOD</div>
+                    <div class="city-label">KILAUEA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">38</span>
+                    </div>
+                </div>
+                <div class="place-title">Kilauea Fish Market</div>
+                <div class="place-subtitle">Seafood</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">GARLIC</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kila01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kila01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="paco02">
+                <div class="visual-header">
+                    <div class="category-label">TACOS</div>
+                    <div class="city-label">KILAUEA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">39</span>
+                    </div>
+                </div>
+                <div class="place-title">Paco's Tacos Kilauea</div>
+                <div class="place-subtitle">Mexican</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">FISH</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'paco02')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'paco02')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="sush01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">KILAUEA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">40</span>
+                    </div>
+                </div>
+                <div class="place-title">Sushigirl Kauai</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">LEGENDARY</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'sush01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'sush01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="tril01">
+                <div class="visual-header">
+                    <div class="category-label">CAFE</div>
+                    <div class="city-label">KILAUEA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">41</span>
+                    </div>
+                </div>
+                <div class="place-title">Trilogy Coffee & Tea Bar</div>
+                <div class="place-subtitle">Cafe</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">CHEDDAR</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'tril01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'tril01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="amar01">
+                <div class="visual-header">
+                    <div class="category-label">ASIAN FUSION</div>
+                    <div class="city-label">HANALEI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">42</span>
+                    </div>
+                </div>
+                <div class="place-title">AMA Restaurant</div>
+                <div class="place-subtitle">Asian Fusion</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">PAPAYA</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'amar01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'amar01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="bara01">
+                <div class="visual-header">
+                    <div class="category-label">TAPAS</div>
+                    <div class="city-label">HANALEI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">43</span>
+                    </div>
+                </div>
+                <div class="place-title">Bar Acuda</div>
+                <div class="place-subtitle">Tapas</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">ROMANTIC</span>
+                    <span class="tag hot">CHEESE</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'bara01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'bara01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="bign01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">HANALEI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">44</span>
+                    </div>
+                </div>
+                <div class="place-title">Big Nick's</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">CHILI</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'bign01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'bign01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="hole01">
+                <div class="visual-header">
+                    <div class="category-label">DONUTS</div>
+                    <div class="city-label">HANALEI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">45</span>
+                    </div>
+                </div>
+                <div class="place-title">Holey Grail Donuts</div>
+                <div class="place-subtitle">Donuts</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">SAFFRON</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'hole01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'hole01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kaly01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">HANALEI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">46</span>
+                    </div>
+                </div>
+                <div class="place-title">Kalypso Island Bar & Grill</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">COCONUT</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kaly01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kaly01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="tahi01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">HANALEI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">47</span>
+                    </div>
+                </div>
+                <div class="place-title">Tahiti Nui</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">MAI</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'tahi01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'tahi01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="theh01">
+                <div class="visual-header">
+                    <div class="category-label">SEAFOOD</div>
+                    <div class="city-label">HANALEI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">48</span>
+                    </div>
+                </div>
+                <div class="place-title">The Hanalei Dolphin Restaurant</div>
+                <div class="place-subtitle">Seafood</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">FRESH</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'theh01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'theh01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="wake01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">HANALEI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">49</span>
+                    </div>
+                </div>
+                <div class="place-title">Wake Up Delicious (Home Of Trucking Delicious)</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">CHURRO</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'wake01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'wake01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="happ01">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN BAR & GRILL</div>
+                    <div class="city-label">PRINCEVILLE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">50</span>
+                    </div>
+                </div>
+                <div class="place-title">Happy Talk Lounge Restaurant & Bar</div>
+                <div class="place-subtitle">American Bar & Grill</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">LAVA</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'happ01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'happ01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="nour02">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN</div>
+                    <div class="city-label">PRINCEVILLE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">51</span>
+                    </div>
+                </div>
+                <div class="place-title">Nourish Hanalei</div>
+                <div class="place-subtitle">American</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'nour02')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'nour02')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="tiki02">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN</div>
+                    <div class="city-label">PRINCEVILLE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">52</span>
+                    </div>
+                </div>
+                <div class="place-title">Tiki Iniki</div>
+                <div class="place-subtitle">American</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'tiki02')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'tiki02')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="beac01">
+                <div class="visual-header">
+                    <div class="category-label">FINE DINING</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">53</span>
+                    </div>
+                </div>
+                <div class="place-title">Beach House Restaurant - Kauai</div>
+                <div class="place-subtitle">Pacific Rim</div>
+                <div class="tag-row">
+                    <span class="tag">$$$</span>
+                    <span class="tag">ROMANTIC</span>
+                    <span class="tag hot">MACADAMIA</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'beac01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'beac01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="bren01">
+                <div class="visual-header">
+                    <div class="category-label">SEAFOOD</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">54</span>
+                    </div>
+                </div>
+                <div class="place-title">Brennecke's Beach Broiler</div>
+                <div class="place-subtitle">Seafood</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">AHI</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'bren01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'bren01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="bubb02">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">55</span>
+                    </div>
+                </div>
+                <div class="place-title">Bubba Burgers Poipu</div>
+                <div class="place-subtitle">American</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">SLOPPER</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'bubb02')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'bubb02')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="dacr01">
+                <div class="visual-header">
+                    <div class="category-label">TACOS</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">56</span>
+                    </div>
+                </div>
+                <div class="place-title">Da Crack Mexican Grinds</div>
+                <div class="place-subtitle">Mexican</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">BURRITOS</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'dacr01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'dacr01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kala02">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">57</span>
+                    </div>
+                </div>
+                <div class="place-title">Kalapaki Joe's Poipu</div>
+                <div class="place-subtitle">American</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">COCONUT</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kala02')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kala02')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kaua07">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">58</span>
+                    </div>
+                </div>
+                <div class="place-title">Kauai Island Brewing Company - Koloa</div>
+                <div class="place-subtitle">American</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">SPENT</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kaua07')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kaua07')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kaua06">
+                <div class="visual-header">
+                    <div class="category-label">JUICE BAR & HEALTH FOOD</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">59</span>
+                    </div>
+                </div>
+                <div class="place-title">Kauai Juice Co Koloa</div>
+                <div class="place-subtitle">Juice Bar & Health Food</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">MANGO</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kaua06')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kaua06')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kenj03">
+                <div class="visual-header">
+                    <div class="category-label">JAPANESE</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">60</span>
+                    </div>
+                </div>
+                <div class="place-title">Kenji Burger Koloa</div>
+                <div class="place-subtitle">Japanese</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">MISOYAKI</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kenj03')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kenj03')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kick01">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">61</span>
+                    </div>
+                </div>
+                <div class="place-title">Kickshaws</div>
+                <div class="place-subtitle">American</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">WHA</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kick01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kick01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kolo02">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">62</span>
+                    </div>
+                </div>
+                <div class="place-title">Koloa Fish Market</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">TUNA</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kolo02')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kolo02')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kolo01">
+                <div class="visual-header">
+                    <div class="category-label">PIZZA</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">63</span>
+                    </div>
+                </div>
+                <div class="place-title">Koloa Pizza Kitchen + Bar</div>
+                <div class="place-subtitle">Pizza</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kolo01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kolo01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="litt02">
+                <div class="visual-header">
+                    <div class="category-label">COFFEE</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">64</span>
+                    </div>
+                </div>
+                <div class="place-title">Little Fish Coffee Poipu</div>
+                <div class="place-subtitle">Coffee</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'litt02')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'litt02')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="merr01">
+                <div class="visual-header">
+                    <div class="category-label">FINE DINING</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">65</span>
+                    </div>
+                </div>
+                <div class="place-title">Merriman's Kauai</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$$$</span>
+                    <span class="tag">ROMANTIC</span>
+                    <span class="tag hot">CRUSTED</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'merr01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'merr01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="pork01">
+                <div class="visual-header">
+                    <div class="category-label">AMERICAN FAST CASUAL</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">66</span>
+                    </div>
+                </div>
+                <div class="place-title">Porky's Kaua’i</div>
+                <div class="place-subtitle">American Fast Casual</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">INFUSED</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'pork01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'pork01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="puka01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">67</span>
+                    </div>
+                </div>
+                <div class="place-title">Puka Dog Hawaiian Style Hot Dogs</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">POLISH</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'puka01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'puka01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="reds01">
+                <div class="visual-header">
+                    <div class="category-label">FINE DINING</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">68</span>
+                    </div>
+                </div>
+                <div class="place-title">Red Salt</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$$$</span>
+                    <span class="tag">ROMANTIC</span>
+                    <span class="tag hot">LOBSTER</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'reds01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'reds01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="scot01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">69</span>
+                    </div>
+                </div>
+                <div class="place-title">Scotty Browns Poipu</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">AHI</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'scot01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'scot01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="stev02">
+                <div class="visual-header">
+                    <div class="category-label">FINE DINING</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">70</span>
+                    </div>
+                </div>
+                <div class="place-title">Stevenson's Library</div>
+                <div class="place-subtitle">Japanese</div>
+                <div class="tag-row">
+                    <span class="tag">$$$</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'stev02')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'stev02')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="tide01">
+                <div class="visual-header">
+                    <div class="category-label">HAWAIIAN</div>
+                    <div class="city-label">POIPU</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">71</span>
+                    </div>
+                </div>
+                <div class="place-title">Tidepools</div>
+                <div class="place-subtitle">Hawaiian</div>
+                <div class="tag-row">
+                    <span class="tag">$$$$</span>
+                    <span class="tag">ROMANTIC</span>
+                    <span class="tag hot">HAWAIIAN</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'tide01')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'tide01')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="wain02">
+                <div class="visual-header">
+                    <div class="category-label">MARKET/CAFE</div>
+                    <div class="city-label">WAINIHA</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">72</span>
+                    </div>
+                </div>
+                <div class="place-title">Wainiha Country Market</div>
+                <div class="place-subtitle">Market/Cafe</div>
+                <div class="tag-row">
+                    <span class="tag">$</span>
+                    <span class="tag">CASUAL</span>
+                    <span class="tag hot">HAVEN'S</span>
+                    <span class="tag hot">LOCAL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'wain02')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'wain02')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="anahola_beach_park">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">EAST SIDE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">73</span>
+                    </div>
+                </div>
+                <div class="place-title">Anahola Beach Park</div>
+                <div class="place-subtitle">families • snorkeling</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">FAMILIES</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'anahola_beach_park')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'anahola_beach_park')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kalapaki_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">EAST SIDE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">74</span>
+                    </div>
+                </div>
+                <div class="place-title">Kalapaki Beach</div>
+                <div class="place-subtitle">families • swimming</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">FAMILIES</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kalapaki_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kalapaki_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="act_lydgate_beach_park">
+                <div class="visual-header">
+                    <div class="category-label">SNORKELING</div>
+                    <div class="city-label">EAST SIDE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">75</span>
+                    </div>
+                </div>
+                <div class="place-title">Lydgate Beach Park</div>
+                <div class="place-subtitle">Snorkeling</div>
+                <div class="tag-row">
+                    <span class="tag">FAMILIES</span>
+                    <span class="tag">$</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'act_lydgate_beach_park')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'act_lydgate_beach_park')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="black_pot_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">KAUAI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">76</span>
+                    </div>
+                </div>
+                <div class="place-title">Black Pot Beach</div>
+                <div class="place-subtitle">swimming • sunsets</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SWIMMING</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'black_pot_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'black_pot_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="hideaway_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">KAUAI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">78</span>
+                    </div>
+                </div>
+                <div class="place-title">Hideaway Beach</div>
+                <div class="place-subtitle">snorkeling • sea turtle viewing</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SNORKELING</span>
+                    <span class="tag hot">SNORKEL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'hideaway_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'hideaway_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kalihiwai_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">KAUAI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">79</span>
+                    </div>
+                </div>
+                <div class="place-title">Kalihiwai Beach</div>
+                <div class="place-subtitle">swimming • surfing</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SWIMMING</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kalihiwai_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kalihiwai_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kea_lia_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">KAUAI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">80</span>
+                    </div>
+                </div>
+                <div class="place-title">Keālia Beach</div>
+                <div class="place-subtitle">surfing • boogie boarding</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SURFING</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kea_lia_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kea_lia_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="lumaha_i_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">KAUAI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">81</span>
+                    </div>
+                </div>
+                <div class="place-title">Lumaha'i Beach</div>
+                <div class="place-subtitle">scenery • photography</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SCENERY</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'lumaha_i_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'lumaha_i_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="lydgate_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">KAUAI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">82</span>
+                    </div>
+                </div>
+                <div class="place-title">Lydgate Beach</div>
+                <div class="place-subtitle">families • children</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">FAMILIES</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'lydgate_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'lydgate_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="paliku_beach_aka_donkey_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">KAUAI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">83</span>
+                    </div>
+                </div>
+                <div class="place-title">Paliku Beach (aka Donkey Beach)</div>
+                <div class="place-subtitle">seclusion • scenic views</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SECLUSION</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'paliku_beach_aka_donkey_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'paliku_beach_aka_donkey_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="sealodge_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">KAUAI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">84</span>
+                    </div>
+                </div>
+                <div class="place-title">Sealodge Beach</div>
+                <div class="place-subtitle">solitude • shade</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SOLITUDE</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'sealodge_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'sealodge_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="secret_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">KAUAI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">85</span>
+                    </div>
+                </div>
+                <div class="place-title">Secret Beach</div>
+                <div class="place-subtitle">secluded beach experience</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SECLUDED BEACH EXPERIENCE</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'secret_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'secret_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="tunnels_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">KAUAI</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">86</span>
+                    </div>
+                </div>
+                <div class="place-title">Tunnels Beach</div>
+                <div class="place-subtitle">snorkeling • beach_lounging</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SNORKELING</span>
+                    <span class="tag hot">SNORKEL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'tunnels_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'tunnels_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="anini_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">NORTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">87</span>
+                    </div>
+                </div>
+                <div class="place-title">Anini Beach</div>
+                <div class="place-subtitle">families • snorkeling</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">FAMILIES</span>
+                    <span class="tag hot">SNORKEL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'anini_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'anini_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="anini_beach_park_campground">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">NORTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">88</span>
+                    </div>
+                </div>
+                <div class="place-title">Anini Beach Park Campground</div>
+                <div class="place-subtitle">families • snorkeling</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">FAMILIES</span>
+                    <span class="tag hot">SNORKEL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'anini_beach_park_campground')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'anini_beach_park_campground')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="haena_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">NORTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">89</span>
+                    </div>
+                </div>
+                <div class="place-title">Haena Beach</div>
+                <div class="place-subtitle">families • snorkeling</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">FAMILIES</span>
+                    <span class="tag hot">SNORKEL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'haena_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'haena_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="hanalei_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">NORTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">90</span>
+                    </div>
+                </div>
+                <div class="place-title">Hanalei Beach</div>
+                <div class="place-subtitle">swimming • surfing</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SWIMMING</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'hanalei_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'hanalei_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="hideaways_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">NORTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">91</span>
+                    </div>
+                </div>
+                <div class="place-title">Hideaways Beach</div>
+                <div class="place-subtitle">snorkeling • seclusion</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SNORKELING</span>
+                    <span class="tag hot">SNORKEL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'hideaways_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'hideaways_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kauapea_secret_beach_trail_head">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">NORTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">92</span>
+                    </div>
+                </div>
+                <div class="place-title">Kauapea (Secret) Beach Trail Head</div>
+                <div class="place-subtitle">scenic views • hiking</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SCENIC VIEWS</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kauapea_secret_beach_trail_head')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kauapea_secret_beach_trail_head')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="lumaha_i_river_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">NORTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">93</span>
+                    </div>
+                </div>
+                <div class="place-title">Lumaha'i River Beach</div>
+                <div class="place-subtitle">river swimming • beach walking</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">RIVER SWIMMING</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'lumaha_i_river_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'lumaha_i_river_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="baby_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">SOUTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">94</span>
+                    </div>
+                </div>
+                <div class="place-title">Baby Beach</div>
+                <div class="place-subtitle">families • children</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">FAMILIES</span>
+                    <span class="tag hot">SNORKEL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'baby_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'baby_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="brennecke_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">SOUTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">95</span>
+                    </div>
+                </div>
+                <div class="place-title">Brennecke Beach</div>
+                <div class="place-subtitle">bodyboarding • bodysurfing</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">BODYBOARDING</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'brennecke_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'brennecke_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="brennecke_s_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">SOUTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">96</span>
+                    </div>
+                </div>
+                <div class="place-title">Brennecke's Beach</div>
+                <div class="place-subtitle">bodyboarding • surfing</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">BODYBOARDING</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'brennecke_s_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'brennecke_s_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="keiki_cove_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">SOUTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">97</span>
+                    </div>
+                </div>
+                <div class="place-title">Keiki Cove Beach</div>
+                <div class="place-subtitle">families • children</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">FAMILIES</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'keiki_cove_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'keiki_cove_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kiahuna_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">SOUTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">98</span>
+                    </div>
+                </div>
+                <div class="place-title">Kiahuna Beach</div>
+                <div class="place-subtitle">swimming • surfing lessons</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SWIMMING</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kiahuna_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kiahuna_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="lawa_i_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">SOUTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">99</span>
+                    </div>
+                </div>
+                <div class="place-title">Lawa'i Beach</div>
+                <div class="place-subtitle">snorkeling • turtle watching</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SNORKELING</span>
+                    <span class="tag hot">SNORKEL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'lawa_i_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'lawa_i_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="poipu_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">SOUTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">100</span>
+                    </div>
+                </div>
+                <div class="place-title">Poipu Beach</div>
+                <div class="place-subtitle">families • snorkeling</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">FAMILIES</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'poipu_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'poipu_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="poipu_beach_park">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">SOUTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">101</span>
+                    </div>
+                </div>
+                <div class="place-title">Poipu Beach Park</div>
+                <div class="place-subtitle">families • snorkeling</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">FAMILIES</span>
+                    <span class="tag hot">SNORKEL</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'poipu_beach_park')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'poipu_beach_park')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="shipwreck_beach">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">SOUTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">102</span>
+                    </div>
+                </div>
+                <div class="place-title">Shipwreck Beach</div>
+                <div class="place-subtitle">surfing • hiking</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SURFING</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'shipwreck_beach')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'shipwreck_beach')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="kekaha_beach_park">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">WEST SIDE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">103</span>
+                    </div>
+                </div>
+                <div class="place-title">Kekaha Beach Park</div>
+                <div class="place-subtitle">sunset viewing • surfing</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">SUNSET VIEWING</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'kekaha_beach_park')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'kekaha_beach_park')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="salt_pond_beach_park">
+                <div class="visual-header">
+                    <div class="category-label">BEACH</div>
+                    <div class="city-label">WEST SIDE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">104</span>
+                    </div>
+                </div>
+                <div class="place-title">Salt Pond Beach Park</div>
+                <div class="place-subtitle">families • snorkeling</div>
+                <div class="tag-row">
+                    <span class="tag">FREE</span>
+                    <span class="tag">FAMILIES</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'salt_pond_beach_park')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'salt_pond_beach_park')">INFO</button>
+                </div>
+            </div>
+
+            <div class="place-card kai100" data-id="act_queen’s_bath">
+                <div class="visual-header">
+                    <div class="category-label">HIKING</div>
+                    <div class="city-label">NORTH SHORE</div>
+                    <div class="kai100-badge">
+                        <span class="kai-text">KAI 100</span>
+                        <span class="kai-number">105</span>
+                    </div>
+                </div>
+                <div class="place-title">Queen’s Bath</div>
+                <div class="place-subtitle">Hiking</div>
+                <div class="tag-row">
+                    <span class="tag">NATURE_LOVERS</span>
+                    <span class="tag">$</span>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" onclick="openMap(event, 'act_queen’s_bath')">MAP</button>
+                    <button class="action-btn" onclick="openWebsite(event, 'act_queen’s_bath')">INFO</button>
+                </div>
+            </div>
+
+
+
+
+<!-- Beaches Section -->
+<div class="category-section" id="beaches-section">
+    <div class="category-header">
+        <h2 class="category-title">Epic Beaches 🏖️</h2>
+        <span class="view-all">All beaches</span>
+    </div>
+    <div class="scroll-container" id="beaches-container">
+        <!-- Paste generated_beach_cards.html here -->
+    </div>
+</div>
+
+<!-- Food Section -->
+<div class="category-section" id="food-section">
+    <div class="category-header">
+        <h2 class="category-title">Grinds & Drinks 🍴</h2>
+        <span class="view-all">All food spots</span>
+    </div>
+    <div class="scroll-container" id="food-container">
+        <!-- Paste generated_food_cards.html here -->
+    </div>
+</div>
+
+<!-- Activities Section -->
+<div class="category-section" id="activities-section">
+    <div class="category-header">
+        <h2 class="category-title">Adventures & Activities 🎯</h2>
+        <span class="view-all">All activities</span>
+    </div>
+    <div class="scroll-container" id="activities-container">
+        <!-- Paste generated_activity_cards.html here -->
+    </div>
+</div>
+
+            <!-- Optional: Keep category sections but hidden by default -->
+            <div id="category-sections" style="display: none;">
+                <!-- Beaches Section -->
+                <div class="category-section" id="beaches-section">
+                    <div class="category-header">
+                        <h2 class="category-title">Epic Beaches 🏖️</h2>
+                        <span class="view-all">All beaches</span>
+                    </div>
+                    
+                    <div class="scroll-container" id="beaches-container">
+                        <!-- BEACH CARDS WILL BE INSERTED HERE -->
+                    <!-- Anini Beach -->
+                    <div class="place-card" data-id="anini-beach">
+                        <div class="add-button" onclick="toggleSelection(event, 'anini-beach')">
+                            <span>+</span>
+                        </div>
+                        <div class="card-flip">
+                            <!-- Front -->
+                            <div class="card-front">
+                                <div class="place-visual">🏖️</div>
+                                <div class="place-content">
+                                    <h3 class="place-title">Anini Beach</h3>
+                                    <p class="place-subtitle">Protected Reef • North Shore</p>
+                                    
+                                    <div class="tag-row">
+                                        <span class="badge badge-cyan">FAMILY</span>
+                                        <span class="badge badge-pink">SNORKELING</span>
+                                        <span class="badge badge-gray">FREE</span>
+                                    </div>
+                                    
+                                    <div class="stats-grid">
+                                        <div class="stat-item">
+                                            <div class="stat-label">Parking</div>
+                                            <div class="stat-value">Easy</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label">Snorkel</div>
+                                            <div class="stat-value">A+</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label">Crowd</div>
+                                            <div class="stat-value">Mellow</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-actions">
+                                    <button class="action-btn" onclick="openMap(event, 'anini-beach')">📍 Directions</button>
+                                    <button class="action-btn" onclick="openWebsite(event, 'anini-beach')">🌐 Info</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Back -->
+                            <div class="card-back">
+                                <div class="kai-section">
+                                    <div class="kai-header">
+                                        <div class="kai-avatar">🤙</div>
+                                        <div>
+                                            <div class="kai-name">Kai says</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="kai-says">
+                                        "Perfect for families! Protected by the longest reef in Hawaii. Epic snorkeling when calm - turtles guaranteed 🐢"
+                                    </div>
+                                    
+                                    <div class="insider-tips">
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🐢</div>
+                                            <div>Snorkel the right side for turtle spotting</div>
+                                        </div>
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🌅</div>
+                                            <div>Sundays get busy - arrive before 10am</div>
+                                        </div>
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🍧</div>
+                                            <div>Shave ice truck usually here afternoons</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-actions">
+                                    <button class="action-btn action-primary" onclick="toggleSelection(event, 'anini-beach')">Add to Day</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- More beach cards... -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Itinerary Builder Sidebar -->
+    <div class="itinerary-builder" id="itineraryBuilder">
+        <div class="itinerary-header">
+            <h3 class="itinerary-title">Your Perfect Day</h3>
+            <p class="itinerary-subtitle">Kai will optimize your route</p>
+        </div>
+        
+        <div class="timeline" id="timeline">
+            <!-- Timeline items will be dynamically added here -->
+        </div>
+
+        <button class="optimize-btn">
+            Ask Kai to Optimize Route 🚀
+        </button>
+    </div>
+
+    <script>
+        // PLACE DATA STRUCTURE - This will be populated by your Python script
+        const placeData = {
+            'sleeping-giant-grill': {
+                name: 'Sleeping Giant Grill',
+                google_place_id: 'ChIJxxxxxxxxxxxxxxxxxxxxxx', // Your Google Place ID
+                lat: 22.0964,
+                lng: -159.3421,
+                website: 'https://sleepinggiantgrill.com',
+                phone: '808-555-0100'
+            },
+            'bobby-vs': {
+                name: "Bobby V's",
+                google_place_id: 'ChIJyyyyyyyyyyyyyyyyyyyyyy',
+                lat: 22.0852,
+                lng: -159.3456,
+                website: 'https://bobbyvsrestaurant.com',
+                phone: '808-555-0101'
+            },
+            'anini-beach': {
+                name: 'Anini Beach',
+                google_place_id: 'ChIJzzzzzzzzzzzzzzzzzzzzzz',
+                lat: 22.2269,
+                lng: -159.4534,
+                website: 'https://www.kauai.gov/beaches',
+                phone: null
+            }
+        };
+
+        // Open Google Maps with directions
+        function openMap(event, placeId) {
+            event.stopPropagation();
+            const place = placeData[placeId];
+            
+            if (place && place.google_place_id) {
+                // Using Google Place ID for more accurate results
+                const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}&query_place_id=${place.google_place_id}`;
+                window.open(mapUrl, '_blank');
+            } else if (place && place.lat && place.lng) {
+                // Fallback to coordinates
+                const mapUrl = `https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lng}`;
+                window.open(mapUrl, '_blank');
+            } else if (place) {
+                // Last fallback to name search
+                const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + ' Kauai')}`;
+                window.open(mapUrl, '_blank');
+            }
+        }
+
+        // Open website
+        function openWebsite(event, placeId) {
+            event.stopPropagation();
+            const place = placeData[placeId];
+            
+            if (place && place.website) {
+                window.open(place.website, '_blank');
+            } else if (place && place.google_place_id) {
+                // Fallback to Google Maps page if no website
+                const mapUrl = `https://www.google.com/maps/place/?q=place_id:${place.google_place_id}`;
+                window.open(mapUrl, '_blank');
+            }
+        }
+
+        let selectedPlaces = [];
+        let itineraryOpen = false;
+
+        // NEW: Event Delegation - Works for all cards including generated ones
+        document.addEventListener('click', function(event) {
+            // Handle add button (+) clicks
+            const addButton = event.target.closest('.add-button');
+            if (addButton) {
+                event.stopPropagation();
+                const card = addButton.closest('.place-card');
+                const placeId = card.getAttribute('data-id') || 
+                               card.querySelector('.place-title').textContent.toLowerCase().replace(/\s+/g, '-');
+                toggleSelection(event, placeId);
+                return;
+            }
+            
+            // Handle "Add to Day" button clicks
+            const actionBtn = event.target.closest('.action-btn');
+            if (actionBtn && actionBtn.textContent.includes('Add to Day')) {
+                event.stopPropagation();
+                const card = actionBtn.closest('.place-card');
+                const placeId = card.getAttribute('data-id') || 
+                               card.querySelector('.place-title').textContent.toLowerCase().replace(/\s+/g, '-');
+                toggleSelection(event, placeId);
+                return;
+            }
+            
+            // Handle card flips (only if not clicking a button)
+            const placeCard = event.target.closest('.place-card');
+            if (placeCard && !event.target.closest('.action-btn') && !event.target.closest('.add-button')) {
+                placeCard.classList.toggle('flipped');
+            }
+        });
+
+        // Selection functionality
+        function toggleSelection(event, placeId) {
+            event.stopPropagation();
+            
+            const card = document.querySelector(`[data-id="${placeId}"]`);
+            const title = card.querySelector('.place-title').textContent;
+            const subtitle = card.querySelector('.place-subtitle').textContent;
+            
+            card.classList.toggle('selected');
+            
+            if (card.classList.contains('selected')) {
+                // Add to selected
+                const time = getNextTimeSlot();
+                selectedPlaces.push({
+                    id: placeId,
+                    name: title,
+                    location: subtitle,
+                    time: time
+                });
+            } else {
+                // Remove from selected
+                selectedPlaces = selectedPlaces.filter(p => p.id !== placeId);
+            }
+            
+            updateItinerary();
+            updatePlaceCount();
+        }
+
+        // Get next time slot
+        function getNextTimeSlot() {
+            const times = ['9:00 AM', '10:30 AM', '12:00 PM', '2:00 PM', '4:00 PM', '6:00 PM', '8:00 PM'];
+            return times[selectedPlaces.length % times.length];
+        }
+
+        // Update place count
+        function updatePlaceCount() {
+            document.getElementById('placeCount').textContent = selectedPlaces.length;
+        }
+
+        // Update itinerary display
+        function updateItinerary() {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+            
+            selectedPlaces.forEach((place, index) => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                item.innerHTML = `
+                    <div class="timeline-time">${place.time}</div>
+                    <div class="timeline-place">${place.name}</div>
+                    <div class="timeline-location">${place.location}</div>
+                `;
+                timeline.appendChild(item);
+            });
+
+            // Auto-open sidebar if items selected
+            if (selectedPlaces.length > 0 && !itineraryOpen) {
+                document.getElementById('itineraryBuilder').classList.add('open');
+                itineraryOpen = true;
+            } else if (selectedPlaces.length === 0) {
+                document.getElementById('itineraryBuilder').classList.remove('open');
+                itineraryOpen = false;
+            }
+        }
+
+        // Toggle itinerary sidebar
+        function toggleItinerary() {
+            const builder = document.getElementById('itineraryBuilder');
+            itineraryOpen = !itineraryOpen;
+            
+            if (itineraryOpen) {
+                builder.classList.add('open');
+            } else {
+                builder.classList.remove('open');
+            }
+        }
+
+        // Filter functionality
+        function filterCategory(filter) {
+            // Update active pill
+            document.querySelectorAll('.filter-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Get all cards
+            const allCards = document.querySelectorAll('#all-cards-container .place-card');
+            let visibleCount = 0;
+            
+            allCards.forEach(card => {
+                if (filter === 'all') {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else if (filter === 'kai100') {
+                    // Show only Kai 100 cards
+                    if (card.getAttribute('data-kai100') === 'true') {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                } else if (filter === 'local') {
+                    // Local favorites
+                    if (card.getAttribute('data-local') === 'true') {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                } else if (filter === 'budget') {
+                    // $ price range
+                    if (card.getAttribute('data-price') === '1') {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                } else if (filter === 'moderate') {
+                    // $ price range
+                    if (card.getAttribute('data-price') === '2') {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                } else {
+                    // Filter by category, area, or location
+                    const cardCategory = card.getAttribute('data-category');
+                    const cardArea = card.getAttribute('data-area');
+                    const cardLocation = card.getAttribute('data-location');
+                    const cardTags = card.getAttribute('data-tags') || '';
+                    
+                    if (cardCategory === filter || 
+                        cardArea === filter || 
+                        cardLocation === filter ||
+                        cardTags.includes(filter)) {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                }
+            });
+            
+            // Update count
+            document.getElementById('place-count').textContent = `${visibleCount} places`;
+        }
+
+        // Initialize count on load
+        window.addEventListener('DOMContentLoaded', function() {
+            const totalCards = document.querySelectorAll('#all-cards-container .place-card').length;
+            document.getElementById('place-count').textContent = `${totalCards} places`;
+            
+            // Initialize search
+            initializeSearch();
+        });
+
+        // Natural Language Search
+        function initializeSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const clearButton = document.getElementById('clearSearch');
+            const searchResults = document.getElementById('searchResults');
+            
+            if (!searchInput) return;
+            
+            // Search handler
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase().trim();
+                
+                // Show/hide clear button
+                clearButton.style.display = query ? 'block' : 'none';
+                
+                if (query.length >= 2) {
+                    performSearch(query);
+                } else {
+                    // Reset if query too short
+                    resetSearch();
+                }
+            });
+            
+            // Clear button
+            clearButton.addEventListener('click', function() {
+                searchInput.value = '';
+                clearButton.style.display = 'none';
+                resetSearch();
+            });
+        }
+
+        function performSearch(query) {
+            const cards = document.querySelectorAll('#all-cards-container .place-card');
+            let matches = 0;
+            
+            // Reset filters when searching
+            document.querySelectorAll('.filter-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            document.querySelector('.filter-pill').classList.add('active'); // Set "All" as active
+            
+            cards.forEach(card => {
+                // Get all searchable content
+                const name = card.querySelector('.place-title')?.textContent.toLowerCase() || '';
+                const subtitle = card.querySelector('.place-subtitle')?.textContent.toLowerCase() || '';
+                const tags = card.getAttribute('data-tags') || '';
+                const category = card.getAttribute('data-category') || '';
+                const area = card.getAttribute('data-area') || '';
+                const location = card.getAttribute('data-location') || '';
+                
+                // Get Kai says content (if card has been flipped)
+                const kaiSays = card.querySelector('.kai-says')?.textContent.toLowerCase() || '';
+                
+                // Natural language matching
+                const searchTerms = query.split(' ').filter(term => term.length > 1);
+                let matchScore = 0;
+                
+                // Check for exact phrase match first
+                if (name.includes(query)) matchScore += 10;
+                if (subtitle.includes(query)) matchScore += 5;
+                if (kaiSays.includes(query)) matchScore += 3;
+                if (tags.includes(query)) matchScore += 2;
+                
+                // Check individual terms
+                searchTerms.forEach(term => {
+                    if (name.includes(term)) matchScore += 3;
+                    if (subtitle.includes(term)) matchScore += 2;
+                    if (tags.includes(term)) matchScore += 1;
+                    if (category.includes(term)) matchScore += 2;
+                    if (area.includes(term)) matchScore += 2;
+                    if (location.includes(term)) matchScore += 2;
+                    if (kaiSays.includes(term)) matchScore += 1;
+                });
+                
+                // Special keyword matching
+                if (query.includes('kid') && tags.includes('family')) matchScore += 5;
+                if (query.includes('sunset') && tags.includes('romantic')) matchScore += 5;
+                if (query.includes('cheap') && card.getAttribute('data-price') === '1') matchScore += 5;
+                if (query.includes('fancy') && card.getAttribute('data-price') === '3') matchScore += 5;
+                if (query.includes('best') && card.getAttribute('data-kai100') === 'true') matchScore += 5;
+                
+                // Show/hide based on match
+                if (matchScore > 0) {
+                    card.classList.remove('hidden');
+                    card.classList.add('search-match');
+                    card.style.order = -matchScore; // Higher scores appear first
+                    matches++;
+                } else {
+                    card.classList.add('hidden');
+                    card.classList.remove('search-match');
+                }
+            });
+            
+            // Update results count
+            const searchResults = document.getElementById('searchResults');
+            if (matches > 0) {
+                searchResults.textContent = `Found ${matches} ${matches === 1 ? 'place' : 'places'} matching "${query}"`;
+                searchResults.classList.add('visible');
+            } else {
+                searchResults.textContent = `No places found for "${query}" - try different words`;
+                searchResults.classList.add('visible');
+            }
+            
+            // Update main count
+            document.getElementById('place-count').textContent = `${matches} places`;
+        }
+
+        function resetSearch() {
+            const cards = document.querySelectorAll('#all-cards-container .place-card');
+            cards.forEach(card => {
+                card.classList.remove('hidden', 'search-match');
+                card.style.order = '';
+            });
+            
+            document.getElementById('searchResults').classList.remove('visible');
+            const totalCards = cards.length;
+            document.getElementById('place-count').textContent = `${totalCards} places`;
+        }
+    </script>
+</body>
+</html>

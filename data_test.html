@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Places Directory | AlohaKai</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* MATCHING YOUR HOMEPAGE STYLE GUIDE EXACTLY */
+        :root {
+            --gradient-cyan: #67E8F9;
+            --gradient-pink: #FB7185;
+            --bg-dark: #0a0a0a;
+            --bg-card: rgba(20, 20, 20, 0.6);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Hero gradient matching homepage */
+        .hero-gradient {
+            background: radial-gradient(ellipse at top right, rgba(103, 232, 249, 0.05) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom left, rgba(251, 113, 133, 0.05) 0%, transparent 50%);
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Glass morphism from homepage */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        /* Navigation matching homepage */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .get-coconuts-btn {
+            background: linear-gradient(135deg, #67E8F9, #FB7185);
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .get-coconuts-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(103, 232, 249, 0.3);
+        }
+
+        /* NETFLIX-STYLE CONTAINER FOR CATEGORIES */
+        .category-section {
+            margin-bottom: 48px;
+            position: relative;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .category-title {
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--text-primary);
+        }
+
+        .view-all {
+            font-size: 12px;
+            color: var(--gradient-cyan);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .view-all:hover {
+            opacity: 0.7;
+        }
+
+        /* NETFLIX-STYLE SCROLLING CONTAINER */
+        .scroll-container {
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+            scroll-snap-type: x proximity;
+            padding-bottom: 8px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Fade hint on right */
+        .scroll-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.8));
+            pointer-events: none;
+            opacity: 0.5;
+            z-index: 2;
+        }
+
+        /* PLACE CARDS - MATCHING YOUR STYLE */
+        .place-card {
+            width: 320px;
+            height: 400px;
+            flex-shrink: 0;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            transform: translate3d(0, 0, 0);
+            scroll-snap-align: start;
+        }
+
+        .place-card:hover {
+            transform: translate3d(0, -8px, 0);
+            border-color: rgba(103, 232, 249, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4),
+                        0 15px 30px rgba(103, 232, 249, 0.08);
+        }
+
+        /* Card flip animation */
+        .card-flip {
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .place-card.flipped .card-flip {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        /* MATCHING BADGE SYSTEM */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .badge-cyan {
+            background: rgba(103, 232, 249, 0.1);
+            border-color: rgba(103, 232, 249, 0.2);
+            color: var(--gradient-cyan);
+        }
+
+        .badge-pink {
+            background: rgba(251, 113, 133, 0.1);
+            border-color: rgba(251, 113, 133, 0.2);
+            color: var(--gradient-pink);
+        }
+
+        .badge-gray {
+            background: rgba(148, 163, 184, 0.08);
+            border-color: rgba(148, 163, 184, 0.15);
+            color: var(--text-muted);
+        }
+
+        /* KAI 100 SPECIAL BADGE */
+        .kai100-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: linear-gradient(135deg, var(--gradient-pink), var(--gradient-cyan));
+            color: #000;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 10;
+            backface-visibility: hidden; /* Hide badge on back */
+            -webkit-backface-visibility: hidden; /* Safari fix */
+            transform: translateZ(0); /* Force hardware acceleration */
+        }
+        
+        /* Hide badge when card is flipped */
+        .place-card.flipped .kai100-badge {
+            display: none;
+        }
+
+        /* Visual category header */
+        .place-visual {
+            height: 140px;
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.03), rgba(251, 113, 133, 0.03));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            position: relative;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        /* Add to itinerary button */
+        .add-button {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 10;
+        }
+
+        .place-card:hover .add-button {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .add-button:hover {
+            background: linear-gradient(135deg, var(--gradient-cyan), var(--gradient-pink));
+            color: white;
+            border-color: transparent;
+        }
+
+        .place-card.selected .add-button {
+            opacity: 1;
+            background: var(--gradient-cyan);
+            color: #000;
+            transform: scale(1) rotate(45deg);
+        }
+
+        /* Card content */
+        .place-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding-top: 16px;
+        }
+
+        /* COLOR HIERARCHY MATCHING HOMEPAGE */
+        .place-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #67E8F9 !important; /* Clean blue for places */
+        }
+
+        .place-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        /* Tag system */
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 12px 0;
+        }
+
+        /* Quick stats grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: auto 0 16px 0;
+            padding-top: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .stat-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 2px;
+        }
+
+        /* Actions row */
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-primary);
+        }
+
+        /* Back card - Kai's voice - CENTERED */
+        .kai-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center vertically */
+            align-items: center; /* Center horizontally */
+            overflow: hidden;
+            padding: 10px 0;
+        }
+
+        .kai-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .kai-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--gradient-cyan), var(--gradient-pink));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .kai-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gradient-cyan);
+        }
+
+        .kai-says {
+            background: rgba(103, 232, 249, 0.03);
+            border: 1px solid rgba(103, 232, 249, 0.08);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-primary);
+            max-height: 100px;
+            overflow-y: auto;
+            width: 100%;
+            text-align: center; /* Center text */
+        }
+
+        .insider-tips {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+            max-height: 120px;
+            width: 100%;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 6px 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+
+        .tip-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.1), rgba(251, 113, 133, 0.1));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+
+        /* Itinerary Builder - Clean Sidebar */
+        .itinerary-builder {
+            position: fixed;
+            right: -400px;
+            top: 80px;
+            bottom: 20px;
+            width: 380px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 24px;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 90;
+            overflow-y: auto;
+        }
+
+        .itinerary-builder.open {
+            right: 20px;
+        }
+
+        /* Mobile itinerary - bottom sheet instead of sidebar */
+        @media (max-width: 768px) {
+            .itinerary-builder {
+                position: fixed;
+                right: 0;
+                left: 0;
+                bottom: -100%;
+                top: auto;
+                width: 100%;
+                max-height: 60vh;
+                border-radius: 20px 20px 0 0;
+                transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .itinerary-builder.open {
+                bottom: 0;
+                right: 0;
+            }
+
+            /* Add drag handle for mobile */
+            .itinerary-builder::before {
+                content: '';
+                position: absolute;
+                top: 8px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 40px;
+                height: 4px;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 2px;
+            }
+            
+            .itinerary-header {
+                padding-top: 8px;
+            }
+        }
+
+        .itinerary-header {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .itinerary-title {
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .itinerary-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 8px;
+            bottom: 8px;
+            width: 1px;
+            background: linear-gradient(180deg, var(--gradient-cyan), var(--gradient-pink));
+            opacity: 0.2;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(103, 232, 249, 0.1);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 20px;
+            width: 8px;
+            height: 8px;
+            background: var(--gradient-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(103, 232, 249, 0.3);
+        }
+
+        .timeline-time {
+            font-size: 10px;
+            color: var(--gradient-cyan);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .timeline-place {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .timeline-location {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Optimize button */
+        .optimize-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 24px;
+            background: linear-gradient(135deg, var(--gradient-cyan), var(--gradient-pink));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .optimize-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(103, 232, 249, 0.3);
+        }
+
+        /* Filter pills matching homepage */
+        .filter-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+
+        .filter-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Search Section */
+        .search-section {
+            margin-bottom: 24px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 50px 16px 50px;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(103, 232, 249, 0.3);
+            background: rgba(20, 20, 20, 0.8);
+            box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.08);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: all 0.2s ease;
+        }
+
+        .clear-search:hover {
+            color: var(--text-primary);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .search-results-count {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--gradient-cyan);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .search-results-count.visible {
+            opacity: 1;
+        }
+
+        /* Search highlighting */
+        .place-card.search-match {
+            border-color: rgba(103, 232, 249, 0.2);
+            box-shadow: 0 0 20px rgba(103, 232, 249, 0.1);
+        }
+
+        .filter-pill {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .filter-pill:hover {
+            border-color: rgba(103, 232, 249, 0.4);
+            color: rgba(103, 232, 249, 0.9);
+            background: rgba(103, 232, 249, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .filter-pill.active {
+            background: linear-gradient(135deg, rgba(103, 232, 249, 0.15), rgba(251, 113, 133, 0.15));
+            border-color: rgba(103, 232, 249, 0.4);
+            color: var(--text-primary);
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 640px) {
+            .place-card {
+                width: 280px;
+                height: 380px;
+            }
+
+            .scroll-container {
+                gap: 12px;
+            }
+            
+            .all-cards-grid {
+                grid-template-columns: 1fr;
+                padding: 12px;
+            }
+            
+            /* Mobile-friendly navigation */
+            .get-coconuts-btn {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 80;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        /* Grid layout for all cards */
+        .all-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            padding: 20px 0;
+        }
+
+        .all-cards-grid .place-card {
+            width: 100%;
+            height: 400px;
+            flex-shrink: initial;
+        }
+
+        /* Show/hide based on filters */
+        .place-card.hidden {
+            display: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-gradient"></div>
+    
+    <!-- Navigation -->
+    <nav class="nav-header">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="/" class="text-2xl font-light">
+                    <span style="background: linear-gradient(135deg, #67E8F9 0%, #FB7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        AlohaKai
+                    </span>
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <div class="text-sm text-gray-400">
+                        <span id="placeCount">0</span> places selected
+                    </div>
+                    <a href="#" class="get-coconuts-btn" onclick="toggleItinerary()">
+                        Build Itinerary
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-24 pb-12 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <!-- Header -->
+            <div class="text-center mb-12 fade-in-up">
+                <h1 class="text-5xl md:text-6xl font-light mb-6">
+                    <span style="color: var(--gradient-cyan);">Discover</span>
+                    <span style="color: var(--text-primary);"> Kauai</span>
+                </h1>
+                <p class="text-lg" style="color: var(--text-secondary);">
+                    Build your perfect adventure • Click to explore • Add to your day
+                </p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-section">
+                <div class="search-wrapper">
+                    <input 
+                        type="text" 
+                        id="searchInput"
+                        class="search-input" 
+                        placeholder="Search anything... 'fish tacos', 'sunset dinner', 'kid friendly beach', 'north shore adventure'"
+                        autocomplete="off"
+                    >
+                    <div class="search-icon">🔍</div>
+                    <button id="clearSearch" class="clear-search" style="display: none;">✕</button>
+                </div>
+                <div id="searchResults" class="search-results-count"></div>
+            </div>
+
+            <!-- Filter Pills -->
+            <div class="filter-container">
+                <div class="filter-pill active" onclick="filterCategory('all')">All Places</div>
+                <div class="filter-pill" onclick="filterCategory('kai100')">Kai 100</div>
+                <div class="filter-pill" onclick="filterCategory('food')">Food & Drinks</div>
+                <div class="filter-pill" onclick="filterCategory('beach')">Beaches</div>
+                <div class="filter-pill" onclick="filterCategory('activity')">Adventures</div>
+                <div class="filter-pill" onclick="filterCategory('local')">Local Favorites</div>
+                <div class="filter-pill" onclick="filterCategory('north-shore')">North Shore</div>
+                <div class="filter-pill" onclick="filterCategory('east-side')">East Side</div>
+                <div class="filter-pill" onclick="filterCategory('south-shore')">South Shore</div>
+                <div class="filter-pill" onclick="filterCategory('budget')">$ Budget</div>
+                <div class="filter-pill" onclick="filterCategory('moderate')">$ Moderate</div>
+            </div>
+
+            <!-- Category Sections with Netflix-style scrolling -->
+            
+            <!-- Kai 100 Section -->
+            <div class="category-section" id="kai100-section">
+                <div class="category-header">
+                    <h2 class="category-title">Kai's Top Picks 🔥</h2>
+                    <span class="view-all">The best of the best</span>
+                </div>
+                
+                <div class="scroll-container" id="kai100-container">
+                    <!-- KAI 100 CARDS WILL BE INSERTED HERE -->
+                    <!-- Sleeping Giant Grill -->
+                    <div class="place-card" data-id="sleeping-giant-grill">
+                        <div class="kai100-badge">KAI 100</div>
+                        <div class="add-button" onclick="toggleSelection(event, 'sleeping-giant-grill')">
+                            <span>+</span>
+                        </div>
+                        <div class="card-flip">
+                            <!-- Front -->
+                            <div class="card-front">
+                                <div class="place-visual">🌮</div>
+                                <div class="place-content">
+                                    <h3 class="place-title">Sleeping Giant Grill</h3>
+                                    <p class="place-subtitle">Mexican Fusion • Kapaa</p>
+                                    
+                                    <div class="tag-row">
+                                        <span class="badge badge-cyan">LOCAL LOVE</span>
+                                        <span class="badge badge-pink">EPIC TACOS</span>
+                                        <span class="badge badge-gray">$$</span>
+                                    </div>
+                                    
+                                    <div class="stats-grid">
+                                        <div class="stat-item">
+                                            <div class="stat-label">Wait</div>
+                                            <div class="stat-value">5-10m</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label">Best Time</div>
+                                            <div class="stat-value">11am</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label">Vibe</div>
+                                            <div class="stat-value">Chill</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-actions">
+                                    <button class="action-btn" onclick="openMap(event, 'sleeping-giant-grill')">📍 Directions</button>
+                                    <button class="action-btn" onclick="openWebsite(event, 'sleeping-giant-grill')">🌐 Website</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Back -->
+                            <div class="card-back">
+                                <div class="kai-section">
+                                    <div class="kai-header">
+                                        <div class="kai-avatar">🤙</div>
+                                        <div>
+                                            <div class="kai-name">Kai says</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="kai-says">
+                                        "Epic spot! Personal favorite - their fish tacos are 🔥 and the Al Pastor is legit. Perfect fuel-up before hitting the beaches!"
+                                    </div>
+                                    
+                                    <div class="insider-tips">
+                                        <div class="tip-item">
+                                            <div class="tip-icon">⏰</div>
+                                            <div>Hit it before 11:30 to avoid lunch rush</div>
+                                        </div>
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🌶️</div>
+                                            <div>Ask for the secret hot sauce - game changer!</div>
+                                        </div>
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🏖️</div>
+                                            <div>Lydgate Beach is 5 mins away - perfect combo</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-actions">
+                                    <button class="action-btn action-primary" onclick="toggleSelection(event, 'sleeping-giant-grill')">Add to Day</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bobby V's -->
+                    <div class="place-card" data-id="bobby-vs">
+                        <div class="kai100-badge">KAI 100</div>
+                        <div class="add-button" onclick="toggleSelection(event, 'bobby-vs')">
+                            <span>+</span>
+                        </div>
+                        <div class="card-flip">
+                            <!-- Front -->
+                            <div class="card-front">
+                                <div class="place-visual">🍕</div>
+                                <div class="place-content">
+                                    <h3 class="place-title">Bobby V's</h3>
+                                    <p class="place-subtitle">Pizza & Sports Bar • Kapaa</p>
+                                    
+                                    <div class="tag-row">
+                                        <span class="badge badge-cyan">THE SPOT</span>
+                                        <span class="badge badge-pink">GARDEN PATIO</span>
+                                        <span class="badge badge-gray">$$</span>
+                                    </div>
+                                    
+                                    <div class="stats-grid">
+                                        <div class="stat-item">
+                                            <div class="stat-label">Wait</div>
+                                            <div class="stat-value">15-20m</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label">Happy Hour</div>
+                                            <div class="stat-value">3-6pm</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label">Vibe</div>
+                                            <div class="stat-value">Lively</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-actions">
+                                    <button class="action-btn" onclick="openMap(event, 'bobby-vs')">📍 Directions</button>
+                                    <button class="action-btn" onclick="openWebsite(event, 'bobby-vs')">🌐 Website</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Back -->
+                            <div class="card-back">
+                                <div class="kai-section">
+                                    <div class="kai-header">
+                                        <div class="kai-avatar">🤙</div>
+                                        <div>
+                                            <div class="kai-name">Kai says</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="kai-says">
+                                        "THE spot for pizza! Garden patio is where it's at. Garlic knots are unreal and the bourbon selection is 👌"
+                                    </div>
+                                    
+                                    <div class="insider-tips">
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🍻</div>
+                                            <div>Happy hour 3-6pm - killer deals on drinks</div>
+                                        </div>
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🏈</div>
+                                            <div>Great for game day - multiple screens</div>
+                                        </div>
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🌿</div>
+                                            <div>Request the garden patio - best vibes</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-actions">
+                                    <button class="action-btn action-primary" onclick="toggleSelection(event, 'bobby-vs')">Add to Day</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- More Kai 100 cards... -->
+                </div>
+            </div>
+
+            <!-- ALL PLACES SECTION - Where all 250 cards go -->
+            <div class="category-section" id="all-places-section">
+                <div class="category-header">
+                    <h2 class="category-title">All Places</h2>
+                    <span class="view-all" id="place-count">0 places</span>
+                </div>
+                
+                <!-- Main grid for all cards -->
+                <div class="all-cards-grid" id="all-cards-container">
+                    <!-- ALL GENERATED CARDS WILL GO HERE -->
+                    <!-- This is where your Python script inserts everything -->
+                </div>
+            </div>
+
+            <!-- Optional: Keep category sections but hidden by default -->
+            <div id="category-sections" style="display: none;">
+                <!-- Beaches Section -->
+                <div class="category-section" id="beaches-section">
+                    <div class="category-header">
+                        <h2 class="category-title">Epic Beaches 🏖️</h2>
+                        <span class="view-all">All beaches</span>
+                    </div>
+                    
+                    <div class="scroll-container" id="beaches-container">
+                        <!-- BEACH CARDS WILL BE INSERTED HERE -->
+                    <!-- Anini Beach -->
+                    <div class="place-card" data-id="anini-beach">
+                        <div class="add-button" onclick="toggleSelection(event, 'anini-beach')">
+                            <span>+</span>
+                        </div>
+                        <div class="card-flip">
+                            <!-- Front -->
+                            <div class="card-front">
+                                <div class="place-visual">🏖️</div>
+                                <div class="place-content">
+                                    <h3 class="place-title">Anini Beach</h3>
+                                    <p class="place-subtitle">Protected Reef • North Shore</p>
+                                    
+                                    <div class="tag-row">
+                                        <span class="badge badge-cyan">FAMILY</span>
+                                        <span class="badge badge-pink">SNORKELING</span>
+                                        <span class="badge badge-gray">FREE</span>
+                                    </div>
+                                    
+                                    <div class="stats-grid">
+                                        <div class="stat-item">
+                                            <div class="stat-label">Parking</div>
+                                            <div class="stat-value">Easy</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label">Snorkel</div>
+                                            <div class="stat-value">A+</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label">Crowd</div>
+                                            <div class="stat-value">Mellow</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-actions">
+                                    <button class="action-btn" onclick="openMap(event, 'anini-beach')">📍 Directions</button>
+                                    <button class="action-btn" onclick="openWebsite(event, 'anini-beach')">🌐 Info</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Back -->
+                            <div class="card-back">
+                                <div class="kai-section">
+                                    <div class="kai-header">
+                                        <div class="kai-avatar">🤙</div>
+                                        <div>
+                                            <div class="kai-name">Kai says</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="kai-says">
+                                        "Perfect for families! Protected by the longest reef in Hawaii. Epic snorkeling when calm - turtles guaranteed 🐢"
+                                    </div>
+                                    
+                                    <div class="insider-tips">
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🐢</div>
+                                            <div>Snorkel the right side for turtle spotting</div>
+                                        </div>
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🌅</div>
+                                            <div>Sundays get busy - arrive before 10am</div>
+                                        </div>
+                                        <div class="tip-item">
+                                            <div class="tip-icon">🍧</div>
+                                            <div>Shave ice truck usually here afternoons</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-actions">
+                                    <button class="action-btn action-primary" onclick="toggleSelection(event, 'anini-beach')">Add to Day</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- More beach cards... -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Itinerary Builder Sidebar -->
+    <div class="itinerary-builder" id="itineraryBuilder">
+        <div class="itinerary-header">
+            <h3 class="itinerary-title">Your Perfect Day</h3>
+            <p class="itinerary-subtitle">Kai will optimize your route</p>
+        </div>
+        
+        <div class="timeline" id="timeline">
+            <!-- Timeline items will be dynamically added here -->
+        </div>
+
+        <button class="optimize-btn">
+            Ask Kai to Optimize Route 🚀
+        </button>
+    </div>
+
+    <script>
+        // PLACE DATA STRUCTURE - This will be populated by your Python script
+        const placeData = {
+            'sleeping-giant-grill': {
+                name: 'Sleeping Giant Grill',
+                google_place_id: 'ChIJxxxxxxxxxxxxxxxxxxxxxx', // Your Google Place ID
+                lat: 22.0964,
+                lng: -159.3421,
+                website: 'https://sleepinggiantgrill.com',
+                phone: '808-555-0100'
+            },
+            'bobby-vs': {
+                name: "Bobby V's",
+                google_place_id: 'ChIJyyyyyyyyyyyyyyyyyyyyyy',
+                lat: 22.0852,
+                lng: -159.3456,
+                website: 'https://bobbyvsrestaurant.com',
+                phone: '808-555-0101'
+            },
+            'anini-beach': {
+                name: 'Anini Beach',
+                google_place_id: 'ChIJzzzzzzzzzzzzzzzzzzzzzz',
+                lat: 22.2269,
+                lng: -159.4534,
+                website: 'https://www.kauai.gov/beaches',
+                phone: null
+            }
+        };
+
+        // Open Google Maps with directions
+        function openMap(event, placeId) {
+            event.stopPropagation();
+            const place = placeData[placeId];
+            
+            if (place && place.google_place_id) {
+                // Using Google Place ID for more accurate results
+                const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}&query_place_id=${place.google_place_id}`;
+                window.open(mapUrl, '_blank');
+            } else if (place && place.lat && place.lng) {
+                // Fallback to coordinates
+                const mapUrl = `https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lng}`;
+                window.open(mapUrl, '_blank');
+            } else if (place) {
+                // Last fallback to name search
+                const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + ' Kauai')}`;
+                window.open(mapUrl, '_blank');
+            }
+        }
+
+        // Open website
+        function openWebsite(event, placeId) {
+            event.stopPropagation();
+            const place = placeData[placeId];
+            
+            if (place && place.website) {
+                window.open(place.website, '_blank');
+            } else if (place && place.google_place_id) {
+                // Fallback to Google Maps page if no website
+                const mapUrl = `https://www.google.com/maps/place/?q=place_id:${place.google_place_id}`;
+                window.open(mapUrl, '_blank');
+            }
+        }
+
+        let selectedPlaces = [];
+        let itineraryOpen = false;
+
+        // Card flip functionality
+        document.querySelectorAll('.place-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Don't flip if clicking buttons or add button
+                if (e.target.closest('.action-btn') || 
+                    e.target.closest('.add-button')) {
+                    return;
+                }
+                
+                // Toggle flip
+                const cardFlip = this.querySelector('.card-flip');
+                if (cardFlip) {
+                    this.classList.toggle('flipped');
+                }
+            });
+        });
+
+        // Selection functionality
+        function toggleSelection(event, placeId) {
+            event.stopPropagation();
+            
+            const card = document.querySelector(`[data-id="${placeId}"]`);
+            const title = card.querySelector('.place-title').textContent;
+            const subtitle = card.querySelector('.place-subtitle').textContent;
+            
+            card.classList.toggle('selected');
+            
+            if (card.classList.contains('selected')) {
+                // Add to selected
+                const time = getNextTimeSlot();
+                selectedPlaces.push({
+                    id: placeId,
+                    name: title,
+                    location: subtitle,
+                    time: time
+                });
+            } else {
+                // Remove from selected
+                selectedPlaces = selectedPlaces.filter(p => p.id !== placeId);
+            }
+            
+            updateItinerary();
+            updatePlaceCount();
+        }
+
+        // Get next time slot
+        function getNextTimeSlot() {
+            const times = ['9:00 AM', '10:30 AM', '12:00 PM', '2:00 PM', '4:00 PM', '6:00 PM', '8:00 PM'];
+            return times[selectedPlaces.length % times.length];
+        }
+
+        // Update place count
+        function updatePlaceCount() {
+            document.getElementById('placeCount').textContent = selectedPlaces.length;
+        }
+
+        // Update itinerary display
+        function updateItinerary() {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+            
+            selectedPlaces.forEach((place, index) => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                item.innerHTML = `
+                    <div class="timeline-time">${place.time}</div>
+                    <div class="timeline-place">${place.name}</div>
+                    <div class="timeline-location">${place.location}</div>
+                `;
+                timeline.appendChild(item);
+            });
+
+            // Auto-open sidebar if items selected
+            if (selectedPlaces.length > 0 && !itineraryOpen) {
+                document.getElementById('itineraryBuilder').classList.add('open');
+                itineraryOpen = true;
+            } else if (selectedPlaces.length === 0) {
+                document.getElementById('itineraryBuilder').classList.remove('open');
+                itineraryOpen = false;
+            }
+        }
+
+        // Toggle itinerary sidebar
+        function toggleItinerary() {
+            const builder = document.getElementById('itineraryBuilder');
+            itineraryOpen = !itineraryOpen;
+            
+            if (itineraryOpen) {
+                builder.classList.add('open');
+            } else {
+                builder.classList.remove('open');
+            }
+        }
+
+        // Filter functionality
+        function filterCategory(filter) {
+            // Update active pill
+            document.querySelectorAll('.filter-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Get all cards
+            const allCards = document.querySelectorAll('#all-cards-container .place-card');
+            let visibleCount = 0;
+            
+            allCards.forEach(card => {
+                if (filter === 'all') {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else if (filter === 'kai100') {
+                    // Show only Kai 100 cards
+                    if (card.getAttribute('data-kai100') === 'true') {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                } else if (filter === 'local') {
+                    // Local favorites
+                    if (card.getAttribute('data-local') === 'true') {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                } else if (filter === 'budget') {
+                    // $ price range
+                    if (card.getAttribute('data-price') === '1') {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                } else if (filter === 'moderate') {
+                    // $ price range
+                    if (card.getAttribute('data-price') === '2') {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                } else {
+                    // Filter by category, area, or location
+                    const cardCategory = card.getAttribute('data-category');
+                    const cardArea = card.getAttribute('data-area');
+                    const cardLocation = card.getAttribute('data-location');
+                    const cardTags = card.getAttribute('data-tags') || '';
+                    
+                    if (cardCategory === filter || 
+                        cardArea === filter || 
+                        cardLocation === filter ||
+                        cardTags.includes(filter)) {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                }
+            });
+            
+            // Update count
+            document.getElementById('place-count').textContent = `${visibleCount} places`;
+        }
+
+        // Initialize count on load
+        window.addEventListener('DOMContentLoaded', function() {
+            const totalCards = document.querySelectorAll('#all-cards-container .place-card').length;
+            document.getElementById('place-count').textContent = `${totalCards} places`;
+            
+            // Initialize search
+            initializeSearch();
+        });
+
+        // Natural Language Search
+        function initializeSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const clearButton = document.getElementById('clearSearch');
+            const searchResults = document.getElementById('searchResults');
+            
+            if (!searchInput) return;
+            
+            // Search handler
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase().trim();
+                
+                // Show/hide clear button
+                clearButton.style.display = query ? 'block' : 'none';
+                
+                if (query.length >= 2) {
+                    performSearch(query);
+                } else {
+                    // Reset if query too short
+                    resetSearch();
+                }
+            });
+            
+            // Clear button
+            clearButton.addEventListener('click', function() {
+                searchInput.value = '';
+                clearButton.style.display = 'none';
+                resetSearch();
+            });
+        }
+
+        function performSearch(query) {
+            const cards = document.querySelectorAll('#all-cards-container .place-card');
+            let matches = 0;
+            
+            // Reset filters when searching
+            document.querySelectorAll('.filter-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            document.querySelector('.filter-pill').classList.add('active'); // Set "All" as active
+            
+            cards.forEach(card => {
+                // Get all searchable content
+                const name = card.querySelector('.place-title')?.textContent.toLowerCase() || '';
+                const subtitle = card.querySelector('.place-subtitle')?.textContent.toLowerCase() || '';
+                const tags = card.getAttribute('data-tags') || '';
+                const category = card.getAttribute('data-category') || '';
+                const area = card.getAttribute('data-area') || '';
+                const location = card.getAttribute('data-location') || '';
+                
+                // Get Kai says content (if card has been flipped)
+                const kaiSays = card.querySelector('.kai-says')?.textContent.toLowerCase() || '';
+                
+                // Natural language matching
+                const searchTerms = query.split(' ').filter(term => term.length > 1);
+                let matchScore = 0;
+                
+                // Check for exact phrase match first
+                if (name.includes(query)) matchScore += 10;
+                if (subtitle.includes(query)) matchScore += 5;
+                if (kaiSays.includes(query)) matchScore += 3;
+                if (tags.includes(query)) matchScore += 2;
+                
+                // Check individual terms
+                searchTerms.forEach(term => {
+                    if (name.includes(term)) matchScore += 3;
+                    if (subtitle.includes(term)) matchScore += 2;
+                    if (tags.includes(term)) matchScore += 1;
+                    if (category.includes(term)) matchScore += 2;
+                    if (area.includes(term)) matchScore += 2;
+                    if (location.includes(term)) matchScore += 2;
+                    if (kaiSays.includes(term)) matchScore += 1;
+                });
+                
+                // Special keyword matching
+                if (query.includes('kid') && tags.includes('family')) matchScore += 5;
+                if (query.includes('sunset') && tags.includes('romantic')) matchScore += 5;
+                if (query.includes('cheap') && card.getAttribute('data-price') === '1') matchScore += 5;
+                if (query.includes('fancy') && card.getAttribute('data-price') === '3') matchScore += 5;
+                if (query.includes('best') && card.getAttribute('data-kai100') === 'true') matchScore += 5;
+                
+                // Show/hide based on match
+                if (matchScore > 0) {
+                    card.classList.remove('hidden');
+                    card.classList.add('search-match');
+                    card.style.order = -matchScore; // Higher scores appear first
+                    matches++;
+                } else {
+                    card.classList.add('hidden');
+                    card.classList.remove('search-match');
+                }
+            });
+            
+            // Update results count
+            const searchResults = document.getElementById('searchResults');
+            if (matches > 0) {
+                searchResults.textContent = `Found ${matches} ${matches === 1 ? 'place' : 'places'} matching "${query}"`;
+                searchResults.classList.add('visible');
+            } else {
+                searchResults.textContent = `No places found for "${query}" - try different words`;
+                searchResults.classList.add('visible');
+            }
+            
+            // Update main count
+            document.getElementById('place-count').textContent = `${matches} places`;
+        }
+
+        function resetSearch() {
+            const cards = document.querySelectorAll('#all-cards-container .place-card');
+            cards.forEach(card => {
+                card.classList.remove('hidden', 'search-match');
+                card.style.order = '';
+            });
+            
+            document.getElementById('searchResults').classList.remove('visible');
+            const totalCards = cards.length;
+            document.getElementById('place-count').textContent = `${totalCards} places`;
+        }
+
+        // Add to day button functionality
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                if (this.textContent.includes('Add to Day')) {
+                    const card = this.closest('.place-card');
+                    const placeId = card.getAttribute('data-id');
+                    toggleSelection(e, placeId);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+[
+  {
+    "place_id": "alpa01",
+    "name": "Al Pastor Tacos",
+    "area": "East Side",
+    "specific_area": "Kapaa",
+    "category": "food",
+    "subtype": "mexican",
+    "details": {
+      "price_range": "$",
+      "best_for": ["lunch"],
+      "vibe": ["casual", "family_friendly"],
+      "local_favorite": true
+    },
+    "food_intel": {
+      "must_try": ["Mahi mahi tacos", "Al Pastor tacos"],
+      "wait_times": "Short wait mentioned for food preparation"
+    },
+    "contact": {
+      "phone": "(808) 652-6953",
+      "website": "http://restaurantwebexperts.com/TacosAlPastor/"
+    },
+    "kai_says": "Fresh Hawaiian-Mexican fusion in a laid-back food truck setting - where mahi mahi meets al pastor!",
+    "insider_tip": "For the freshest catch, try their mahi mahi tacos. Pair it with the ocean breeze for the perfect beachside meal!",
+    "search_terms": ["kid-friendly", "outdoor_seating", "food", "quick_service", "casual", "food_truck", "mexican"],
+    "coordinates": {
+      "lat": 22.080775,
+      "lng": -159.313525
+    },
+    "tags": ["casual", "family-friendly", "food", "mexican"]
+  },
+  {
+    "place_id": "bvsb01",
+    "name": "BV's Bourbon & Ale House",
+    "area": "East Side",
+    "specific_area": "Kapaa",
+    "category": "food",
+    "subtype": "american",
+    "details": {
+      "price_range": "$$",
+      "best_for": ["lunch", "dinner", "drinks"],
+      "vibe": ["casual", "local_favorite"],
+      "local_favorite": true
+    },
+    "food_intel": {
+      "must_try": ["Blackened Mahi-Mahi sandwich", "Garlic knots"],
+      "best_time": "lunch time for outdoor seating with breeze"
+    },
+    "contact": {
+      "phone": "(808) 821-8080",
+      "website": "https://bvbourbonbar.com/"
+    },
+    "kai_says": "Local favorite bourbon house with killer Mahi sandwich and sports bar vibes!",
+    "insider_tip": "Try the Blackened Mahi-Mahi sandwich with house-made chips for a true taste of Kauai.",
+    "search_terms": ["kid-friendly", "outdoor_seating", "pizza", "sports_bar", "local"],
+    "coordinates": {
+      "lat": 22.0544796,
+      "lng": -159.328965
+    },
+    "kai100": {
+      "selected": true,
+      "rank": 2
+    },
+    "tags": ["american", "casual", "food", "local-favorite"]
+  },
+  {
+    "place_id": "anini_beach",
+    "name": "Anini Beach",
+    "area": "North Shore",
+    "category": "beach",
+    "subtype": "snorkeling",
+    "access": {
+      "parking": "easy"
+    },
+    "conditions": {
+      "swimming": "good",
+      "snorkeling": "excellent",
+      "typical_crowd": "moderate"
+    },
+    "best_for": ["families", "snorkeling", "children"],
+    "local_tips": ["Stay right of boat ramp to avoid boats", "Swim far out for best coral reef views"],
+    "kai_says": "Perfect family-friendly beach with calm waters and excellent snorkeling opportunities, especially for seeing turtles.",
+    "coordinates": {
+      "lat": 22.2252413,
+      "lng": -159.4493796
+    },
+    "tags": ["beach", "snorkeling", "family-friendly"],
+    "search_terms": ["beach", "snorkeling", "turtles", "family", "calm"]
+  }
+]
